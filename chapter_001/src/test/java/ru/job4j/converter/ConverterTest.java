@@ -12,7 +12,7 @@ import static org.junit.Assert.assertThat;
 public class ConverterTest {
 
     /**
-     * Test rubleToDaollar method.
+     * Test rubleToDollar method.
      */
     @Test
     public void when60RubleToDollarThen1() {
