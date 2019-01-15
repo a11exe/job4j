@@ -1,5 +1,11 @@
-package ru.job4j.calculate;
+package ru.job4j.calculator;
 
+/**
+ * Класс Calculator для вычисления арифметических операций + - * / ^.
+ * @author Alexandr Abramov (alllexe@mail.ru)
+ * @since 14.01.2019
+ * @version 1
+ */
 public class Calculator {
 
     private double result;
