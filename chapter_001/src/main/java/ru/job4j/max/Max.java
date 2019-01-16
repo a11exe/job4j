@@ -1,7 +1,7 @@
 package ru.job4j.max;
 
 /**
- * Описывает точку в системе координат x и y.
+ * Максимум из двух чисел x и y.
  * @author Alexandr Abramov (alllexe@mail.ru)
  * @since 16.01.2019
  * @version 1

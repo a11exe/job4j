@@ -1,7 +1,7 @@
 package ru.job4j.condition;
 
 /**
- * Описывает точку в системе координат x и y.
+ * Глупый робот.
  * @author Alexandr Abramov (alllexe@mail.ru)
  * @since 15.01.2019
  * @version 1
