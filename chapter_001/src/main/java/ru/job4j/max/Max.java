@@ -18,4 +18,14 @@ public class Max {
         return  first > second ? first : second;
     }
 
+    /**
+     * Максимум из трех чисел.
+     * @param first первое число.
+     * @param second второе число.
+     * @param third третье число.
+     * @return максимум из first, second, third.
+     */
+    public int max(int first, int second, int third) {
+        return this.max(this.max(first, second), this.max(second, third));
+    }
 }
