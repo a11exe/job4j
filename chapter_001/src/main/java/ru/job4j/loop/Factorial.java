@@ -1,6 +1,6 @@
 package ru.job4j.loop;
 /**
- * Конвертор валюты.
+ * Факториал.
  * @author Alexandr Abramov (alllexe@mail.ru)
  * @since 18.01.2019
  * @version 1

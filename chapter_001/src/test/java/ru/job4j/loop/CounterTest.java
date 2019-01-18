@@ -6,7 +6,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
 /**
- * Конвертор валюты.
+ * Сумма чисел тест.
  * @author Alexandr Abramov (alllexe@mail.ru)
  * @since 18.01.2019
  * @version 1
