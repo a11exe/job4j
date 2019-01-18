@@ -17,7 +17,7 @@ public class Counter {
     public int add(int start, int finish) {
 
         int sum = 0;
-        start = start % 2 == 0 ? start : start - 1;
+        start = start % 2 == 0 ? start : start + 1;
 
         while (start <= finish) {
             sum += start;
