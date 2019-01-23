@@ -19,6 +19,24 @@ public class BubbleSortTest {
     }
 
     @Test
+    public void sortAlreadySorted() {
+        BubbleSort bubbleSort = new BubbleSort();
+        assertThat(bubbleSort.sort(new int[]{1, 2, 3, 4, 5}), is(new int[]{1, 2, 3, 4, 5}));
+    }
+
+    @Test
+    public void sortWhenOneOutLoop() {
+        BubbleSort bubbleSort = new BubbleSort();
+        assertThat(bubbleSort.sort(new int[]{5, 1, 3, 4, 5}), is(new int[]{1, 3, 4, 5, 5}));
+    }
+
+    @Test
+    public void sortWhenOneSwapInStart() {
+        BubbleSort bubbleSort = new BubbleSort();
+        assertThat(bubbleSort.sort(new int[]{2, 1, 3, 4, 5}), is(new int[]{1, 2, 3, 4, 5}));
+    }
+
+    @Test
     public void whenSortArrayWithTenElementsThenSortedArray() {
         //напишите здесь тест, проверяющий сортировку массива из 10 элементов методом пузырька, например {1, 5, 4, 2, 3, 1, 7, 8, 0, 5}.
         BubbleSort bubbleSort = new BubbleSort();

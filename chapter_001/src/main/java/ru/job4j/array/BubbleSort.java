@@ -1,5 +1,7 @@
 package ru.job4j.array;
 
+import java.util.Arrays;
+
 /**
  * Сортировка пузырьком.
  * @author Alexander Abramov (alllexe@mail.ru)
@@ -8,6 +10,8 @@ package ru.job4j.array;
  */
 public class BubbleSort {
 
+    private int count = 0;
+
     /**
      * Сортировка пузырьком.
      * @param array входящий массив для сортировки.
@@ -15,21 +19,34 @@ public class BubbleSort {
      */
     public int[] sort(int[] array) {
         boolean alreadySorted;
-        for (int i = 0; i < array.length; i++) {
+        printArray(array);
+        for (int i = array.length - 1; i > 0; i--) {
             alreadySorted = true;
-            for (int j = 0; j < array.length - 1; j++) {
+            for (int j = 0; j < i; j++) {
+                count++;
                 if (array[j] > array[j + 1]) {
-                    int b = array[j + 1];
-                    array[j + 1] = array[j];
-                    array[j] = b;
+                    toSwap(array, j + 1, j);
                     alreadySorted = false;
                 }
             }
             if (alreadySorted) {
                 break;
             }
+            printArray(array);
         }
+        System.out.println("Count: " + count);
         return array;
     }
 
+    private void toSwap(int[] array, int i, int j) {
+        int b = array[i];
+        array[i] = array[j];
+        array[j] = b;
+    }
+
+
+    public void printArray(int[] array) {
+        Arrays.stream(array).forEach(System.out::print);
+        System.out.println();
+    }
 }
