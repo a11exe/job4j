@@ -16,52 +16,18 @@ public class ArrayDuplicate {
      * @return массив без дублей.
      */
     public String[] remove(String[] array) {
-        int countDoubles = sortArray(array);
-        return  Arrays.copyOf(array, array.length - countDoubles);
-    }
+        int unique = array.length;
 
-    /**
-     * Соритрует массив строк перенося дубли в конец.
-     * @param array массив для сортировки.
-     * @return количество дублей.
-     */
-    private int sortArray(String[] array) {
-
-        boolean hasDoubles;
-        int countDoubles = 0;
-
-        if (array.length > 1) {
-            for (int i = 0; i < array.length - countDoubles; i++) {
-                String check = array[i];
-                do {
-                    hasDoubles = false;
-                    for (int j = i + 1; j < array.length - countDoubles; j++) {
-                        if (check.equals(array[j])) {
-                            shiftArray(array, j);
-                            countDoubles++;
-                            hasDoubles = true;
-                        }
-                    }
-                } while (hasDoubles);
+        for (int out = 0; out < array.length; out++) {
+            for (int in = 1 + out; in < unique; in++) {
+                if (array[out].equals(array[in])) {
+                    array[in] = array[unique - 1];
+                    unique--;
+                    in--;
+                }
             }
-
         }
 
-        return countDoubles;
+        return Arrays.copyOf(array, unique);
     }
-
-    /**
-     * Элемент j переносит в конец массива сдвигая массив влево на 1
-     * @param array массив
-     * @param j позиция которая переносится в конец
-     */
-    private void shiftArray(String[] array, int j) {
-        String str = array[j];
-        System.arraycopy(array, j + 1, array, j, array.length - 1 - j);
-//        for (int i = j; i < array.length - 1; i++) {
-//            array[i] = array[i + 1];
-//        }
-        array[array.length - 1] = str;
-    }
-
 }
