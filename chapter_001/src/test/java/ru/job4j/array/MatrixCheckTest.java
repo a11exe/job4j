@@ -48,4 +48,15 @@ public class MatrixCheckTest {
         assertThat(result, is(false));
     }
 
+    @Test
+    public void whenDataMonoTrueAndMonoFalseByTrueThenTrue() {
+        MatrixCheck check = new MatrixCheck();
+        boolean[][] input = new boolean[][]{
+                {true, false},
+                {false, true}
+        };
+        boolean result = check.mono(input);
+        assertThat(result, is(true));
+    }
+
 }

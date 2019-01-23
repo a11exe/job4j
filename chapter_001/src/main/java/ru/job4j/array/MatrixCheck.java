@@ -11,6 +11,7 @@ public class MatrixCheck {
 
     /**
      * Квадратный массив заполнен по диагонали одинаков true или false.
+     *
      * @param data массив для проверки.
      * @return по диагонали одинаковые значения true или false.
      */
@@ -20,22 +21,19 @@ public class MatrixCheck {
 
         if (data.length > 1) {
 
-            boolean checked = data[0][0];
+            boolean checkedLeft = data[0][0];
+            boolean checkedRight = data[data.length - 1][0];
 
-            if (checked != data[data.length - 1][0]) {
-                result = false;
-            } else {
-                for (int i = 1; i < data.length; i++) {
-                    // check from left to right
-                    if (checked != data[i][i]) {
-                        result = false;
-                        break;
-                    }
-                    // check from right to left
-                    if (checked != data[data.length - 1 - i][i]) {
-                        result = false;
-                        break;
-                    }
+            for (int i = 1; i < data.length; i++) {
+                // check from left to right
+                if (checkedLeft != data[i][i]) {
+                    result = false;
+                    break;
+                }
+                // check from right to left
+                if (checkedRight != data[data.length - 1 - i][i]) {
+                    result = false;
+                    break;
                 }
             }
         }
