@@ -18,18 +18,18 @@ public class BubbleSort {
      * @return отсортированный массив.
      */
     public int[] sort(int[] array) {
-        boolean alreadySorted;
+        boolean sorted;
         printArray(array);
         for (int i = array.length - 1; i > 0; i--) {
-            alreadySorted = true;
+            sorted = true;
             for (int j = 0; j < i; j++) {
                 count++;
                 if (array[j] > array[j + 1]) {
                     toSwap(array, j + 1, j);
-                    alreadySorted = false;
+                    sorted = false;
                 }
             }
-            if (alreadySorted) {
+            if (sorted) {
                 break;
             }
             printArray(array);
@@ -43,7 +43,6 @@ public class BubbleSort {
         array[i] = array[j];
         array[j] = b;
     }
-
 
     public void printArray(int[] array) {
         Arrays.stream(array).forEach(System.out::print);

@@ -16,28 +16,21 @@ public class MatrixCheck {
      * @return по диагонали одинаковые значения true или false.
      */
     public boolean mono(boolean[][] data) {
-
         boolean result = true;
-
         if (data.length > 1) {
-
-            boolean checkedLeft = data[0][0];
-            boolean checkedRight = data[data.length - 1][0];
-
+            boolean left = data[0][0];
+            boolean right = data[data.length - 1][0];
             for (int i = 1; i < data.length; i++) {
-                // check from left to right
-                if (checkedLeft != data[i][i]) {
+                if (left != data[i][i]) {
                     result = false;
                     break;
                 }
-                // check from right to left
-                if (checkedRight != data[data.length - 1 - i][i]) {
+                if (right != data[data.length - 1 - i][i]) {
                     result = false;
                     break;
                 }
             }
         }
-
         return result;
     }
 

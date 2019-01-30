@@ -13,7 +13,6 @@ public class Factorial {
      * @return значение факториала
      */
     public int calc(int n) {
-
         int rez = 1;
         if (n == 0) {
             return rez;
@@ -23,7 +22,6 @@ public class Factorial {
             rez *= i;
         }
         return rez;
-
     }
 
 }
