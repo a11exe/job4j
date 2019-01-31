@@ -6,8 +6,10 @@ package professions;
  * @version 1
  * @since 31.01.2019
  */
-public class Teacher {
+public class Teacher extends Profession {
 
-    public void learn(Student student) {}
+    public void learn(Student student) {
+
+    }
 
 }

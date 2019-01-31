@@ -8,6 +8,12 @@ package professions;
  */
 public class Doctor extends Profession {
 
-    public void cure(Patient patient) {}
+    public void cure(Patient patient) {
+
+    }
+
+    public Diagnose heal(Patient patient) {
+        return new Diagnose();
+    }
 
 }
