@@ -1,6 +1,7 @@
 package tracker;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 
 /**
  * Трекер
@@ -72,9 +73,7 @@ public class Tracker {
      * @return массив заявок.
      */
     public Item[] findAll() {
-        Item[] result = new Item[position];
-        System.arraycopy(items, 0, result, 0, position);
-        return result;
+        return Arrays.copyOf(items, position);
     }
 
     /**
@@ -90,9 +89,7 @@ public class Tracker {
                 found[position++] = this.items[i];
             }
         }
-        Item[] result = new Item[position];
-        System.arraycopy(found, 0, result, 0, position);
-        return result;
+        return Arrays.copyOf(found, position);
     }
 
     /**
