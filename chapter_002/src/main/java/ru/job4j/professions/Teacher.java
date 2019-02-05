@@ -1,4 +1,4 @@
-package professions;
+package ru.job4j.professions;
 
 /**
  * Учитель

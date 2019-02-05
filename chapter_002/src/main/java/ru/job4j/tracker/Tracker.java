@@ -1,4 +1,4 @@
-package tracker;
+package ru.job4j.tracker;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
