@@ -75,7 +75,7 @@ public class StartUITest {
         StartUI startUI = new StartUI(new StubInput(addActions), tracker);
         startUI.init();
 
-        startUI = new StartUI(new StubInput(new String[]{"2", tracker.findAll()[0].getId(),"new name", "new desc", "6"}), tracker);
+        startUI = new StartUI(new StubInput(new String[]{"2", tracker.findAll()[0].getId(), "new name", "new desc", "6"}), tracker);
         startUI.init();
 
         assertThat(tracker.findAll()[0].getName(), is("new name"));
