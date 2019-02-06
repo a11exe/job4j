@@ -25,9 +25,7 @@ public class StartUITest {
     private Item[] items;
     private final int size = 3;
     private final StringBuilder menuOut = new StringBuilder()
-            .append("Меню.")
-            .append(System.lineSeparator())
-            .append("0. Add new Item")
+            .append("0. Add new item")
             .append(System.lineSeparator())
             .append("1. Show all items")
             .append(System.lineSeparator())
