@@ -80,6 +80,11 @@ public class MenuTracker {
         this.actions.get(key).execute(this.input, this.tracker);
     }
 
+    public int[] range() {
+        return this.actions.stream().mapToInt(UserAction::key).toArray();
+    }
+
+
     /**
      * Метод выводит на экран меню.
      */

@@ -22,4 +22,27 @@ public class ConsoleInput implements Input {
         System.out.println(question);
         return scanner.nextLine();
     }
+
+    /**
+     * Номер пункта меню     *
+     * @param question Текст выводимого вопроса
+     * @param range массив из номеров пунктов меню
+     * @return выбранный пункт меню
+     */
+    @Override
+    public int ask(String question, int[] range) {
+        int key = Integer.parseInt(ask(question));
+        boolean exist = false;
+        for (int x: range
+             ) {
+            if (x == key) {
+                exist = true;
+                break;
+            }
+        }
+        if (!exist) {
+            throw new MenuOutException("Нет такого пункта меню");
+        }
+        return key;
+    }
 }
