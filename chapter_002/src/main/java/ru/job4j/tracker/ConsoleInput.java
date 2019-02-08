@@ -24,7 +24,7 @@ public class ConsoleInput implements Input {
     }
 
     /**
-     * Номер пункта меню     *
+     * Номер пункта меню
      * @param question Текст выводимого вопроса
      * @param range массив из номеров пунктов меню
      * @return выбранный пункт меню

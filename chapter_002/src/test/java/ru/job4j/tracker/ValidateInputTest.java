@@ -30,7 +30,7 @@ public class ValidateInputTest {
     }
 
     @Test
-    public void whenInvalidInput() {
+    public void whenInvalidInputChar() {
         ValidateInput input = new ValidateInput(
                 new StubInput(new String[] {"invalid", "1"})
         );
@@ -40,4 +40,18 @@ public class ValidateInputTest {
                         String.format("Введены некорректные данные. Введите число:%n")
         ));
     }
+
+    @Test
+    public void whenInvalidInputNumber() {
+        ValidateInput input = new ValidateInput(
+                new StubInput(new String[] {"9", "1"})
+        );
+        input.ask("Enter", new int[] {1});
+        assertThat(this.mem.toString(),
+                is(
+                        String.format("Введены некорректные данные. Введите существющий пункт меню:%n")
+                ));
+    }
+
+
 }
