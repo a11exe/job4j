@@ -40,6 +40,7 @@ public class ConsoleInput implements Input {
                 break;
             }
         }
+        // if-else-throw
         if (!exist) {
             throw new MenuOutException("Нет такого пункта меню");
         }
