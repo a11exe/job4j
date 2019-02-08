@@ -7,15 +7,25 @@ package ru.job4j.tracker;
  * @version 1
  * @since 07.02.2019
  */
-public class ValidateInput extends ConsoleInput {
+public class ValidateInput implements Input {
+
+    private final Input input;
+
+    public ValidateInput(final Input input) {
+        this.input = input;
+    }
 
     @Override
+    public String ask(String question) {
+        return null;
+    }
+
     public int ask(String question, int[] range) {
         boolean valid = false;
         int key = 0;
         while (!valid) {
             try {
-                key = super.ask(question, range);
+                key = this.input.ask(question, range);
                 valid = true;
             } catch (NumberFormatException e) {
                 System.out.println("Введены некорректные данные. Введите число:");
