@@ -96,19 +96,10 @@ public class MenuTracker {
         }
     }
 
-    public class AddItem implements UserAction {
-
-        private final int key;
-        private final String name;
+    public class AddItem extends BaseAction {
 
         public AddItem(int key, String name) {
-            this.key = key;
-            this.name = name;
-        }
-
-        @Override
-        public int key() {
-            return key;
+            super(key, name);
         }
 
         @Override
@@ -122,53 +113,23 @@ public class MenuTracker {
             System.out.println("------------ New Item with Name : " + item.getName());
             System.out.println("------------ New Item with Description : " + item.getDesc());
         }
-
-        @Override
-        public String info() {
-            return key() + ". " + this.name;
-        }
     }
 
-    private class ShowItems implements UserAction {
-
-        private final int key;
-        private final String name;
-
+    private class ShowItems extends BaseAction {
         public ShowItems(int key, String name) {
-            this.key = key;
-            this.name = name;
+            super(key, name);
         }
-
-        @Override
-        public int key() {
-            return this.key;
-        }
-
         @Override
         public void execute(Input input, Tracker tracker) {
             System.out.println("------------Список всех заявок------------");
             Arrays.stream(tracker.findAll()).forEach(System.out::println);
         }
-
-        @Override
-        public String info() {
-            return key() + ". " + this.name;
-        }
     }
 
-    private class UpdateItem implements UserAction {
-
-        private final int key;
-        private final String name;
+    private class UpdateItem extends BaseAction {
 
         public UpdateItem(int key, String name) {
-            this.key = key;
-            this.name = name;
-        }
-
-        @Override
-        public int key() {
-            return this.key;
+            super(key, name);
         }
 
         @Override
@@ -191,28 +152,12 @@ public class MenuTracker {
                 System.out.println(actionMsg("Не найдена", id));
             }
         }
-
-        @Override
-        public String info() {
-            return key() + ". " + this.name;
-        }
     }
 
-    private class DeleteItem implements UserAction {
-
-        private final int key;
-        private final String name;
-
+    private class DeleteItem extends BaseAction {
         public DeleteItem(int key, String name) {
-            this.key = key;
-            this.name = name;
+            super(key, name);
         }
-
-        @Override
-        public int key() {
-            return this.key;
-        }
-
         @Override
         public void execute(Input input, Tracker tracker) {
             System.out.println("------------ Удаление заявки по номеру --------------");
@@ -223,28 +168,12 @@ public class MenuTracker {
                 System.out.println(actionMsg("Ошибка удаления", id));
             }
         }
-
-        @Override
-        public String info() {
-            return key() + ". " + this.name;
-        }
     }
 
-    private class FindItemById implements UserAction {
-
-        private final int key;
-        private final String name;
-
+    private class FindItemById extends BaseAction {
         public FindItemById(int key, String name) {
-            this.key = key;
-            this.name = name;
+            super(key, name);
         }
-
-        @Override
-        public int key() {
-            return this.key;
-        }
-
         @Override
         public void execute(Input input, Tracker tracker) {
             System.out.println("------------ Поиск заявки по номеру --------------");
@@ -252,64 +181,27 @@ public class MenuTracker {
             Item item = tracker.findById(id);
             System.out.println((item == null ? actionMsg("Не найдена", id) : item));
         }
-
-        @Override
-        public String info() {
-            return key() + ". " + this.name;
-        }
     }
 
-    private class FindItemsByName implements UserAction {
-
-        private final int key;
-        private final String name;
-
+    private class FindItemsByName extends BaseAction {
         public FindItemsByName(int key, String name) {
-            this.key = key;
-            this.name = name;
+            super(key, name);
         }
-
-        @Override
-        public int key() {
-            return this.key;
-        }
-
         @Override
         public void execute(Input input, Tracker tracker) {
             System.out.println("------------ Поиск заявок по имени --------------");
             String name = input.ask("Введите имя заявки :");
             Arrays.stream(tracker.findByName(name)).forEach(System.out::println);
         }
-
-        @Override
-        public String info() {
-            return key() + ". " + this.name;
-        }
     }
 
-    private class ExitProgram implements UserAction {
-
-        private final int key;
-        private final String name;
-
+    private class ExitProgram extends BaseAction {
         public ExitProgram(int key, String name) {
-            this.key = key;
-            this.name = name;
+            super(key, name);
         }
-
-        @Override
-        public int key() {
-            return this.key;
-        }
-
         @Override
         public void execute(Input input, Tracker tracker) {
             setExit(true);
-        }
-
-        @Override
-        public String info() {
-            return key() + ". " + this.name;
         }
     }
 
