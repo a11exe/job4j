@@ -13,16 +13,18 @@ import java.util.List;
 public class ConvertList2Array {
 
     public int[][] toArray(List<Integer> list, int rows) {
-        int k = 0;
         int cells = list.size() % 3 != 0 ? list.size() / rows + 1 : list.size() / rows;
         int[][] array = new int[rows][cells];
-        if (list.size() > 0) {
-            for (int i = 0; i < rows; i++) {
-                for (int j = 0; j < cells; j++) {
-                    array[i][j] = k >= list.size() ? 0 : list.get(k++);
-                }
+        int row = 0;
+        int cell = 0;
+        for (Integer x : list) {
+            array[row][cell++] = x;
+            if (cell == cells) {
+                cell = 0;
+                row++;
             }
         }
+
         return array;
     }
 
