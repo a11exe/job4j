@@ -19,14 +19,6 @@ public enum Cell {
     }
 
     public static Cell findByKey(int x, int y) {
-        Cell finded = null;
-        Cell[] cells = Cell.values();
-        for (Cell cell : cells) {
-            if (cell.x == x && cell.y == y) {
-                finded = cell;
-                break;
-            }
-        }
-        return finded;
+        return Cell.values()[x * 8 + y];
     }
 }
