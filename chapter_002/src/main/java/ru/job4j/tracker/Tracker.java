@@ -55,7 +55,7 @@ public class Tracker {
         boolean deleted = false;
         for (int i = 0; i < this.items.size(); i++) {
             if (this.items.get(i).getId().equals(id)) {
-                this.items.remove(items.get(i));
+                this.items.remove(i);
                 deleted = true;
                 break;
             }
