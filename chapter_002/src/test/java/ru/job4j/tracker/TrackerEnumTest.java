@@ -24,6 +24,6 @@ public class TrackerEnumTest {
         TrackerEnum trackerEnum = TrackerEnum.INSTANCE;
         Item item = new Item("test1", "testDescription", 123L);
         trackerEnum.add(item);
-        assertThat(trackerEnum.findAll()[0], is(item));
+        assertThat(trackerEnum.findAll().get(0), is(item));
     }
 }

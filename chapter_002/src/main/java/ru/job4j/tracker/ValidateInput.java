@@ -1,5 +1,7 @@
 package ru.job4j.tracker;
 
+import java.util.List;
+
 /**
  * Проверка введенных данных на ошибки
  *
@@ -20,7 +22,7 @@ public class ValidateInput implements Input {
         return null;
     }
 
-    public int ask(String question, int[] range) {
+    public int ask(String question, List<Integer> range) {
         boolean valid = false;
         int key = 0;
         while (!valid) {

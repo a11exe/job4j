@@ -1,5 +1,7 @@
 package ru.job4j.tracker;
 
+import java.util.List;
+
 /**
  * Заглушка консоли для тестов.
  *
@@ -43,7 +45,7 @@ public class StubInput implements Input {
     }
 
     @Override
-    public int ask(String question, int[] range) {
+    public int ask(String question, List<Integer> range) {
         int key = Integer.parseInt(ask(question));
         boolean exist = false;
         for (int x: range

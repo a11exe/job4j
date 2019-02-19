@@ -1,8 +1,8 @@
 package ru.job4j.tracker;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Основное меню трекера.
@@ -80,8 +80,8 @@ public class MenuTracker {
         this.actions.get(key).execute(this.input, this.tracker);
     }
 
-    public int[] range() {
-        return this.actions.stream().mapToInt(UserAction::key).toArray();
+    public List<Integer> range() {
+        return this.actions.stream().mapToInt(UserAction::key).boxed().collect(Collectors.toList());
     }
 
 
@@ -122,7 +122,7 @@ public class MenuTracker {
         @Override
         public void execute(Input input, Tracker tracker) {
             System.out.println("------------Список всех заявок------------");
-            Arrays.stream(tracker.findAll()).forEach(System.out::println);
+            tracker.findAll().forEach(System.out::println);
         }
     }
 
@@ -191,7 +191,7 @@ public class MenuTracker {
         public void execute(Input input, Tracker tracker) {
             System.out.println("------------ Поиск заявок по имени --------------");
             String name = input.ask("Введите имя заявки :");
-            Arrays.stream(tracker.findByName(name)).forEach(System.out::println);
+            tracker.findByName(name).forEach(System.out::println);
         }
     }
 

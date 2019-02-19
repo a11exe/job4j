@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.util.Collections;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -34,7 +35,7 @@ public class ValidateInputTest {
         ValidateInput input = new ValidateInput(
                 new StubInput(new String[] {"invalid", "1"})
         );
-        input.ask("Enter", new int[] {1});
+        input.ask("Enter", Collections.singletonList(1));
         assertThat(this.mem.toString(),
                 is(
                         String.format("Введены некорректные данные. Введите число:%n")
@@ -46,7 +47,7 @@ public class ValidateInputTest {
         ValidateInput input = new ValidateInput(
                 new StubInput(new String[] {"9", "1"})
         );
-        input.ask("Enter", new int[] {1});
+        input.ask("Enter", Collections.singletonList(1));
         assertThat(this.mem.toString(),
                 is(
                         String.format("Введены некорректные данные. Введите существющий пункт меню:%n")

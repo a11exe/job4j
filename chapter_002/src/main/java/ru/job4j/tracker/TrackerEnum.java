@@ -1,6 +1,7 @@
 package ru.job4j.tracker;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * enum. Eager loading.
@@ -46,7 +47,7 @@ public enum TrackerEnum {
      * Получение списка всех заявок.
      * @return массив заявок.
      */
-    public Item[] findAll() {
+    public List<Item> findAll() {
         return TRACKER.findAll();
     }
 
@@ -55,7 +56,7 @@ public enum TrackerEnum {
      * @param key имя заявки
      * @return массив заявок.
      */
-    public Item[] findByName(String key) {
+    public List<Item> findByName(String key) {
         return TRACKER.findByName(key);
     }
 

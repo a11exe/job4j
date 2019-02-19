@@ -24,6 +24,6 @@ public class TrackerStaticLazyTest {
         Tracker tracker = TrackerStaticLazy.getInstance();
         Item item = new Item("test1", "testDescription", 123L);
         tracker.add(item);
-        assertThat(tracker.findAll()[0], is(item));
+        assertThat(tracker.findAll().get(0), is(item));
     }
 }

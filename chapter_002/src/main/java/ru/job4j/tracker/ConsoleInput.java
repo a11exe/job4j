@@ -1,5 +1,6 @@
 package ru.job4j.tracker;
 
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -30,7 +31,7 @@ public class ConsoleInput implements Input {
      * @return выбранный пункт меню
      */
     @Override
-    public int ask(String question, int[] range) {
+    public int ask(String question, List<Integer> range) {
         int key = Integer.parseInt(ask(question));
         boolean exist = false;
         for (int x: range
