@@ -40,7 +40,7 @@ public class PaintTest {
                                 .append("  X  \n")
                                 .append(" XXX \n")
                                 .append("XXXX\n")
-                                .append("\r\n")
+                                .append("\n")
                                 .toString()
                 )
         );
@@ -57,7 +57,7 @@ public class PaintTest {
                                 .append("XXXX\n")
                                 .append("XXXX\n")
                                 .append("XXXX\n")
-                                .append("\r\n")
+                                .append("\n")
                                 .toString()
                 )
         );
