@@ -80,8 +80,8 @@ public class Bank {
         List<Account> srcAccounts = getUserAccounts(srcPassport);
         List<Account> destAccounts = getUserAccounts(destPassport);
         if ((srcAccounts != null) && (destAccounts != null)) {
-            Account srcAccount = srcAccounts.stream().filter(s->s.getRequisites().equals(srcRequisite)).findFirst().orElse(null);
-            Account destAccount = destAccounts.stream().filter(s->s.getRequisites().equals(dstRequisite)).findFirst().orElse(null);
+            Account srcAccount = getAccountByRequisites(srcAccounts, srcRequisite);
+            Account destAccount = getAccountByRequisites(destAccounts, dstRequisite);
             if (srcAccount != null && destAccount != null && srcAccount.getValue() >= amount) {
                 srcAccount.setValue(srcAccount.getValue() - amount);
                 destAccount.setValue(destAccount.getValue() + amount);
@@ -90,5 +90,10 @@ public class Bank {
         }
         return transferSuccess;
     }
+
+    private Account getAccountByRequisites(List<Account> accounts, String requisite) {
+        return accounts.stream().filter(s->s.getRequisites().equals(requisite)).findFirst().orElse(null);
+    }
+
 
 }
