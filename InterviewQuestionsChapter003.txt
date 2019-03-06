@@ -95,25 +95,32 @@
 
 17. Как происходит удаление элементов из LinkedList?
     Замена ссылок prev и next у соседних элементов.
+	
+	
 
 Расскажите иерархию интерфейсов Collection framework
-    i Collections extends Iterable
+    i Collections extends Iterableю.
     - i Set (коллекция без дублирования)
-    -- HashSet
-    --- LinkedHashSet
-    -- i SortedSet (методы first, last
-    --- TreeSet
-    - i Queue очередь(offer(), element(), peek(), poll(), remove()
+    -- HashSet базирующаяся на HashMap В качестве ключа используется добавляемый элемент, а в качестве значения — объект-пустышка (new Object())
+    --- LinkedHashSet в основе лежит LinkedHashMap
+    -- i SortedSet Методы: first, last
+    --- TreeSet (отсортированный список) содержит в себе объект NavigableMap
+    - i Queue очередь Методы: offer(), element(), peek(), poll(), remove()
     -- i Deque двусторонняя очередь addFirst, addLast, getFist, getLast, (push, pop  -> использовать как стек)
-    - i List (сохраняет последовательность элементов. можно получить по индекусу, можно повторяющиеся)
-    -- ArrayList динамический массив
-    -- LinkedList связный список
-    i Map
-    - i SortedMap
-    -- TreeMap
+    - i List упорядоченная коллекция (сохраняет последовательность элементов. можно получить по индексу, можно повторяющиеся, можно по значению первый найденный)
+	-- Vector @deprecated реализация динамического массива объектов. Позволяет хранить любые данные, включая null в качестве элемента
+	-- Stack - данная коллекция является расширением коллекции Vector. реализация стека LIFO
+    -- ArrayList динамический массив, можно хранить null
+    -- LinkedList связный список (impl List & Deque)
+    i Map (нет итератора, нельзя перебирать в цикле. Можно получить представление в виде коллекции для перебора) get(), put(), entrySet(), keySet(), values()
+    - i SortedMap (по порядку нарастания ключей)
+	- i NavigableMap
+    -- TreeMap реализация Map основанная на красно-чёрных деревьях (отсортированная по умолчанию natural oedering, можно задать свой компаратор)
     - AbstractMap
-    -- HashMap
-    ---LinkedHashMap
+    -- HashMap позволяет использовать null как в качестве ключа, так и значения
+    ---LinkedHashMap  это упорядоченная реализация хэш-таблицы. Аналогично LinkedList
+	- WeekHashMap - реализация хэш-таблицы, которая организована с использованием weak references. 
+					Другими словами, Garbage Collector автоматически удалит элемент из коллекции при следующей сборке мусора, если на ключ этого элеметна нет жёстких ссылок
 
 Назовите основные методы интерфейса Collections
     !int size()
@@ -130,3 +137,210 @@
     !void clear()
     boolean equals(Object o)
     int hashCode()
+
+Может ли null использоваться в качестве ключа в Map?
+	HashMap оперирует с null-ключом без каких-либо проблем. Его hash всегда равен 0	
+	В пустой TreeMap можно положить единственный ключ-null, все остальные операции (кроме size() и clear(), кстати) после этого не работают.
+	В непустой TreeMap положить null-ключ нельзя из-за обязательного вызова compareTo().
+	
+Может ли Set содержать null?
+	HashSet работает. TreeSet — только для первого элемента.
+	
+Чем отличается ArrayList от LinkedList?
+	ArrayList это список, реализованный на основе массива, а LinkedList — это классический связный список, основанный на объектах с ссылками между ними.
+	Если необходимо вставлять (или удалять) в середину коллекции много элементов, то лучше использовать LinkedList. Во всех остальных случаях – ArrayList.
+
+Необходимо добавить 1млн. элемент, какую структуру вы используете?
+	Тоже довольно популярная скрытая версия первого вопроса. 
+	Так же постановка предполагает выбор одного из предложенных вариантов, хотя на самом деле информации для однозначного выбора нет. 
+	Нужно задавать дополнительные вопросы: в какую часть списка происходит добавление элементов? есть ли информация о том,
+	что потом будет происходить с элементами списка? какие то ограничения по памяти или скорости выполнения? 
+	
+Как происходит удаление элементов из ArrayList? Как меняется в этом случае размер ArrayList?
+	 При удалении произвольного элемента из списка, все элементы находящиеся «правее» смещаются на одну ячейку влево 
+	 и реальный размер массива (его емкость, capacity) не изменяется никак. 
+	 Механизм автоматического «расширения» массива существует, а вот автоматического «сжатия» нет, 
+	 можно только явно выполнить «сжатие» командой trimToSize().
+	 
+Предложите эффективный алгоритм удаления нескольких рядом стоящих элементов из середины списка, реализуемого ArrayList
+	Вместо выполнения удаления одного элемента n раз (каждый раз смещая на 1 позицию элементы, стоящие «правее» в списке), 
+	нужно выполнить смещение всех элементов, стоящих «правее» n+m позиции на n элементов левее к началу списка. 
+	Таким образом, вместо выполнения n итераций перемещения элементов списка, все выполняется за 1 проход.
+	
+Как устроена HashMap?
+	HashMap состоит из «корзин» (bucket`ов). С технической точки зрения «корзины» — это элементы массива, 
+	которые хранят ссылки на списки элементов. При добавлении новой пары ключ-значение, вычисляет хеш-код ключа, 
+	на основании которого вычисляется номер корзины (номер ячейки массива), в которую попадет новый элемент. 
+	Если корзина пустая, то в нее сохраняется ссылка на вновь добавляемый элемент, если же там уже есть элемент, 
+	то происходит последовательный переход по ссылкам между элементами в цепочке, в поисках последнего элемента, 
+	от которого и ставится ссылка на вновь добавленный элемент. Если в списке был найден элемент с таким же ключом, 
+	то он заменяется. Добавление, поиск и удаление элементов выполняется за константное время. Вроде все здорово, с одной оговоркой, 
+	хеш-функций должна равномерно распределять элементы по корзинам, 
+	в этом случае временная сложность для этих 3 операций будет не ниже lg N, а в среднем случае как раз константное время.
+	
+Какое начальное количество корзин в HashMap?
+	Ответ здесь — 16. Отвечая, стоит заметить, что можно используя конструкторы с параметрами: 
+	через параметр capacity задавать свое начальное количество корзин
+	
+Какая оценка временной сложности выборки элемента из HashMap? Гарантирует ли HashMap указанную сложность выборки элемента?
+	Если вы возьмете хеш-функцию, которая постоянно будет возвращать одно и то же значение, 
+	то HashMap превратится в связный список, с отвратной производительностью.
+	Если вы будете использовать хеш-функцию с равномерным распределением, 
+	в предельном случае гарантироваться будет только временная сложность lg N. 
+	Так что, ответ на вторую часть вопроса — нет, не гарантируется.
+	
+Роль equals и hashCode в HashMap?
+	 hashCode позволяет определить корзину для поиска элемента, 
+	 а equals используется для сравнения ключей элементов в списке внутри корзины и искомого ключа.
+	 
+Максимальное число значений hashCode()
+	равно диапазону типа int — 2^32
+	
+Как и когда происходит увеличение количества корзин в HashMap?
+	Помимо capacity в HashMap есть еще параметр loadFactor, на основании которого, 
+	вычисляется предельное количество занятых корзин (capacity*loadFactor). 
+	По умолчанию loadFactor = 0,75. По достижению предельного значения, число корзин увеличивается в 2 раза. 
+	Для всех хранимых элементов вычисляется новое «местоположение» с учетом нового числа корзин.
+	
+В каком случае может быть потерян элемент в HashMap?
+	После добавления элемента в HashMap у объекта, который выступает в качестве ключа, изменяют одно поле, 
+	которое участвует в вычислении хеш-кода. В результате при попытке найти данный элемент по исходному ключу, 
+	будет происходить обращение к правильной корзине, а вот equals (ведь equals и hashCode должны работать с одним и тем же набором полей) 
+	уже не найдет указанный ключ в списке элементов. Тем не менее, даже если equals реализован таким образом, 
+	что изменение данного поля объекта не влияет на результат, 
+	то после увеличения размера корзин и пересчета хеш-кодов элементов, указанный элемент, с измененным значением поля, 
+	с большой долей вероятности попадет совсем в другую корзину и тогда он уже совсем потеряется
+	
+Почему нельзя использовать byte[] в качестве ключа в HashMap?
+	Как обычно, все оказалось довольно просто — хеш-код массива не зависит от хранимых в нем элементов, 
+	а присваивается при создании массива (метод вычисления хеш-кода массива не переопределен и вычисляется по стандартному Object.hashCode() 
+	на основании адреса массива). Так же у массивов не переопределен equals и выполняет сравнение указателей. 
+	Это приводит к тому, что обратиться к сохраненному с ключом-массивом элементу не получится при использовании другого массива 
+	такого же размера и с такими же элементами, доступ можно осуществить лишь в одном случае — 
+	при использовании той же самой ссылки на массив, что использовалась для сохранения элемента.
+	
+В чем отличия TreeSet и HashSet?
+	TreeSet обеспечивает упорядоченно хранение элементов в виде красно-черного дерева. 
+	Сложность выполнения основных операций в TreeSet lg N. HashSet использует для хранения элементов такой же подход, что и HashMap, 
+	за тем отличием, что в HashSet в качестве ключа выступает сам элемент, кроме того HashSet (как и HashMap) 
+	не поддерживает упорядоченное хранение элементов и обеспечивает временную сложность выполнения операций аналогично HashMap.
+	
+Что будет, если добавлять элементы в TreeSet по возрастанию?
+	На самом, деле, как выше упоминалось в основе TreeSet лежит красно-черное дерево, 
+	которое умеет само себя балансировать. В итоге, TreeSet все равно в каком порядке вы добавляете в него элементы, 
+	преимущества этой структуры данных будут сохраняться.
+	
+Какие реализации SortedSet вы знаете и в чем их особенность?
+	TreeSet 
+	
+В каких случаях разумно использовать массив, а не ArrayList?
+	Если коротко, то Oracle пишет — используйте ArrayList вместо массивов. 
+	Если ответить на этот вопрос нужно по-другому, то можно сказать следующее: массивы могут быть быстрее и кушать меньше памяти. 
+	Списки теряют в производительности из-за возможности автоматического увеличения размера и сопутствующих проверок.
+	
+
+Какие коллекции синхронизированы?
+	Для этого используется пакет Concurrent. А так @Deprecated HashTable, Vector.
+	
+Как получить синхронизированную коллекцию из не синхронизированной?
+	Collections.synchronizedList(list);
+	Collections.synchronizedSet(set);
+	Collections.synchronizedMap(map);
+	
+Как получить коллекцию только для чтения?
+	Collections.unmodifiableList(list);
+	Collections.unmodifiableSet(set);
+	Collections.unmodifiableMap(map);
+	
+В чем разница между Iterator и Enumeration?
+	Enumeration в два раза быстрее Iterator и использует меньше памяти. 
+	Iterator потокобезопасен, т.к. не позволяет другим потокам модифицировать коллекцию при переборе. 
+	Enumeration можно использовать только для read-only коллекций. Так же у него отсутствует метод remove();
+	
+В чем разница между Iterator и ListIterator?
+	Iterator может использоваться для перебора элементов Set, List и Map. 
+	В отличие от него, ListIterator может быть использован только для перебора элементов коллекции List
+	Iterator позволяет перебирать элементы только в одном направлении, при помощи метода next(). 
+	Тогда как ListIterator позволяет перебирать список в обоих направлениях, при помощи методов next() и previous()
+	При помощи ListIterator вы можете модифицировать список, добавляя/удаляя элементы с помощью методов add() и remove(). 
+	Iterator не поддерживает данного функционала
+	
+Как преобразовать массив строк в ArrayList
+	Arrays.asList(words)
+	
+Как отсортировать список в обратном порядке?
+	List reversedList = Collections.reverse(list)
+	
+ 
+ 
+Временная сложность						Среднее										Худшее
+							Индекс 	Поиск		Вставка		Удаление 		Индекс 	Поиск		Вставка		Удаление	
+	ArrayList				O(1)	O(n)		O(n)		O(n)			O(1)	O(n)		O(n)		O(n)
+	Vector					O(1)	O(n)		O(n)		O(n)			O(1)	O(n)		O(n)		O(n)
+	LinkedList				O(n)	O(n)		O(1)		O(1)			O(n)	O(n)		O(1)		O(1)
+	
+	HashTable				n/a		O(1)		O(1)		O(1)			n/a		O(n)		O(n)		O(n)
+	HashMap					n/a		O(1)		O(1)		O(1)			n/a		O(n)		O(n)		O(n)
+	LinkedHashMap			n/a		O(1)		O(1)		O(1)			n/a		O(n)		O(n)		O(n)
+	TreeMap					n/a		O(log(n))	O(log(n))	O(log(n))		n/a		O(log(n))	O(log(n))	O(log(n))
+	
+	HashSet					n/a		O(1)		O(1)		O(1)			n/a		O(n)		O(n)		O(n)
+	LinkedHashSet			n/a		O(1)		O(1)		O(1)			n/a		O(n)		O(n)		O(n)
+	TreeSet					n/a		O(log(n))	O(log(n))	O(log(n))		n/a		O(log(n))	O(log(n))	O(log(n))
+
+
+Как работает HashMap
+	HashMap has an inner class Entry:
+		static class Entry<K ,V> implements Map.Entry<K, V>
+		{
+			final K key;
+			V value;
+			Entry<K ,V> next;
+			final int hash;
+			...//More code goes here
+		}
+	How HashMap.put() methods works:
+		transient Entry[] table;
+		
+		1.First of all, the key object is checked for null. If the key is null, the value is stored in table[0] position. 
+			Because hashcode for null is always 0. 
+		2. Then on next step, a hash value is calculated using the key’s hash code by calling its hashCode() method. 
+			This hash value is used to calculate the index in the array for storing Entry object. 
+			JDK designers well assumed that there might be some poorly written hashCode() functions that can return very high or low hash code value.
+			To solve this issue, they introduced another hash() function and passed the object’s hash code to this hash() function 
+			to bring hash value in the range of array index size.
+		3. Now indexFor(hash, table.length) function is called to calculate exact index position for storing the Entry object.
+		
+	How collisions are resolved:
+		as we know that two unequal objects can have the same hash code value, 
+		how two different objects will be stored in same array location called bucket.
+		The answer is LinkedList. If you remember, Entry class had an attribute "next". 
+		This attribute always points to the next object in the chain. This is exactly the behavior of LinkedList.
+		
+		1. So, in case of collision, Entry objects are stored in linked list form. 
+			When an Entry object needs to be stored in particular index, HashMap checks whether there is already an entry?? 
+			If there is no entry already present, the entry object is stored in this location. 
+			If there is already an object sitting on calculated index, its next attribute is checked. 
+			If it is null, and current entry object becomes next node in linkedlist. 
+			If next variable is not null, procedure is followed until next is evaluated as null.
+			
+		2. What if we add the another value object with same key as entered before. 
+			Logically, it should replace the old value. How it is done? Well, after determining the index position of Entry object, 
+			while iterating over linkedist on calculated index, HashMap calls equals method on key object for each entry object.
+			
+			All these entry objects in linkedlist will have similar hashcode but equals() method will test for true equality. 
+			If key.equals(k) will be true then both keys are treated as same key object. 
+			This will cause the replacing of value object inside entry object only.
+			
+	How HashMap.get() methods works:
+		public V get(Object key) {
+			if (key == null)
+			return getForNullKey();
+			int hash = hash(key.hashCode());
+			for (Entry<K , V> e = table[indexFor(hash, table.length)]; e != null; e = e.next) {
+				Object k;
+				if (e.hash == hash && ((k = e.key) == key || key.equals(k)))
+					return e.value;
+			}
+			return null;
+		}
