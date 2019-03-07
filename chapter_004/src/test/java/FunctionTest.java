@@ -1,9 +1,13 @@
+import org.hamcrest.Matcher;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.closeTo;
+import static org.hamcrest.Matchers.contains;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -33,8 +37,11 @@ public class FunctionTest {
     public void whenLogarithmicFunctionThenLogarithmicResults() {
         Diapason function = new Diapason();
         List<Double> result = function.diapason(5, 8, Math::log);
-        List<Double> expected = Arrays.asList(1.6094379124341003D, 1.791759469228055D, 1.9459101490553132D);
-        assertThat(result, is(expected));
+        List<Matcher<? super Double>> expected = new ArrayList<>();
+        expected.add(closeTo(1.609D, 0.001));
+        expected.add(closeTo(1.791D, 0.001));
+        expected.add(closeTo(1.945D, 0.001));
+        assertThat(result, contains(expected));
     }
 
 }
