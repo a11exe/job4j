@@ -2,6 +2,7 @@ package ru.job4j.tracker;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
@@ -30,6 +31,12 @@ public class MenuTracker {
      * хранит ссылку на объект .
      */
     private final Input input;
+
+    /*
+    * вывод данных
+     */
+    private final Consumer<String> output;
+
     /**
      * хранит ссылку на объект .
      */
@@ -45,9 +52,10 @@ public class MenuTracker {
      * @param input   объект типа Input
      * @param tracker объект типа Tracker
      */
-    public MenuTracker(Input input, Tracker tracker) {
+    public MenuTracker(Input input, Tracker tracker, Consumer<String> output) {
         this.input = input;
         this.tracker = tracker;
+        this.output = output;
     }
 
     public boolean isExit() {
@@ -91,7 +99,7 @@ public class MenuTracker {
     public void show() {
         for (UserAction action : this.actions) {
             if (action != null) {
-                System.out.println(action.info());
+                this.output.accept(action.info());
             }
         }
     }
@@ -104,14 +112,14 @@ public class MenuTracker {
 
         @Override
         public void execute(Input input, Tracker tracker) {
-            System.out.println("------------ Adding new item --------------");
+            output.accept("------------ Adding new item --------------");
             String name = input.ask("Please, provide item name:");
             String desc = input.ask("Please, provide item description:");
             Item item = new Item(name, desc);
             tracker.add(item);
-            System.out.println("------------ New Item with Id : " + item.getId());
-            System.out.println("------------ New Item with Name : " + item.getName());
-            System.out.println("------------ New Item with Description : " + item.getDesc());
+            output.accept("------------ New Item with Id : " + item.getId());
+            output.accept("------------ New Item with Name : " + item.getName());
+            output.accept("------------ New Item with Description : " + item.getDesc());
         }
     }
 
@@ -121,7 +129,7 @@ public class MenuTracker {
         }
         @Override
         public void execute(Input input, Tracker tracker) {
-            System.out.println("------------Список всех заявок------------");
+            output.accept("------------Список всех заявок------------");
             tracker.findAll().forEach(System.out::println);
         }
     }
@@ -134,22 +142,22 @@ public class MenuTracker {
 
         @Override
         public void execute(Input input, Tracker tracker) {
-            System.out.println("------------ Редактирование заявки по номеру --------------");
+            output.accept("------------ Редактирование заявки по номеру --------------");
             String id = input.ask("Введите номер заявки :");
             Item item = tracker.findById(id);
             if (item != null) {
-                System.out.println(item);
+                output.accept(item.toString());
                 String name = input.ask("Введите новое имя заявки :");
                 String desc = input.ask("Введите новое описание заявки :");
                 Item itemNew = new Item(name, desc);
                 itemNew.setId(item.getId());
                 if (tracker.replace(id, itemNew)) {
-                    System.out.println(actionMsg("Изменена", id));
+                    output.accept(actionMsg("Изменена", id));
                 } else {
-                    System.out.println(actionMsg("Не удалось изменить", id));
+                    output.accept(actionMsg("Не удалось изменить", id));
                 }
             } else {
-                System.out.println(actionMsg("Не найдена", id));
+                output.accept(actionMsg("Не найдена", id));
             }
         }
     }
@@ -160,12 +168,12 @@ public class MenuTracker {
         }
         @Override
         public void execute(Input input, Tracker tracker) {
-            System.out.println("------------ Удаление заявки по номеру --------------");
+            output.accept("------------ Удаление заявки по номеру --------------");
             String id = input.ask("Введите номер заявки :");
             if (tracker.delete(id)) {
-                System.out.println(actionMsg("Удалена", id));
+                output.accept(actionMsg("Удалена", id));
             } else {
-                System.out.println(actionMsg("Ошибка удаления", id));
+                output.accept(actionMsg("Ошибка удаления", id));
             }
         }
     }
@@ -176,10 +184,10 @@ public class MenuTracker {
         }
         @Override
         public void execute(Input input, Tracker tracker) {
-            System.out.println("------------ Поиск заявки по номеру --------------");
+            output.accept("------------ Поиск заявки по номеру --------------");
             String id = input.ask("Введите номер заявки :");
             Item item = tracker.findById(id);
-            System.out.println((item == null ? actionMsg("Не найдена", id) : item));
+            output.accept((item == null ? actionMsg("Не найдена", id) : item.toString()));
         }
     }
 
@@ -189,9 +197,9 @@ public class MenuTracker {
         }
         @Override
         public void execute(Input input, Tracker tracker) {
-            System.out.println("------------ Поиск заявок по имени --------------");
+            output.accept("------------ Поиск заявок по имени --------------");
             String name = input.ask("Введите имя заявки :");
-            tracker.findByName(name).forEach(System.out::println);
+            tracker.findByName(name).forEach(s->output.accept(s.toString()));
         }
     }
 

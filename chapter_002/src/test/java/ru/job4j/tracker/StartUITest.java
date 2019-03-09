@@ -1,12 +1,12 @@
 package ru.job4j.tracker;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.List;
+import java.util.function.Consumer;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -20,8 +20,14 @@ import static org.junit.Assert.assertThat;
  */
 public class StartUITest {
 
-    private final PrintStream stdout = System.out;
     private final ByteArrayOutputStream out = new ByteArrayOutputStream();
+    private final Consumer<String> output = new Consumer<String>() {
+        private final PrintStream stdout = new PrintStream(out);
+        @Override
+        public void accept(String s) {
+            stdout.println(s);
+        }
+    };
     private Tracker tracker;
     private Item[] items;
     private final int size = 3;
@@ -43,23 +49,14 @@ public class StartUITest {
 
     @Before
     public void setOutput() {
-        System.setOut(new PrintStream(out));
         fillTracker();
-    }
-
-    @After
-    public void backOutput() {
-        System.setOut(stdout);
     }
 
     @Test
     public void thenShowAllItemThenThreeItems() {
-        this.out.reset();
-        StartUI startUI = new StartUI(new StubInput(new String[]{"1", "6"}), this.tracker);
+        StartUI startUI = new StartUI(new StubInput(new String[]{"1", "6"}), this.tracker, this.output);
         startUI.init();
-        String actual = new String(out.toByteArray());
 
-        this.out.reset();
         StringBuilder outTest = new StringBuilder(menuOut)
                 .append(System.lineSeparator())
                 .append("------------Список всех заявок------------")
@@ -73,18 +70,15 @@ public class StartUITest {
         outTest.append(menuOut);
         System.out.println(outTest);
         String expected = new String(out.toByteArray());
-        assertThat(actual, is(expected));
+        assertThat(this.out.toString(), is(expected));
     }
 
     @Test
     public void thenFindByNameThenFirstItem() {
         String name = "name 0";
-        this.out.reset();
-        StartUI startUI = new StartUI(new StubInput(new String[]{"5", name, "6"}), this.tracker);
+        StartUI startUI = new StartUI(new StubInput(new String[]{"5", name, "6"}), this.tracker, this.output);
         startUI.init();
-        String actual = new String(out.toByteArray());
 
-        this.out.reset();
         StringBuilder outTest = new StringBuilder(menuOut)
                 .append(System.lineSeparator())
                 .append("------------ Поиск заявок по имени --------------")
@@ -96,7 +90,7 @@ public class StartUITest {
         outTest.append(menuOut);
         System.out.println(outTest);
         String expected = new String(out.toByteArray());
-        assertThat(actual, is(expected));
+        assertThat(this.out.toString(), is(expected));
     }
 
     @Test
@@ -108,7 +102,9 @@ public class StartUITest {
 
     @Test
     public void deleteItem() {
-        StartUI startUI = new StartUI(new StubInput(new String[]{"3", tracker.findAll().get(0).getId(), "6"}), tracker);
+        StartUI startUI = new StartUI(
+                new StubInput(new String[]{"3", tracker.findAll().get(0).getId(), "6"}), this.tracker, this.output
+        );
         startUI.init();
         assertThat(tracker.findAll().get(0).getName(), is(items[1].getName()));
         assertThat(tracker.findAll().get(1).getDesc(), is(items[2].getDesc()));
@@ -117,7 +113,12 @@ public class StartUITest {
 
     @Test
     public void editItem() {
-        StartUI startUI = new StartUI(new StubInput(new String[]{"2", tracker.findAll().get(0).getId(), "new name", "new desc", "6"}), tracker);
+        StartUI startUI = new StartUI(
+                new StubInput(
+                        new String[]{"2", tracker.findAll().get(0).getId(), "new name", "new desc", "6"}),
+                this.tracker,
+                this.output
+        );
         startUI.init();
         assertThat(tracker.findAll().get(0).getName(), is("new name"));
         assertThat(tracker.findAll().get(0).getDesc(), is("new desc"));
@@ -134,7 +135,7 @@ public class StartUITest {
             addActions[i * 3 + 2] = items[i].getDesc();
         }
         addActions[addActions.length - 1] = "6";
-        StartUI startUI = new StartUI(new StubInput(addActions), this.tracker);
+        StartUI startUI = new StartUI(new StubInput(addActions), this.tracker, this.output);
         startUI.init();
     }
 
