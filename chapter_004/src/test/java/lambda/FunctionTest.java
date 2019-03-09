@@ -1,3 +1,5 @@
+package lambda;
+
 import org.hamcrest.Matcher;
 import org.junit.Test;
 
