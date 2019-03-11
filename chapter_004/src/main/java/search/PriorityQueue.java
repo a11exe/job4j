@@ -1,6 +1,7 @@
 package search;
 
 import java.util.LinkedList;
+import java.util.stream.IntStream;
 
 /**
  * Список задач с приоритетами
@@ -19,9 +20,11 @@ public class PriorityQueue {
      * @param task задача
      */
     public void put(Task task) {
-        Task taskFinded = tasks.stream().filter(s -> s.getPriority() >= task.getPriority()).findFirst().orElse(null);
-        int i = taskFinded == null ? 0 : tasks.indexOf(taskFinded);
-        tasks.add(i, task);
+        int index = IntStream.range(0, this.tasks.size())
+                .filter(i->this.tasks.get(i).getPriority() >= task.getPriority())
+                .findFirst()
+                .orElse(0);
+        tasks.add(index, task);
     }
 
     public Task take() {
