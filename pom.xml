@@ -8,10 +8,11 @@
     <url>http://job4j.ru/</url>
 
     <properties>
-     <maven.compiler.source>1.8</maven.compiler.source>
-     <maven.compiler.target>1.8</maven.compiler.target>
-     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
- </properties>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <compiler.version>3.8.0</compiler.version>
+    </properties>
 
  <modules>
      <module>chapter_001</module>
@@ -35,10 +36,54 @@
         <version>4.12</version>
         <scope>test</scope>
     </dependency>
+     <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-fxml -->
+     <dependency>
+         <groupId>org.openjfx</groupId>
+         <artifactId>javafx-fxml</artifactId>
+         <version>11</version>
+     </dependency>
+
+     <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-graphics -->
+     <dependency>
+         <groupId>org.openjfx</groupId>
+         <artifactId>javafx-graphics</artifactId>
+         <version>11</version>
+     </dependency>
+
+     <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-base -->
+     <dependency>
+         <groupId>org.openjfx</groupId>
+         <artifactId>javafx-base</artifactId>
+         <version>11</version>
+     </dependency>
+
+     <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-controls -->
+     <dependency>
+         <groupId>org.openjfx</groupId>
+         <artifactId>javafx-controls</artifactId>
+         <version>11</version>
+     </dependency>
 </dependencies>
 
 <build>
     <plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>3.0.0-M3</version>
+            <configuration>
+                <testFailureIgnore>true</testFailureIgnore>
+            </configuration>
+        </plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>${compiler.version}</version>
+            <configuration>
+                <release>11</release>
+                <encoding>${project.build.sourceEncoding}</encoding>
+            </configuration>
+        </plugin>
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-javadoc-plugin</artifactId>
@@ -68,7 +113,7 @@
         <plugin>
             <groupId>org.jacoco</groupId>
             <artifactId>jacoco-maven-plugin</artifactId>
-            <version>0.7.9</version>
+            <version>0.8.3</version>
             <executions>
                 <execution>
                     <goals>
