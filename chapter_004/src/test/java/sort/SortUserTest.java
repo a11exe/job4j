@@ -2,7 +2,6 @@ package sort;
 
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -15,11 +14,11 @@ public class SortUserTest {
     @Test
     public void sort() {
         SortUser sortUser = new SortUser();
-        List<User> users = new ArrayList<>();
-        users.add(new User(3, "Ivan"));
-        users.add(new User(5, "Pavel"));
-        users.add(new User(4, "Nikon"));
-        users.add(new User(1, "Oleg"));
+        List<User> users = List.of(
+        new User(3, "Ivan"),
+        new User(5, "Pavel"),
+        new User(4, "Nikon"),
+        new User(1, "Oleg"));
         Set<User> set = sortUser.sort(users);
         User[] usersArr = set.toArray(new User[3]);
 
@@ -30,11 +29,11 @@ public class SortUserTest {
     @Test
     public void sortNameLength() {
         SortUser sortUser = new SortUser();
-        List<User> users = new ArrayList<>();
-        users.add(new User(3, "Ivan"));
-        users.add(new User(5, "Pavel"));
-        users.add(new User(4, "Nikolai"));
-        users.add(new User(1, "Bob"));
+        List<User> users = List.of(
+        new User(3, "Ivan"),
+        new User(5, "Pavel"),
+        new User(4, "Nikolai"),
+        new User(1, "Bob"));
         List<User> list = sortUser.sortNameLength(users);
 
         assertThat(list.get(0).getName(), is("Bob"));
@@ -48,18 +47,18 @@ public class SortUserTest {
         User ivan2 = new User(30, "Иван");
         User serg1 = new User(20, "Сергей");
         User serg2 = new User(25, "Сергей");
-        List<User> users = new ArrayList<>();
-        users.add(serg2);
-        users.add(ivan2);
-        users.add(serg1);
-        users.add(ivan1);
+        List<User> users = List.of(
+        serg2,
+        ivan2,
+        serg1,
+        ivan1);
         List<User> list = sortUser.sortByAllFields(users);
 
-        List<User> expected = new ArrayList<>();
-        expected.add(ivan1);
-        expected.add(ivan2);
-        expected.add(serg1);
-        expected.add(serg2);
+        List<User> expected = List.of(
+        ivan1,
+        ivan2,
+        serg1,
+        serg2);
 
         assertThat(list, is(expected));
     }

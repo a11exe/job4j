@@ -82,10 +82,10 @@ public class BankTest {
 
     @Test
     public void whenAddUserThreeAccountsThenUserHasThisTreeAccounts() {
-        List<Account> accounts = new ArrayList<>();
-        accounts.add(new Account(100.3, "7878787"));
-        accounts.add(new Account(500.3, "7878888"));
-        accounts.add(new Account(800, "7878999"));
+        List<Account> accounts = List.of(
+        new Account(100.3, "7878787"),
+        new Account(500.3, "7878888"),
+        new Account(800, "7878999"));
         Bank bank = new Bank();
         User user1 = new User("Ivan", "34567891F");
         bank.addUser(user1);
@@ -111,13 +111,10 @@ public class BankTest {
 
     @Test
     public void whenDeleteAllAccountsThenUserHasNoAccounts() {
-        List<Account> accounts = new ArrayList<>();
         Account account1 = new Account(100.3, "7878787");
-        accounts.add(account1);
         Account account2 = new Account(500.3, "7878888");
-        accounts.add(account2);
         Account account3 = new Account(800, "7878999");
-        accounts.add(account3);
+        List<Account> accounts = List.of(account1, account2, account3);
         Bank bank = new Bank();
         User user1 = new User("Ivan", "34567891F");
         bank.addUser(user1);

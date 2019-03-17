@@ -3,7 +3,6 @@ package lambda;
 import org.hamcrest.Matcher;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -39,10 +38,10 @@ public class FunctionTest {
     public void whenLogarithmicFunctionThenLogarithmicResults() {
         Diapason function = new Diapason();
         List<Double> result = function.diapason(5, 8, Math::log);
-        List<Matcher<? super Double>> expected = new ArrayList<>();
-        expected.add(closeTo(1.609D, 0.001));
-        expected.add(closeTo(1.791D, 0.001));
-        expected.add(closeTo(1.945D, 0.001));
+        List<Matcher<? super Double>> expected = List.of(
+        closeTo(1.609D, 0.001),
+        closeTo(1.791D, 0.001),
+        closeTo(1.945D, 0.001));
         assertThat(result, contains(expected));
     }
 
