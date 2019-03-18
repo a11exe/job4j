@@ -14,13 +14,13 @@
 + [12. Что делаем метод filter](#Что-делаем-метод-filter)
 + [13. Что делаем метод map](#Что-делаем-метод-map)
 + [14. Что делаем метод flatMap](#Что-делаем-метод-flatMap)
-+ [12. Что делаем метод filter](#Что-делаем-метод-filter)
-+ [12. Что делаем метод filter](#Что-делаем-метод-filter)
-+ [12. Что делаем метод filter](#Что-делаем-метод-filter)
-+ [12. Что делаем метод filter](#Что-делаем-метод-filter)
-+ [12. Что делаем метод filter](#Что-делаем-метод-filter)
-+ [12. Что делаем метод filter](#Что-делаем-метод-filter)
-+ [12. Что делаем метод filter](#Что-делаем-метод-filter)
++ [15. Что делаем метод collect](#Что-делаем-метод-collect)
++ [16. Что делает метод reduce](#Что-делает-метод-reduce)
++ [17. Что делаем метод findFirst](#Что-делаем-метод-findFirst)
++ [18. Возможно ли прервать выполнение потока по аналогии с break](#Возможно-ли-прервать-выполнение-потока-по-аналогии-с-break)
++ [19. Возможно ли пропустить элемент потока по аналогии с continue](#Возможно-ли-пропустить-элемент-потока-по-аналогии-с-continue)
++ [20. Что такое Optional](#Что-такое-Optional)
++ [21. Перечислите методы Optional](#Перечислите-методы-Optional)
 + [12. Что делаем метод filter](#Что-делаем-метод-filter)
 + [12. Что делаем метод filter](#Что-делаем-метод-filter)
 + [12. Что делаем метод filter](#Что-делаем-метод-filter)
@@ -158,43 +158,48 @@ Consumer<T>, Function<T,R>, Predicate<T>, Supplier<T>, UnaryOperator<T> BinaryOp
 ```
 [к оглавлению](#FP-Labmda-Stream-API)
 
-## 15. Что делаем метод collect?
-    Преобразует поток в коллекцию. Мы можем написать свою реализацию функции, однако Java уже предоставляет
-    ряд встроенных функций, определенных в классе Collectors:
-    toList(): преобразование к типу List
-    toSet(): преобразование к типу Set
-    toMap(): преобразование к типу Map
+## Что делаем метод collect
+Преобразует поток в коллекцию. Мы можем написать свою реализацию функции, однако Java уже предоставляет
+ряд встроенных функций, определенных в классе Collectors:
++ toList(): преобразование к типу List
++ toSet(): преобразование к типу Set
++ toMap(): преобразование к типу Map
 
 [к оглавлению](#FP-Labmda-Stream-API)
 
-## 16. Что делает метод reduce?
-    Позволяет выполнять агрегатные функции на всей коллекцией и возвращать один результат
-    Метод reduce выполняет терминальные операции сведения, возвращая некоторое значение - результат операции.
-    Он имеет следующие формы:
-    Optional<T> reduce(BinaryOperator<T> accumulator)
-    T reduce(T identity, BinaryOperator<T> accumulator)
-    U reduce(U identity, BiFunction<U,? super T,U> accumulator, BinaryOperator<U> combiner)
+## Что делает метод reduce
+Позволяет выполнять агрегатные функции на всей коллекцией и возвращать один результат
+Метод reduce выполняет терминальные операции сведения, возвращая некоторое значение - результат операции.
+Он имеет следующие формы:
++ Optional<T> reduce(BinaryOperator<T> accumulator)
++ T reduce(T identity, BinaryOperator<T> accumulator)
++ U reduce(U identity, BiFunction<U,? super T,U> accumulator, BinaryOperator<U> combiner)
 
-    Первая форма возвращает результат в виде объекта Optional<T>. Например, вычислим произведение набора чисел:
-    Stream<Integer> numbersStream = Stream.of(1,2,3,4,5,6);
-    Optional<Integer> result = numbersStream.reduce((x,y)->x*y);
-    System.out.println(result.get()); // 720
+Первая форма возвращает результат в виде объекта Optional<T>. Например, вычислим произведение набора чисел:
+```java
+Stream<Integer> numbersStream = Stream.of(1,2,3,4,5,6);
+Optional<Integer> result = numbersStream.reduce((x,y)->x*y);
+System.out.println(result.get()); // 720
+```
 
-    Объект BinaryOperator<T> представляет функцию, которая принимает два элемента и выполняет над ними некоторую операцию,
-    возвращая результат. При этом метод reduce сохраняет результат и затем опять же применяет к этому результату
-    и следующему элементу в наборе бинарную операцию.
+Объект BinaryOperator<T> представляет функцию, которая принимает два элемента и выполняет над ними некоторую операцию,
+возвращая результат. При этом метод reduce сохраняет результат и затем опять же применяет к этому результату
+и следующему элементу в наборе бинарную операцию.
 
-    Если нам надо, чтобы первым элементом в наборе было какое-то определенное значение, то мы можем использовать вторую
-    версию метода reduce(), которая в качестве первого параметра принимает T identity.
-    Этот параметр хранит значение, с которого будет начинаться цепочка бинарных операций. Например:
+Если нам надо, чтобы первым элементом в наборе было какое-то определенное значение, то мы можем использовать вторую
+версию метода reduce(), которая в качестве первого параметра принимает T identity.
+Этот параметр хранит значение, с которого будет начинаться цепочка бинарных операций. Например:
 
-    Stream<String> wordsStream = Stream.of("мама", "мыла", "раму");
-    String sentence = wordsStream.reduce("Результат:", (x,y)->x + " " + y);
-    System.out.println(sentence); // Результат: мама мыла раму
+```java
+Stream<String> wordsStream = Stream.of("мама", "мыла", "раму");
+String sentence = wordsStream.reduce("Результат:", (x,y)->x + " " + y);
+System.out.println(sentence); // Результат: мама мыла раму
+```
 
-    Допустим мы хотим найти сумму цен тех телефонов, у которых цена меньше определенного значения.
-    Для этого используем третью версию метода reduce:
+Допустим мы хотим найти сумму цен тех телефонов, у которых цена меньше определенного значения.
+Для этого используем третью версию метода reduce:
 
+```java
     Stream<Phone> phoneStream = Stream.of(new Phone("iPhone 6 S", 54000),
                 new Phone("Lumia 950", 45000),
                 new Phone("Samsung Galaxy S 6", 40000),
@@ -210,18 +215,20 @@ Consumer<T>, Function<T,R>, Predicate<T>, Supplier<T>, UnaryOperator<T> BinaryOp
                 (x, y)->x+y);
 
     System.out.println(sum); // 117000
+```
 
 [к оглавлению](#FP-Labmda-Stream-API)
 
-## 17. Что делаем метод findFirst?
-    Возвращает первый элемент из стрима (возвращает Optional)
+## Что делаем метод findFirst
+Возвращает первый элемент из стрима (возвращает Optional)
 
 [к оглавлению](#FP-Labmda-Stream-API)
 
-## 18. Возможно ли прервать выполнение потока по аналогии с break?
-    Stream может выполнятся в несколько параллельных потоков, поэтому прерывание может привести к некорректным результатам.
-    В Java 9 можно использовать takeWhile.
-    Лучше использовать итератор:
+## Возможно ли прервать выполнение потока по аналогии с break
+Stream может выполнятся в несколько параллельных потоков, поэтому прерывание может привести к некорректным результатам.
+В Java 9 можно использовать ```java takeWhile ```.
+Лучше использовать итератор:
+```java
     Iterator<BuyOrderType> iter = market.buyOrders() // replace BuyOrderType with correct type here
                 .stream()
                 .filter(buyOrder -> buyOrder.price >= sellOrder.price)
@@ -242,11 +249,13 @@ Consumer<T>, Function<T,R>, Predicate<T>, Supplier<T>, UnaryOperator<T> BinaryOp
             break;
         }
     }
+```
 
 [к оглавлению](#FP-Labmda-Stream-API)
 
-## 19. Возможно ли пропустить элемент потока по аналогии с continue?
-    Вместо этого можно использовать return или filter
+## Возможно ли пропустить элемент потока по аналогии с continue
+Вместо этого можно использовать return или filter
+```java
     public static void main(String[] args) {
         ArrayList<String> stringList = new ArrayList<>();
         stringList.add("a");
@@ -259,12 +268,13 @@ Consumer<T>, Function<T,R>, Predicate<T>, Supplier<T>, UnaryOperator<T> BinaryOp
             System.out.println(str); // a c
         });
     }
-
+```
 [к оглавлению](#FP-Labmda-Stream-API)
 
-## 20. Что такое Optional?
-    В релизе Java 8 появился новый класс Optional призванный помочь разработчикам в обработке NullPointerException.
+## Что такое Optional
+В релизе Java 8 появился новый класс Optional призванный помочь разработчикам в обработке NullPointerException.
 
+```java
     //Пустой Optional объект
     Optional<Person> optionalPerson = Optional.empty();
 
@@ -273,42 +283,45 @@ Consumer<T>, Function<T,R>, Predicate<T>, Supplier<T>, UnaryOperator<T> BinaryOp
 
     //Optional объект с возможностью нулевого значения
     Optional<Person> optionalNullable = Optional.ofNullable(somePerson);
+```
 
-    Метод ifPresent() позволяет также устранить некоторую избыточность кода, следующего вида:
+Метод ifPresent() позволяет также устранить некоторую избыточность кода, следующего вида:
+```java
      if(person != null) {
     	System.out.println(person);
      }
+```
 
-    Те же действия, но с использованием Optional:
-    person.ifPresent(System.out::println);
+Те же действия, но с использованием Optional:
+```java  person.ifPresent(System.out::println); ```
 
-    orElse(), orElseThrow():
-    Как было раньше:
-    Person personNew = person != null ? person : new Person();
+orElse(), orElseThrow():
+Как было раньше:
+```java Person personNew = person != null ? person : new Person(); ```
 
-    То же самое, но с использованием Optional:
-    Person personNew = person.orElse(new Person());
-    Или, если не хотим создавать объект, можно выбросить исключение:
-    Person personNewThrow = person.orElseThrow(Exception::new);
+То же самое, но с использованием Optional:
+```java Person personNew = person.orElse(new Person()); ```
+Или, если не хотим создавать объект, можно выбросить исключение:
+```java Person personNewThrow = person.orElseThrow(Exception::new); ```
 
 [к оглавлению](#FP-Labmda-Stream-API)
 
-## 21 Перечислите методы Optional?
-    Optional.empty() - возвращает Optional с null внутри
-    Optional.of(T value) - возвращает Optional с нe null значением внутри
-    Optional.ofNullable(T value) - возвращает Optional который может содержать null значение внутри
+## Перечислите методы Optional
++ Optional.empty() - возвращает Optional с null внутри
++ Optional.of(T value) - возвращает Optional с нe null значением внутри
++ Optional.ofNullable(T value) - возвращает Optional который может содержать null значение внутри
 
-    Дальше мы рассмотрим методы конкретного объекта optional.
-    filter(Predicate<? super T> predicate) - Этот метод дает возможность отфильтровать значение опционального типа.
-        Мы передаем ему в параметр Predicat (это стандартный функциональный интерфейс),
-        он возвращает булево значение, если значение true, то возвращается этот же опционал, если значение false,
-        то возвращается пустой опционал (Optional.empty())
-    flatMap(Function<? super T,Optional<U>> mapper) - Этот метод можно применить для изменения значения установленного
-        в опционале. Функция которая передается в метод flatMap должна возвращать опционал.
-        Если значение не установлено, вернется Optional.empty()
-    get() - Этот метод возвращает значение из опционала. Нужно аккуратно использовать этот метод,
-        так как он может бросить исключение NoSuchElementException, если значение в опционале равно null.
-        Чтобы безопасно использовать этот метод перед его вызовом надо вызвать метод isPresent()
+Дальше мы рассмотрим методы конкретного объекта optional.
++ filter(Predicate<? super T> predicate) - Этот метод дает возможность отфильтровать значение опционального типа.
+Мы передаем ему в параметр Predicat (это стандартный функциональный интерфейс),
+он возвращает булево значение, если значение true, то возвращается этот же опционал, если значение false,
+то возвращается пустой опционал (Optional.empty())
++ flatMap(Function<? super T,Optional<U>> mapper) - Этот метод можно применить для изменения значения установленного
+в опционале. Функция которая передается в метод flatMap должна возвращать опционал.
+Если значение не установлено, вернется Optional.empty()
++ get() - Этот метод возвращает значение из опционала. Нужно аккуратно использовать этот метод,
+так как он может бросить исключение NoSuchElementException, если значение в опционале равно null.
+Чтобы безопасно использовать этот метод перед его вызовом надо вызвать метод isPresent()
     ifPresent(Consumer<? super T> consumer) - Этот метод исполняет Consumer функциональный интерфейс
         если значение в опционале присутствует
     isPresent() - Возвращает булево значение true если в опционале значение есть и возвращает false если в опционале значение null
