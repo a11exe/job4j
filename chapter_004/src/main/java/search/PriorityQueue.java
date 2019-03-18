@@ -20,7 +20,7 @@ public class PriorityQueue {
      * @param task задача
      */
     public void put(Task task) {
-        int index = IntStream.range(0, this.tasks.size())
+        var index = IntStream.range(0, this.tasks.size())
                 .filter(i->this.tasks.get(i).getPriority() >= task.getPriority())
                 .findFirst()
                 .orElse(0);
