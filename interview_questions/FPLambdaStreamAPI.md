@@ -45,7 +45,7 @@
 
 ## Перечислите функциональные интерфейсы из пакета java.util.function
 
-[Подробней](#https://metanit.com/java/tutorial/9.3.php)
+[Подробней](https://metanit.com/java/tutorial/9.3.php)
  
 Consumer<T>, Function<T,R>, Predicate<T>, Supplier<T>, UnaryOperator<T> BinaryOperator<T> и их Bi – формы
 
@@ -101,7 +101,7 @@ Consumer<T>, Function<T,R>, Predicate<T>, Supplier<T>, UnaryOperator<T> BinaryOp
 Как известно из функциональных интерфейсов в Stream API нельзя выбрасывать контролируемые исключения.
 Если по каким-то причинам это необходимо (например, работа с файлами, базами данных или по сети),
 приходится оборачивать их в RuntimeException.
-[Подробней](#https://www.codeflow.site/ru/article/java-lambda-exceptions)
+[Подробней](https://www.codeflow.site/ru/article/java-lambda-exceptions)
 
 [к оглавлению](#FP-Labmda-Stream-API)
 
