@@ -5,3 +5,6 @@
 + [OOP]() ![icon][done]
 + [Collection lite]() ![icon][done]
 + [FP, Lambda, Stream API](FPLambdaStreamAPI.md#fp-labmda-stream-api)
+
+
+[done]:done.png
