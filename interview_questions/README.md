@@ -4,4 +4,4 @@
 + [Java Core]() ![icon][done]
 + [OOP]() ![icon][done]
 + [Collection lite]() ![icon][done]
-+ [FP, Lambda, Stream API](fplambdastreamapi.md#FP-Labmda-Stream-API)
++ [FP, Lambda, Stream API](FPLambdaStreamAPI.md#fp-labmda-stream-api)
