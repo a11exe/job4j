@@ -19,8 +19,10 @@
      <module>puzzle</module>
      <module>chapter_002</module>
      <module>chess</module>
+     <module>tictactoe</module>
      <module>chapter_003</module>
      <module>chapter_004</module>
+     <module>chapter_005</module>
  </modules>
 
  <dependencies>
