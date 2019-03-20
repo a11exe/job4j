@@ -31,11 +31,11 @@ public class MatrixIterator implements Iterator<Integer> {
     @Override
     public Integer next() {
         int next;
-        try {
-            next = this.array[this.x][this.y];
-        } catch (ArrayIndexOutOfBoundsException e) {
+        if (x > this.array.length -1) {
             throw new NoSuchElementException("no next element");
         }
+        next = this.array[this.x][this.y];
+
         if (this.array[this.x].length - 1 > this.y) {
             this.y++;
         } else {
