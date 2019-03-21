@@ -13,18 +13,14 @@ import java.util.NoSuchElementException;
 public class IteratorOfIterators implements Iterator<Integer> {
 
     private Iterator<Iterator<Integer>> it;
-    private Iterator<Integer> actualIterator;
+    private Iterator<Integer> actual;
 
     public IteratorOfIterators() {
     }
 
     public IteratorOfIterators(Iterator<Iterator<Integer>> it) {
         this.it = it;
-        try {
-            this.actualIterator = it.next();
-        } catch (NoSuchElementException e) {
-            this.actualIterator = null;
-        }
+        this.actual = it.hasNext() ? it.next() : null;
     }
 
     public Iterator<Integer> convert(Iterator<Iterator<Integer>> it) {
@@ -34,33 +30,25 @@ public class IteratorOfIterators implements Iterator<Integer> {
     @Override
     public boolean hasNext() {
         boolean hasNext = false;
-        if (actualIterator != null) {
-            hasNext = actualIterator.hasNext();
-            if ((!hasNext) && (it.hasNext())) {
-                    actualIterator = it.next();
-                    hasNext = actualIterator.hasNext();
-                }
+        if (actual != null) {
+            hasNext = actual.hasNext();
+            while (!hasNext && it.hasNext()) {
+                actual = it.next();
+                hasNext = actual.hasNext();
+            }
         }
-
         return hasNext;
     }
 
     @Override
     public Integer next() {
-        Integer next;
-        if (actualIterator == null) {
+        if (!hasNext()) {
             throw new NoSuchElementException("no iterators");
         }
-        if (actualIterator.hasNext()) {
-            next = actualIterator.next();
-        } else {
-            if (it.hasNext()) {
-                actualIterator = it.next();
-                next = actualIterator.next();
-            } else {
-                throw new NoSuchElementException("iterators finish");
-            }
+        if (!actual.hasNext()) {
+            actual = it.next();
         }
-        return next;
+
+        return actual.next();
     }
 }
