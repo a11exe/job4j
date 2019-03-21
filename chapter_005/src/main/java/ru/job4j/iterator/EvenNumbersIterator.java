@@ -23,7 +23,7 @@ public class EvenNumbersIterator implements Iterator<Integer> {
     public boolean hasNext() {
         boolean hasNext = false;
         if (cursor < array.length) {
-            hasNext = isEven(cursor) || moveCursor();
+            hasNext = isEven(cursor) || moveCursorNextEven();
         }
         return hasNext;
     }
@@ -34,8 +34,8 @@ public class EvenNumbersIterator implements Iterator<Integer> {
         if (!hasNext()) {
             throw new NoSuchElementException("even number not found");
         }
-        next = this.array[cursor];
-        moveCursor();
+        next = this.array[cursor++];
+//        moveCursorNextEven();
         return next;
     }
 
@@ -43,7 +43,7 @@ public class EvenNumbersIterator implements Iterator<Integer> {
         return this.array[i] % 2 == 0;
     }
 
-    private boolean moveCursor() {
+    private boolean moveCursorNextEven() {
         boolean hasNextEven = false;
         cursor++;
         for (int i = cursor; i < this.array.length; i++) {
