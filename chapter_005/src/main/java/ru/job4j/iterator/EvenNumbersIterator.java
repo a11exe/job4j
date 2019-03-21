@@ -12,39 +12,50 @@ import java.util.NoSuchElementException;
 public class EvenNumbersIterator implements Iterator<Integer> {
 
     private final int[] array;
-    private int index;
+    private Integer cursor;
 
     public EvenNumbersIterator(int[] array) {
         this.array = array;
+        this.cursor = 0;
     }
 
     @Override
     public boolean hasNext() {
         boolean hasNext = false;
-        for (int i = index; i < this.array.length; i++) {
-            if (this.array[i] % 2 == 0) {
-                hasNext = true;
-                break;
-            }
+        if (cursor < array.length) {
+            hasNext = isEven(cursor) || moveCursor();
         }
         return hasNext;
     }
 
     @Override
     public Integer next() {
-        Integer next = null;
-        for (int i = index; i < this.array.length; i++) {
-            if (this.array[i] % 2 == 0) {
-                next = this.array[i];
-                index = ++i;
+        Integer next;
+        if (!hasNext()) {
+            throw new NoSuchElementException("even number not found");
+        }
+        next = this.array[cursor];
+        moveCursor();
+        return next;
+    }
+
+    private boolean isEven(int i) {
+        return this.array[i] % 2 == 0;
+    }
+
+    private boolean moveCursor() {
+        boolean hasNextEven = false;
+        cursor++;
+        for (int i = cursor; i < this.array.length; i++) {
+            if (isEven(i)) {
+                cursor = i;
+                hasNextEven = true;
                 break;
             }
         }
-
-        if (next == null) {
-            throw new NoSuchElementException("even number not found");
+        if (!hasNextEven) {
+            cursor = array.length;
         }
-
-        return next;
+        return hasNextEven;
     }
 }
