@@ -47,9 +47,17 @@ public class SimpleArrayTest {
     public void whenSetByIndexShouldGetSameElement() {
         SimpleArray<String> simpleArray = new SimpleArray<>(5);
         String expected = "ss";
-        simpleArray.set(4, expected);
-        String actual = simpleArray.get(4);
+        simpleArray.add(expected);
+        simpleArray.set(0, expected);
+        String actual = simpleArray.get(0);
         assertThat(actual, is(expected));
+    }
+
+    @Test(expected = ArrayIndexOutOfBoundsException.class)
+    public void whenSetWithoutAddShouldException() {
+        SimpleArray<String> simpleArray = new SimpleArray<>(5);
+        String expected = "ss";
+        simpleArray.set(0, expected);
     }
 
     @Test(expected = ArrayIndexOutOfBoundsException.class)
@@ -64,6 +72,13 @@ public class SimpleArrayTest {
         simpleArray.add("ss");
         simpleArray.add("bb");
         assertNull(simpleArray.get(4));
+    }
+
+    @Test(expected = ArrayIndexOutOfBoundsException.class)
+    public void whenRemoveWithoutAddShouldException() {
+        SimpleArray<String> simpleArray = new SimpleArray<>(2);
+        simpleArray.remove(0);
+        assertNull(simpleArray.get(0));
     }
 
     @Test
@@ -85,7 +100,6 @@ public class SimpleArrayTest {
         simpleArray.add(expected);
         assertThat(simpleArray.get(2), is(expected));
     }
-
 
     @Test
     public void whenAddTwoElementsShouldGetTwoElementsUsingIterator() {
@@ -110,5 +124,21 @@ public class SimpleArrayTest {
         iterator.next();
         iterator.next();
     }
+
+    @Test(expected = NoSuchElementException.class)
+    public void whenEmptyIteratorShouldException() {
+        SimpleArray<String> simpleArray = new SimpleArray<>(2);
+        Iterator<String> iterator = simpleArray.iterator();
+        iterator.next();
+    }
+
+    @Test(expected = ArrayIndexOutOfBoundsException.class)
+    public void whenFullAddShouldException() {
+        SimpleArray<String> simpleArray = new SimpleArray<>(2);
+        simpleArray.add("ss");
+        simpleArray.add("bb");
+        simpleArray.add("zz");
+    }
+
 
 }
