@@ -6,7 +6,7 @@ public abstract class AbstractStore<T extends Base> implements Store<T> {
 
     private final SimpleArray<T> simpleArray;
 
-    private int getIndex(SimpleArray<T> simpleArray, String id) throws NoSuchElementException {
+    private int getIndex(String id) throws NoSuchElementException {
         int index = 0;
         boolean exist = false;
         for (T model : simpleArray) {
@@ -17,7 +17,7 @@ public abstract class AbstractStore<T extends Base> implements Store<T> {
             index++;
         }
         if (!exist) {
-            throw new NoSuchElementException("model not found by id: " + id);
+            index = -1;
         }
         return index;
     }
@@ -35,11 +35,10 @@ public abstract class AbstractStore<T extends Base> implements Store<T> {
     @Override
     public boolean replace(String id, T model) {
         boolean result = false;
-        try {
-            this.simpleArray.set(getIndex(simpleArray, id), model);
+        int index = getIndex(id);
+        if (index != -1) {
+            this.simpleArray.set(index, model);
             result = true;
-        } catch (ArrayIndexOutOfBoundsException | NoSuchElementException e) {
-            e.printStackTrace();
         }
         return result;
     }
@@ -47,17 +46,20 @@ public abstract class AbstractStore<T extends Base> implements Store<T> {
     @Override
     public boolean delete(String id) {
         boolean result = false;
-        try {
-            this.simpleArray.remove(getIndex(simpleArray, id));
+        int index = getIndex(id);
+        if (index != -1) {
+            this.simpleArray.remove(index);
             result = true;
-        } catch (ArrayIndexOutOfBoundsException | NoSuchElementException e) {
-            e.printStackTrace();
         }
         return result;
     }
 
     @Override
     public T findById(String id) throws NoSuchElementException {
-        return this.simpleArray.get(getIndex(simpleArray, id));
+        int index = getIndex(id);
+        if (index == -1) {
+            throw new NoSuchElementException("model not found d by id: " + id);
+        }
+        return this.simpleArray.get(index);
     }
 }
