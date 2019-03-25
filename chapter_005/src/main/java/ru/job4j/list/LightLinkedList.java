@@ -11,10 +11,10 @@ import java.util.NoSuchElementException;
  */
 public class LightLinkedList<E> implements Iterable<E> {
 
-    private Node<E> last;
-    private Node<E> first;
-    private int size = 0;
-    private int modCount = 0;
+    Node<E> last;
+    Node<E> first;
+    int size = 0;
+    int modCount = 0;
 
     public void add(E value) {
         final Node<E> l = last;
@@ -105,7 +105,7 @@ public class LightLinkedList<E> implements Iterable<E> {
         return new LightLinkedList.Itr();
     }
 
-    private static class Node<E> {
+    static class Node<E> {
         E item;
         Node<E> next;
         Node<E> prev;
