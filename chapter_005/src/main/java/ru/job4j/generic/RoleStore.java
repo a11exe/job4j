@@ -1,4 +1,4 @@
-package ru.jobj4.generic;
+package ru.job4j.generic;
 
 public class RoleStore extends AbstractStore<Role> {
     public RoleStore(int size) {
