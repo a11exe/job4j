@@ -11,10 +11,10 @@ import java.util.NoSuchElementException;
  */
 public class LightLinkedList<E> implements Iterable<E> {
 
-    Node<E> last;
-    Node<E> first;
-    int size = 0;
-    int modCount = 0;
+    private Node<E> last;
+    private Node<E> first;
+    private int size = 0;
+    private int modCount = 0;
 
     public void add(E value) {
         final Node<E> l = last;
@@ -43,7 +43,7 @@ public class LightLinkedList<E> implements Iterable<E> {
         }
     }
 
-    Node<E> node(int index) {
+    private Node<E> node(int index) {
         // assert isElementIndex(index);
 
         if (index < (size >> 1)) {
@@ -105,7 +105,7 @@ public class LightLinkedList<E> implements Iterable<E> {
         return new LightLinkedList.Itr();
     }
 
-    static class Node<E> {
+    private static class Node<E> {
         E item;
         Node<E> next;
         Node<E> prev;
@@ -117,4 +117,52 @@ public class LightLinkedList<E> implements Iterable<E> {
         }
     }
 
+    public int size() {
+        return size;
+    }
+
+    /**
+     * Убираем ссылки на первый элемент
+     * Делаем следующий элемент первым
+     * @param f первый элемент в списке
+     * @return значение первого элемента в списке
+     */
+    private E unlinkFirst(Node<E> f) {
+        // assert f == first && f != null;
+        final E element = f.item;
+        final Node<E> next = f.next;
+        f.item = null;
+        f.next = null; // help GC
+        first = next;
+        if (next == null) {
+            last = null;
+        } else {
+            next.prev = null;
+        }
+        size--;
+        modCount++;
+        return element;
+    }
+
+    public E removeFirst() {
+        final Node<E> f = first;
+       E removed = null;
+        if (f != null) {
+            removed = unlinkFirst(f);
+        }
+        return removed;
+    }
+
+    public void addFirst(E e) {
+        final Node<E> f = first;
+        final Node<E> newNode = new Node<>(null, e, f);
+        first = newNode;
+        if (f == null) {
+            last = newNode;
+        } else {
+            f.prev = newNode;
+        }
+        size++;
+        modCount++;
+    }
 }
