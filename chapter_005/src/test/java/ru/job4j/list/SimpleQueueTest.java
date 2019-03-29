@@ -38,6 +38,22 @@ public class SimpleQueueTest {
     }
 
     @Test
+    public void whenFIFOShouldFIFO() {
+        assertThat(queue.poll(), is(1));
+        assertThat(queue.poll(), is(2));
+        queue.push(4);
+        queue.push(5);
+        assertThat(queue.size(), is(3));
+        assertThat(queue.poll(), is(3));
+        assertThat(queue.poll(), is(4));
+        assertThat(queue.poll(), is(5));
+        queue.push(6);
+        queue.push(7);
+        assertThat(queue.poll(), is(6));
+        assertThat(queue.poll(), is(7));
+    }
+
+    @Test
     public void whenPollEmptyQueueShouldNull() {
         queue = new SimpleQueue<>();
         assertNull(queue.poll());

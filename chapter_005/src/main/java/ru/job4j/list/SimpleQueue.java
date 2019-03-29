@@ -25,17 +25,13 @@ public class SimpleQueue<T> {
      * @return элемент из очереди
      */
     public T poll() {
-        T result;
-        int stackSize = stack.size();
-        for (int i = 0; i < stackSize; i++) {
-            stackReverse.push(stack.poll());
+        if (stackReverse.size() == 0) {
+            int stackSize = stack.size();
+            for (int i = 0; i < stackSize; i++) {
+                stackReverse.push(stack.poll());
+            }
         }
-        result = stackReverse.poll();
-        int stackReverseSize = stackReverse.size();
-        for (int i = 0; i < stackReverseSize; i++) {
-            stack.push(stackReverse.poll());
-        }
-       return result;
+        return stackReverse.poll();
     }
 
     /**
@@ -43,7 +39,7 @@ public class SimpleQueue<T> {
      * @return размер очереди
      */
     public int size() {
-        return stack.size();
+        return stack.size() + stackReverse.size();
     }
 
 }
