@@ -33,4 +33,21 @@ public class SimpleStackTest {
         assertNull(stack.poll());
     }
 
+    @Test
+    public void whenPush3ElementsShouldSize3() {
+        assertThat(stack.size(), is(3));
+    }
+
+    @Test
+    public void whenEmptyShouldSize0() {
+        stack = new SimpleStack<>();
+        assertThat(stack.size(), is(0));
+    }
+
+    @Test
+    public void whenAdd3ElementsShouldGet2ElementByIndexIsOne() {
+        assertThat(stack.get(1), is(2));
+    }
+
+
 }

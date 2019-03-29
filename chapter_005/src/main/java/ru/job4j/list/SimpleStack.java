@@ -4,14 +4,16 @@ package ru.job4j.list;
  * Стек LIFO последний пришел первым ушел
  * @param <T>
  */
-public class SimpleStack<T> extends LightLinkedList<T> {
+public class SimpleStack<T> {
+
+    private final LightLinkedList<T> lightLinkedList = new LightLinkedList<>();
 
     /**
      * Получаем из головы и удаляем элемент
      * @return значение первого элемента в списке
      */
     public T poll() {
-        final Node<T> f = first;
+        final LightLinkedList.Node<T> f = lightLinkedList.first;
         return (f == null) ? null : unlinkFirst(f);
     }
 
@@ -21,20 +23,20 @@ public class SimpleStack<T> extends LightLinkedList<T> {
      * @param f первый элемент в списке
      * @return значение первого элемента в списке
      */
-    private T unlinkFirst(Node<T> f) {
+    private T unlinkFirst(LightLinkedList.Node<T> f) {
         // assert f == first && f != null;
         final T element = f.item;
-        final Node<T> next = f.next;
+        final LightLinkedList.Node<T> next = f.next;
         f.item = null;
         f.next = null; // help GC
-        first = next;
+        lightLinkedList.first = next;
         if (next == null) {
-            last = null;
+            lightLinkedList.last = null;
         } else {
             next.prev = null;
         }
-        size--;
-        modCount++;
+        lightLinkedList.size--;
+        lightLinkedList.modCount++;
         return element;
     }
 
@@ -43,16 +45,32 @@ public class SimpleStack<T> extends LightLinkedList<T> {
      * @param value значение элемента
      */
     public void push(T value) {
-        final Node<T> f = first;
-        final Node<T> newNode = new Node<>(null, value, f);
-        first = newNode;
+        final LightLinkedList.Node<T> f = lightLinkedList.first;
+        final LightLinkedList.Node<T> newNode = new LightLinkedList.Node<>(null, value, f);
+        lightLinkedList.first = newNode;
         if (f == null) {
-            last = newNode;
+            lightLinkedList.last = newNode;
         } else {
             f.prev = newNode;
         }
-        size++;
-        modCount++;
+        lightLinkedList.size++;
+        lightLinkedList.modCount++;
     }
 
+    /**
+     * Возвращает размер стека
+     * @return размер стека
+     */
+    public int size() {
+        return lightLinkedList.size;
+    }
+
+    /**
+     * Возвращает элемент по индексу
+     * @param index индекс элемента
+     * @return елемент по этому индексу
+     */
+    public T get(int index) {
+        return lightLinkedList.get(index);
+    }
 }
