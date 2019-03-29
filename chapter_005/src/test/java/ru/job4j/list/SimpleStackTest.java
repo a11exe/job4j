@@ -49,5 +49,10 @@ public class SimpleStackTest {
         assertThat(stack.get(1), is(2));
     }
 
+    @Test
+    public void whenAdd3ElementsShouldSize3() {
+        assertThat(stack.size(), is(3));
+    }
+
 
 }

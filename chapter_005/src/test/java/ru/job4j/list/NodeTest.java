@@ -27,21 +27,21 @@ public class NodeTest {
 
 
     @Test
-    public void whenHasCycleShouldTrue() {
+    public void whenHasLoopShouldTrue() {
         first.next = two;
         two.next = third;
         third.next = four;
         four.next = first;
-        assertTrue(new Node<>(6).hasCycle(first));
+        assertTrue(new Node<>(6).hasLoop(first));
     }
 
     @Test
-    public void whenHasCycleInsideShouldTrue() {
+    public void whenHasLoopInsideShouldTrue() {
         first.next = two;
         two.next = third;
         third.next = two;
         four.next = first;
-        assertTrue(new Node<>(6).hasCycle(first));
+        assertTrue(new Node<>(6).hasLoop(first));
     }
 
     @Test
@@ -50,7 +50,7 @@ public class NodeTest {
         two.next = third;
         third.next = four;
         four.next = null;
-        assertFalse(first.hasCycle(first));
+        assertFalse(first.hasLoop(first));
     }
 
     @Test
@@ -66,7 +66,7 @@ public class NodeTest {
         }
 
         node.next = first;
-        assertTrue(first.hasCycle(first));
+        assertTrue(first.hasLoop(first));
     }
 
     @Test
@@ -81,7 +81,7 @@ public class NodeTest {
             node = next;
         }
 
-        assertFalse(first.hasCycle(first));
+        assertFalse(first.hasLoop(first));
     }
 
 

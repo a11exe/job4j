@@ -14,52 +14,33 @@ public class Node<T> {
         this.value = value;
     }
 
-    /**
-     * Обертка для прохода по цепочке назад
-     */
-    private class NodeWrapper {
-        final Node<T> node;
-        final NodeWrapper prev;
+    public boolean hasLoop(Node first) {
 
-        public NodeWrapper(Node<T> node, NodeWrapper prev) {
-            this.node = node;
-            this.prev = prev;
+        if (first == null)  {
+            // list does not exist..so no loop either
+            return false;
         }
-    }
 
-    /**
-     * Проверяет циклические ссылки
-     * @param first элемент с которого начинать проверку
-     * @return есть зацикленные ссылки
-     */
-    public boolean hasCycle(Node<T> first) {
-        boolean cycle = false;
-        NodeWrapper nodeWrapper = new NodeWrapper(first, null);
-        while (nodeWrapper.node.next != null) {
-            if (isCrossLink(nodeWrapper)) {
-                cycle = true;
-                break;
+        Node slow, fast; // create two references.
+
+        slow = first;
+        fast = first; // make both refer to the start of the list
+
+        while (true) {
+            slow = slow.next;          // 1 hop
+            if (fast.next != null) {
+                fast = fast.next.next; // 2 hops
+            } else {
+                return false;          // next node null => no loop
             }
-            nodeWrapper = new NodeWrapper(nodeWrapper.node.next, nodeWrapper);
-        }
-        return cycle;
-    }
-
-    /**
-     * Есть ссылки на текущий элемент среди предыдущих
-     * @param nodeWrapper ссылка на элемент с которого начать проверку назад
-     * @return есть ссылки на текущий элемент в предыдущих
-     */
-    private boolean isCrossLink(NodeWrapper nodeWrapper) {
-        boolean crossLink = false;
-        Node<T> node = nodeWrapper.node;
-        while (nodeWrapper.prev != null) {
-            nodeWrapper = nodeWrapper.prev;
-            if (nodeWrapper.node.equals(node)) {
-                crossLink = true;
-                break;
+            if (slow == null || fast == null) {
+                // if either hits null..no loop
+                return false;
+            }
+            if (slow == fast) {
+                // if the two ever meet...we must have a loop
+                return true;
             }
         }
-        return crossLink;
     }
 }
