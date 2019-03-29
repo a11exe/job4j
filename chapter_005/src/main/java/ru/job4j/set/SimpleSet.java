@@ -18,7 +18,12 @@ public class SimpleSet<E> implements Iterable<E> {
     public void add(E e) {
         boolean isNew = true;
         for (E item : list) {
-            if (item.equals(e)) {
+            if (item == null) {
+                if (e == null) {
+                    isNew = false;
+                    break;
+                }
+            } else if (item.equals(e)) {
                 isNew = false;
                 break;
             }
