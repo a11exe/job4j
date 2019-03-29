@@ -24,6 +24,11 @@ public class SimpleQueueTest {
     }
 
     @Test
+    public void whenAdd3ShouldSize3() {
+        assertThat(queue.size(), is(3));
+    }
+
+    @Test
     public void whenPollShouldFIFO() {
         int[] actual = new int[3];
         actual[0] = queue.poll();
@@ -37,14 +42,5 @@ public class SimpleQueueTest {
         queue = new SimpleQueue<>();
         assertNull(queue.poll());
     }
-
-    @Test(expected = IndexOutOfBoundsException.class)
-    public void whenPushOnePullOneAndGetQueueShouldException() {
-        queue = new SimpleQueue<>();
-        queue.push(1);
-        queue.poll();
-        assertNull(queue.get(0));
-    }
-
 
 }

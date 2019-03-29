@@ -7,27 +7,43 @@ package ru.job4j.list;
  * @version 1
  * @since 26.03.2019
  */
-public class SimpleQueue<T> extends SimpleStack<T> {
+public class SimpleQueue<T> {
 
-    @Override
+    private final SimpleStack<T> stack = new SimpleStack<>();
+    private final SimpleStack<T> stackReverse = new SimpleStack<>();
+
+    /**
+     * Добавить элемент в очередь
+     * @param value добавляемый элемент
+     */
+    public void push(T value) {
+        stack.push(value);
+    }
+
+    /**
+     * Взять элемент из очереди по FIFO
+     * @return элемент из очереди
+     */
     public T poll() {
-        final Node<T> f = last;
-        return (f == null) ? null : unlinkLast(f);
+        T result;
+        int stackSize = stack.size();
+        for (int i = 0; i < stackSize; i++) {
+            stackReverse.push(stack.poll());
+        }
+        result = stackReverse.poll();
+        int stackReverseSize = stackReverse.size();
+        for (int i = 0; i < stackReverseSize; i++) {
+            stack.push(stackReverse.poll());
+        }
+       return result;
     }
 
-    private T unlinkLast(Node<T> f) {
-        final T element = f.item;
-        final Node<T> prev = f.prev;
-        f.item = null;
-        f.prev = null; // help GC
-        last = prev;
-        if (last == null) {
-            first = null;
-        } else {
-            prev.next = null;
-        }
-        size--;
-        modCount++;
-        return element;
+    /**
+     * Возвращает размер очереди
+     * @return размер очереди
+     */
+    public int size() {
+        return stack.size();
     }
+
 }
