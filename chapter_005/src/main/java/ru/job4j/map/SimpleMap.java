@@ -1,12 +1,17 @@
 package ru.job4j.map;
 
 
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
 /**
  * @author Alexander Abramov (alllexe@mail.ru)
  * @version 1
  * @since 02.04.2019
  */
-public class SimpleMap<K, V> {
+public class SimpleMap<K, V> implements Iterable<V> {
 
     private int size = 0;
 
@@ -71,7 +76,8 @@ public class SimpleMap<K, V> {
     }
 
     /**
-     * Вставка значения
+     * Вставка значения.
+     * По одинаковым ключам перезаписвает значение
      * @param key ключ
      * @param value значение
      * @return результат вставки
@@ -83,10 +89,14 @@ public class SimpleMap<K, V> {
         }
         int hash = hash(key);
         int index = indexFor(hash);
-        if (table[index] == null) {
+        Node<K, V> oldVal = table[index];
+        if (oldVal == null) {
             table[index] = new Node<>(key, value);
             result = true;
             size++;
+        } else if (oldVal.key.equals(key)) {
+            table[index] = new Node<>(key, value);
+            result = true;
         }
         return result;
     }
@@ -99,7 +109,14 @@ public class SimpleMap<K, V> {
     public V get(K key) {
         int hash = hash(key);
         int index = indexFor(hash);
-        return table[index] == null ? null : table[index].value;
+        V value = null;
+        Node<K, V> node = table[index];
+        if (node != null) {
+            if ((node.key == null && key == null) || (node.key != null && node.key.equals(key))) {
+                value = node.value;
+            }
+        }
+        return value;
     }
 
     /**
@@ -122,5 +139,8 @@ public class SimpleMap<K, V> {
         return result;
     }
 
-
+    @Override
+    public Iterator<V> iterator() {
+        return Arrays.stream(table).filter(Objects::nonNull).map(s->s.value).collect(Collectors.toList()).iterator();
+    }
 }
