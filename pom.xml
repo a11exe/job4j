@@ -24,6 +24,7 @@
      <module>chapter_004</module>
      <module>chapter_005</module>
      <module>utils</module>
+     <module>chapter_006</module>
  </modules>
 
  <dependencies>
