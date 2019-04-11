@@ -1,10 +1,8 @@
 package ru.job4j.map;
 
 
-import java.util.Arrays;
 import java.util.Iterator;
-import java.util.Objects;
-import java.util.stream.Collectors;
+import java.util.NoSuchElementException;
 
 /**
  * @author Alexander Abramov (alllexe@mail.ru)
@@ -49,6 +47,7 @@ public class SimpleMap<K, V> implements Iterable<V> {
 
     /**
      * Определяет индекс в массиве по хешу ключа
+     *
      * @param hash хеш ключа
      * @return индекс в масссиве
      */
@@ -58,6 +57,7 @@ public class SimpleMap<K, V> implements Iterable<V> {
 
     /**
      * Увеличивает размер массив Node[]
+     *
      * @param size новый размер массива
      */
     private void resize(int size) {
@@ -78,7 +78,8 @@ public class SimpleMap<K, V> implements Iterable<V> {
     /**
      * Вставка значения.
      * По одинаковым ключам перезаписвает значение
-     * @param key ключ
+     *
+     * @param key   ключ
      * @param value значение
      * @return результат вставки
      */
@@ -103,6 +104,7 @@ public class SimpleMap<K, V> implements Iterable<V> {
 
     /**
      * Получение значения по ключу
+     *
      * @param key ключ
      * @return значение по ключу
      */
@@ -121,6 +123,7 @@ public class SimpleMap<K, V> implements Iterable<V> {
 
     /**
      * Удаление значения по ключу
+     *
      * @param key ключ
      * @return результат удаления
      */
@@ -139,8 +142,38 @@ public class SimpleMap<K, V> implements Iterable<V> {
         return result;
     }
 
+    private class SimpleMapIterator implements Iterator<V> {
+
+        private int index = 0;
+        Node<K, V> node = null;
+
+        @Override
+        public boolean hasNext() {
+            boolean hasNext = false;
+            if (index < table.length) {
+                do {
+                    node = table[index++];
+                } while (node == null && index < table.length);
+                hasNext = (node != null);
+                index--;
+            }
+            return hasNext;
+        }
+
+        @Override
+        public V next() {
+            V next;
+            if (hasNext()) {
+                next = table[index++].value;
+            } else {
+                throw new NoSuchElementException("Simple map");
+            }
+            return next;
+        }
+    }
+
     @Override
     public Iterator<V> iterator() {
-        return Arrays.stream(table).filter(Objects::nonNull).map(s->s.value).collect(Collectors.toList()).iterator();
+        return new SimpleMapIterator();
     }
 }

@@ -3,7 +3,9 @@ package ru.job4j.map;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.containsInAnyOrder;
@@ -81,6 +83,31 @@ public class SimpleMapTest {
             actual.add(val);
         }
         assertThat(actual, containsInAnyOrder(expected.toArray()));
+    }
+
+    @Test
+    public void whenHasNext4AndNext1Should5() {
+        SimpleMap<Integer, Integer> simpleMap = new SimpleMap<>();
+        List<Integer> expected = new ArrayList<>(List.of(5, 7, 8, 15));
+        expected.forEach(s->assertTrue(simpleMap.insert(s, s)));
+        Iterator<Integer> iterator = simpleMap.iterator();
+        assertTrue(iterator.hasNext());
+        assertTrue(iterator.hasNext());
+        assertTrue(iterator.hasNext());
+        assertThat(iterator.next(), is(5));
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void whenNext5ShouldException() {
+        SimpleMap<Integer, Integer> simpleMap = new SimpleMap<>();
+        List<Integer> expected = new ArrayList<>(List.of(5, 7, 8, 15));
+        expected.forEach(s->assertTrue(simpleMap.insert(s, s)));
+        Iterator<Integer> iterator = simpleMap.iterator();
+        assertThat(iterator.next(), is(5));
+        assertThat(iterator.next(), is(7));
+        assertThat(iterator.next(), is(8));
+        assertThat(iterator.next(), is(15));
+        iterator.next();
     }
 
 
