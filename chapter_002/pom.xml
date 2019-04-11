@@ -10,6 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>chapter_002</artifactId>
+    <packaging>pom</packaging>
     <build>
         <plugins>
             <plugin>
@@ -35,6 +36,5 @@
             </plugin>
         </plugins>
     </build>
-
 
 </project>
