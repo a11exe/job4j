@@ -162,13 +162,10 @@ public class SimpleMap<K, V> implements Iterable<V> {
 
         @Override
         public V next() {
-            V next;
-            if (hasNext()) {
-                next = table[index++].value;
-            } else {
+            if (!hasNext()) {
                 throw new NoSuchElementException("Simple map");
             }
-            return next;
+            return table[index++].value;
         }
     }
 
