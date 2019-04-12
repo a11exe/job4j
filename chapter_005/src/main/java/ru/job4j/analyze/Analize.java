@@ -13,6 +13,8 @@ public class Analize {
 
         Info info = new Info();
 
+        Map<Integer, User> map = new TreeMap<>();
+
         if (previous.size() == 0 && current.size() > 0) {
             info.added = current.size();
         }
@@ -20,51 +22,42 @@ public class Analize {
             info.deleted = previous.size();
         }
         if (previous.size() > 0 && current.size() > 0) {
-            Comparator<User> userComparatorById = Comparator.comparingInt(o -> o.id);
-            previous.sort(userComparatorById);
-            current.sort(userComparatorById);
 
-            int i = 0;
-            int y = 0;
-            do {
-                User prevUser = previous.get(i);
-                User currUser = current.get(y);
-                if (isUserEquals(prevUser, currUser)) {
-                    i++;
-                    y++;
-                } else if (isUserChanged(prevUser, currUser)) {
-                    info.changed++;
-                    i++;
-                    y++;
-                } else if (isUserDeleted(prevUser, currUser)) {
-                    info.deleted++;
-                    i++;
-                } else if (isUserAdded(prevUser, currUser)) {
-                    info.added++;
-                    y++;
+            int maxSize = Math.max(previous.size(), current.size());
+            for (int i = 0; i < maxSize; i++) {
+                // prev
+                if (i < previous.size()) {
+                    User prevUser = previous.get(i);
+                    if (map.containsKey(prevUser.id)) {
+                        if (!map.get(prevUser.id).name.equals(prevUser.name)) {
+                            info.changed++;
+                            info.added--;
+                        } else {
+                            info.added--;
+                        }
+                    } else {
+                        map.put(prevUser.id, prevUser);
+                        info.deleted++;
+                    }
                 }
-            } while (i < previous.size() && y < current.size());
-            // add tails
-            info.added = info.added + current.size() - y;
-            info.deleted = info.deleted + previous.size() - i;
+                // current
+                if (i < current.size()) {
+                    User currUser = current.get(i);
+                    if (map.containsKey(currUser.id)) {
+                        if (!map.get(currUser.id).name.equals(currUser.name)) {
+                            info.changed++;
+                            info.deleted--;
+                        } else {
+                            info.deleted--;
+                        }
+                    } else {
+                        map.put(currUser.id, currUser);
+                        info.added++;
+                    }
+                }
+            }
         }
         return info;
-    }
-
-    private boolean isUserAdded(User prevUser, User currUser) {
-        return prevUser.id > currUser.id;
-    }
-
-    private boolean isUserDeleted(User prevUser, User currUser) {
-        return prevUser.id < currUser.id;
-    }
-
-    private boolean isUserChanged(User prevUser, User currUser) {
-        return prevUser.id == currUser.id && !prevUser.name.equals(currUser.name);
-    }
-
-    private boolean isUserEquals(User prevUser, User currUser) {
-        return prevUser.id == currUser.id && prevUser.name.equals(currUser.name);
     }
 
     public static class User {
