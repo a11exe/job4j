@@ -28,4 +28,8 @@ public class Node<E extends Comparable<E>> {
         return this.value.compareTo(that) == 0;
 
     }
+
+    public E getValue() {
+        return value;
+    }
 }

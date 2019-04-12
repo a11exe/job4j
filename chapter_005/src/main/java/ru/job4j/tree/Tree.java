@@ -1,9 +1,6 @@
 package ru.job4j.tree;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Optional;
-import java.util.Queue;
+import java.util.*;
 
 /**
  * @author Alexander Abramov (alllexe@mail.ru)
@@ -12,7 +9,7 @@ import java.util.Queue;
  */
 public class Tree<E extends Comparable<E>> implements SimpleTree<E> {
 
-    private Node<E> root;
+    private final Node<E> root;
 
     public Tree(E rootValue) {
         this.root = new Node<>(rootValue);
@@ -25,12 +22,14 @@ public class Tree<E extends Comparable<E>> implements SimpleTree<E> {
         data.offer(this.root);
         while (!data.isEmpty()) {
             Node<E> el = data.poll();
-            if (el.eqValue(value)) {
-                rsl = Optional.of(el);
-                break;
-            }
-            for (Node<E> child : el.leaves()) {
-                data.offer(child);
+            if (el != null) {
+                if (el.eqValue(value)) {
+                    rsl = Optional.of(el);
+                    break;
+                }
+                for (Node<E> child : el.leaves()) {
+                    data.offer(child);
+                }
             }
         }
         return rsl;
@@ -39,16 +38,67 @@ public class Tree<E extends Comparable<E>> implements SimpleTree<E> {
     @Override
     public boolean add(E parent, E child) {
         boolean result = false;
-        Optional<Node<E>> node = findBy(parent);
-        if (node.isPresent()) {
-            node.get().add(new Node<>(child));
-            result = true;
+        if (findBy(child).isEmpty()) {
+            Optional<Node<E>> node = findBy(parent);
+            if (node.isPresent()) {
+                node.get().add(new Node<>(child));
+                result = true;
+            }
         }
         return result;
     }
 
+    private class TreeIterator<T extends Comparable<T>> implements Iterator<T> {
+
+        private final Queue<Node<T>> data = new LinkedList<>();
+
+        public TreeIterator() {
+            //noinspection unchecked
+            data.offer((Node<T>) root);
+        }
+
+        @Override
+        public boolean hasNext() {
+            return !data.isEmpty();
+        }
+
+        @Override
+        public T next() {
+            Node<T> val = data.poll();
+            for (Node<T> child : Objects.requireNonNull(val).leaves()) {
+                data.offer(child);
+            }
+            return val.getValue();
+        }
+    }
+
     @Override
     public Iterator<E> iterator() {
-        return null;
+        return new TreeIterator<>();
     }
+
+    /**
+     * Определяет бинарное дерево
+     * Если дочерних элементов <=2
+     * дерево бинароное
+     * @return признак бинарного дерева
+     */
+    public boolean isBinary() {
+        boolean isBinary = true;
+        final Queue<Node<E>> data = new LinkedList<>();
+        data.offer(this.root);
+        while (!data.isEmpty()) {
+            Node<E> el = data.poll();
+            if (Objects.requireNonNull(el).leaves().size() > 2) {
+                isBinary = false;
+                break;
+            }
+            for (Node<E> child : Objects.requireNonNull(el).leaves()) {
+                data.offer(child);
+            }
+        }
+
+        return isBinary;
+    }
+
 }
