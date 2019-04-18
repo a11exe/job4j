@@ -9,7 +9,8 @@ import java.util.*;
  */
 public class Analize {
 
-    public Info diff(List<User> previous, List<User> current) {
+    @Deprecated
+    public Info diffOneLoop(List<User> previous, List<User> current) {
 
         Info info = new Info();
 
@@ -57,6 +58,25 @@ public class Analize {
                 }
             }
         }
+        return info;
+    }
+
+    public Info diff(List<User> previous, List<User> current) {
+        Info info = new Info();
+        Map<Integer, User> map = new TreeMap<>();
+        current.forEach(s -> map.put(s.id, s));
+        previous.forEach(s -> {
+            User user = map.remove(s.id);
+            if ((user == null)) {
+                info.deleted++;
+            } else {
+                if (!user.equals(s)) {
+                    info.changed++;
+                }
+            }
+        });
+        info.added = map.size();
+
         return info;
     }
 
