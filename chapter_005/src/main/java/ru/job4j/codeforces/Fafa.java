@@ -1,5 +1,7 @@
 package ru.job4j.codeforces;
 
+import java.util.Scanner;
+
 /**
  * Количество вариантов разделения n сотрудников
  * на руководителей и подчиненных
@@ -10,10 +12,10 @@ package ru.job4j.codeforces;
  * @version 1
  * @since 18.04.2019
  */
-class Fafa {
+public class Fafa {
 
-    private int startManagers = 2;
-    private int startWorkers = 0;
+    static int startManagers;
+    static int startWorkers;
 
     /**
      * Return number variants
@@ -21,7 +23,11 @@ class Fafa {
      * @param workersCount count employees for test
      * @return number of variants
      */
-    public int numberOptions(int workersCount) {
+    public static int numberOptions(int workersCount) {
+
+        startManagers = 2;
+        startWorkers = 0;
+
         int numberOptions = 0;
         if (workersCount > 1) {
             log(1, workersCount - 1);
@@ -49,8 +55,17 @@ class Fafa {
         return numberOptions;
     }
 
-    private void log(int managers, int workers) {
-        System.out.println("managers: " + managers + " workers: " + workers);
+    private static void log(int managers, int workers) {
+        //System.out.println("managers: " + managers + " workers: " + workers);
+    }
+
+    public static void main(String[] args) {
+
+        Scanner scanner = new Scanner(System.in);
+        String str = scanner.nextLine();
+        int workersCount = Integer.parseInt(str);
+        System.out.println(numberOptions(workersCount));
+
     }
 
 
