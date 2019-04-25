@@ -44,7 +44,7 @@ IO API – (Input & Output) в первую очередь это Java API, ко
 3) System.err, System.in, System.out;
 4) при работе с буфером.
 
-![Иерархия]()https://github.com/a11exe/job4j/blob/master/interview_questions/file_io.jpg)
+![Иерархия](https://github.com/a11exe/job4j/blob/master/interview_questions/file_io.jpg)
 
 **Классы Java IO API**
 
