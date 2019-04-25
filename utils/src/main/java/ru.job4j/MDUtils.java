@@ -29,7 +29,7 @@ public class MDUtils {
         str = str.replaceAll("\\?", "");
         str = str.replaceAll(" ", "-");
 
-        return question + "(#" + str + ")";
+        return question + "(#" + str.substring(str.indexOf("-") + 1) + ")";
     }
 
     public static void main(String[] args) {
