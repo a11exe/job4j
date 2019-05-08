@@ -1,0 +1,8 @@
+url:http://www.alicebot.org
+name:SUPER
+email:callmom-info@pandorabots.com
+gender:male
+botmaster:Dr. Richard S. Wallace
+organization:ALICE AI Foundation
+version:0.0.4
+

@@ -26,7 +26,7 @@ public class Table {
 
     private String getTableString(String str) {
         StringBuilder sb = new StringBuilder();
-        String[] arr = str.split( "\t");
+        String[] arr = str.split("\t");
         Arrays.stream(arr).forEach(s -> sb.append("| ").append(s));
         sb.append(" |").append(System.lineSeparator());
         return sb.toString();
@@ -34,7 +34,7 @@ public class Table {
 
     private String getHeadDiv(String str) {
         StringBuilder sb = new StringBuilder();
-        String[] arr = str.split( "\t");
+        String[] arr = str.split("\t");
         Arrays.stream(arr).forEach(s -> sb.append("| ").append("---"));
         sb.append(" |").append(System.lineSeparator());
         return sb.toString();
