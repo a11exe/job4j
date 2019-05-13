@@ -2,7 +2,6 @@ package ru.job4j.socket;
 
 import org.alicebot.ab.Bot;
 import org.alicebot.ab.Chat;
-import org.alicebot.ab.History;
 import org.alicebot.ab.MagicBooleans;
 
 import java.io.*;
@@ -19,24 +18,27 @@ import java.nio.file.Paths;
  */
 public class Oracle {
 
-    private static final int PORT = 1999;
+    private final Socket socket;
     private static final String EXIT = "пока";
     private static final boolean TRACE_MODE = false;
 
     public static void main(String[] args) {
 
-        Oracle oracle = new Oracle();
-        try {
+        try (final Socket socket = new ServerSocket(1999).accept()) {
+            Oracle oracle = new Oracle(socket);
             oracle.init();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void init() throws IOException {
-        Socket socket =  new ServerSocket(PORT).accept();
-        PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-        BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+    public Oracle(Socket socket) {
+        this.socket = socket;
+    }
+
+    public void init() throws IOException {
+        PrintWriter out = new PrintWriter(this.socket.getOutputStream(), true);
+        BufferedReader in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
         String ask;
 
         String resourcesPath = getResourcesPath();
@@ -55,18 +57,19 @@ public class Oracle {
                 out.println("Hello, dear friend, I'm a oracle.");
                 out.println();
             } else if (EXIT.equals(ask)) {
-                out.println(EXIT);
                 out.println();
             } else {
-                String request = ask;
-                if (MagicBooleans.trace_mode)
-                    System.out.println("STATE=" + request + ":THAT=" + ((History) chatSession.thatHistory.get(0)).get(0) + ":TOPIC=" + chatSession.predicates.get("topic"));
-                String response = chatSession.multisentenceRespond(request);
-                while (response.contains("&lt;"))
+                if (MagicBooleans.trace_mode) {
+                    System.out.println("STATE=" + ask + ":THAT=" + chatSession.thatHistory.get(0).get(0) + ":TOPIC=" + chatSession.predicates.get("topic"));
+                }
+                String response = chatSession.multisentenceRespond(ask);
+                while (response.contains("&lt;")) {
                     response = response.replace("&lt;", "<");
-                while (response.contains("&gt;"))
+                }
+                while (response.contains("&gt;")) {
                     response = response.replace("&gt;", ">");
-                out.println("Robot : " + response);
+                }
+                out.println("Oracle: " + response);
                 out.println();
             }
         } while (!EXIT.equals(ask));
@@ -78,7 +81,7 @@ public class Oracle {
         try {
             File dir = Paths.get(resource.toURI()).toFile();
             System.out.println(dir);
-            res = dir.getAbsolutePath().replace("bots","");
+            res = dir.getAbsolutePath().replace("bots", "");
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }

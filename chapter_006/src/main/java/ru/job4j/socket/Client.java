@@ -1,9 +1,6 @@
 package ru.job4j.socket;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Scanner;
@@ -15,23 +12,25 @@ import java.util.Scanner;
  */
 public class Client {
 
-    private static final String IP = "localhost";
-    private static final int PORT = 1999;
+    private final Socket socket;
     private static final String EXIT = "пока";
 
     public static void main(String[] args) {
-        Client client = new Client();
-        try {
+
+        try (final Socket socket = new Socket(InetAddress.getByName("localhost"), 1999)) {
+            Client client = new Client(socket);
             client.init();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void init() throws IOException {
+    public Client(Socket socket) {
+        this.socket = socket;
+    }
 
-        Socket socket = new Socket(InetAddress.getByName(IP), PORT);
-        //socket.setSoTimeout(10000);
+    public void init() throws IOException {
+
         PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
         BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         Scanner console = new Scanner(System.in);
@@ -39,9 +38,10 @@ public class Client {
         do {
             ask = console.nextLine();
             out.println(ask);
-            String str;
-            while (!(str = in.readLine()).isEmpty()) {
+            String str = in.readLine();
+            while (!str.isEmpty()) {
                 System.out.println(str);
+                str = in.readLine();
             }
         } while (!EXIT.equals(ask));
 
