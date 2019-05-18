@@ -9,3 +9,5 @@
 Объединение зафиксированных измененй
 
 [Вопросы для собеседования по темам обучения job4j.ru](interview_questions#вопросы-для-собеседования-по-темам-обучения-job4jru)
+
+[How to build jars from IntelliJ](build_jars/BuildJars.MD#how-to-build-jars-from-intellijbuild_jars#How-to-build-jars-from-IntelliJ)
