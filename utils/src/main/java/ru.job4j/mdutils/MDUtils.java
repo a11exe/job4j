@@ -19,6 +19,7 @@ public class MDUtils {
         str = str.replaceAll("\\[", "");
         str = str.replaceAll("\\]", "");
         str = str.replaceAll("\\+", "");
+        str = str.replaceAll("\\/", "");
         str = str.trim();
 
         String question = str;
