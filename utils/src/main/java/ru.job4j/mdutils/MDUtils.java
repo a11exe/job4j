@@ -29,7 +29,26 @@ public class MDUtils {
         str = str.replaceAll("\\?", "");
         str = str.replaceAll(" ", "-");
 
-        return question + "(#" + str.substring(str.indexOf("-") + 1) + ")";
+        String answer = removeNumberFromBeginOfLine(str);
+
+        return question + "(#" + answer + ")";
+    }
+
+    private String removeNumberFromBeginOfLine(String str) {
+        String number = str.substring(str.indexOf("-") - 1);
+        if (isNumeric(number)) {
+            str = str.substring(str.indexOf("-") + 1);
+        }
+        return str;
+    }
+
+    public static boolean isNumeric(String strNum) {
+        try {
+            double d = Double.parseDouble(strNum);
+        } catch (NumberFormatException | NullPointerException nfe) {
+            return false;
+        }
+        return true;
     }
 
     public static void main(String[] args) {

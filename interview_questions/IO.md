@@ -24,6 +24,17 @@
 + [22. Как создать директорию?](#Как-создать-директорию)
 + [23. Как записать в файл?](#Как-записать-в-файл)
 + [24. Как прочитать данные из файла?](#Как-прочитать-данные-из-файла)
++ [Работа с сокетами](#Работа-с-сокетами)
++ [Какие существуют виды потоков ввода/вывода?](#Какие-существуют-виды-потоков-ввода/вывода)
++ [Назовите основные предки потоков ввода/вывода.](#Назовите-основные-предки-потоков-ввода/вывода)
++ [Что общего и чем отличаются следующие потоки: InputStream, OutputStream, Reader, Writer?](#Что-общего-и-чем-отличаются-следующие-потоки:-InputStream-OutputStream-Reader-Writer)
++ [Что вы знаете о RandomAccessFile?](#Что-вы-знаете-о-RandomAccessFile)
++ [Какой класс-надстройка позволяет читать данные из входного байтового потока в формате примитивных типов данных?](#Какой-класс-надстройка-позволяет-читать-данные-из-входного-байтового-потока-в-формате-примитивных-типов-данных)
++ [Какой класс-надстройка позволяет ускорить чтение/запись за счет использования буфера?](#Какой-класс-надстройка-позволяет-ускорить-чтение/запись-за-счет-использования-буфера)
++ [Какие классы позволяют преобразовать байтовые потоки в символьные и обратно?](#Какие-классы-позволяют-преобразовать-байтовые-потоки-в-символьные-и-обратно)
++ [Какой символ является разделителем при указании пути к ЭФС?](#Какой-символ-является-разделителем-при-указании-пути-к-ЭФС)
++ [Что вы знаете об интерфейсе FilenameFilter?](#Что-вы-знаете-об-интерфейсе-FilenameFilter)
++ [Что такое сериализация?](#Что-такое-сериализация)
 
 
 ## Расскажите общее идею что такое поток ввода вывода
@@ -101,6 +112,25 @@ RandomAccessFile может открываться в режиме чтения 
 | ---| --- |
 | Потокоориентированный| Буфер-ориентированный |
 | Блокирующий (синхронный) ввод/вывод| Неблокирующий (асинхронный) ввод/вывод |
+
+**Предпосылки создания:**
+
+Недостатки IO:
+
++ The File class lacked some important functionality, such as a copy method.
++ It also defined many methods that returned boolean. As one can imagine, in case of an error, false was returned, rather than throwing an exception. The developer had, indeed, no way of knowing why it failed.
++ Did not provide good handling on support of symbolic links.
++ A limited set of file attributes was provided.
+
+To overcome these problems, java.nio package was introduced in java 4. The key features were:
+
++ Channels and Selectors: A channel is an abstraction on lower-level file system features, e.g. memory-mapped files.
++ Buffers: Buffering for all primitive classes (except for Boolean).
++ Charset: Charset (java.nio.charset), encoders, and decoders to map bytes and Unicode symbols
+
+With java 7 the java.nio.file package is introduced providing a better support for handling symbolic links, 
+file attributes access and specially to support extended the file system through classes such 
+as **Path, Paths and Files**.
 
 Состоит из 3 основных компонентов
 
@@ -285,7 +315,7 @@ String.format("|%020d|", 93); // prints: |00000000000000000093|
 
 ## Что такое класс Console Расскажите его АПИ
 
-Альтернатива стандратным потокам ввода / вывода класс Console. Часто используются дл
+Альтернатива стандратным потокам ввода / вывода класс Console.
 
 Для создание экземпляра используется System.console(). Метод может вернуть NULL если консоль недоступна. 
 Консоль позволяет вводить пароль используя метод readPassword (не видны символы при вводе, не сохраняется в памяти). 
@@ -350,6 +380,14 @@ Path testFilePath = Paths.get("D:\\test\\testfile.txt");
 
 ## Как получить список файлов.
 
++ Без учета подпапок
+```java
+File file = new File("dir");
+File[] filesArr = file.listFiles();
+String[] filesNames = file.list();
+```
+
++ С учетом подпапок
 ```java
 public void listFilesForFolder(final File folder) {
     for (final File fileEntry : folder.listFiles()) {
@@ -365,7 +403,14 @@ final File folder = new File("/home/you/Desktop");
 listFilesForFolder(folder);
 ```
 
-**Files.walk API is available from Java 8.**
+**Java 8**
+
++ Java NIO без учета подпапок
+```java
+Stream<Path> stramFiles = Files.list(Paths.get("dir"));
+```
+
++ С учетом подпапок. Files.walk API is available from Java 8.
 
 ```java
 try (Stream<Path> paths = Files.walk(Paths.get("/home/you/Desktop"))) {
@@ -374,6 +419,27 @@ try (Stream<Path> paths = Files.walk(Paths.get("/home/you/Desktop"))) {
         .forEach(System.out::println);
 }
 ```
+
++ Через walkFileTree 
+
+(The difference between walk and walkFileTree is that they supply different interfaces for walking the tree: walkFileTree takes FileVisitor, walk gives Stream<Path>)
+
+```java
+Files.walkFileTree(directory, Collections.emptySet(), 1, new SimpleFileVisitor<Path>() {
+    @Override
+    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+        doSomething(file);
+        return FileVisitResult.CONTINUE;
+    }
+
+    @Override
+    public FileVisitResult visitFileFailed(Path file, IOException exc) {
+        // log exc
+        return FileVisitResult.CONTINUE;
+    }
+});
+```
+
 
 [к оглавлению](#IO)
 
@@ -490,6 +556,9 @@ dosView.setArchive(true);
   
 + String fileData = "Pankaj Kumar";
   Files.write(Paths.get("name.txt"), fileData.getBytes());
+  
++ Path path = Paths.get("name.txt");
+  Files.createFile(path);
 
 [к оглавлению](#IO)
 
@@ -605,5 +674,177 @@ dosView.setArchive(true);
 ```java
     data = new String(Files.readAllBytes(Paths.get(fileName)));
 ```
+
+[к оглавлению](#IO)
+
+## Работа с сокетами
+
+Создание сервера:
+
+```java
+server = new ServerSocket(4004); // серверсокет прослушивает порт 4004
+System.out.println("Сервер запущен!"); 
+clientSocket = server.accept(); // accept() будет ждать пока
+
+                
+try { // установив связь и воссоздав сокет для общения с клиентом можно перейти
+                    
+    in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+    // и отправлять
+    out = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
+
+    String word = in.readLine(); // ждём пока клиент что-нибудь нам напишет
+    System.out.println(word);
+    // не долго думая отвечает клиенту
+    out.write("Привет, это Сервер! Подтверждаю, вы написали : " + word + "\n");
+    out.flush(); // выталкиваем все из буфера
+
+    } finally { // в любом случае сокет будет закрыт
+         System.out.println("dfjkhgkdf");
+        clientSocket.close();
+        // потоки тоже хорошо бы закрыть
+        in.close();
+        out.close();
+}
+```
+
+Создание клиента
+
+```java
+
+// адрес - локальный хост, порт - 4004, такой же как у сервера
+clientSocket = new Socket("localhost", 4004); // этой строкой мы запрашиваем
+//  у сервера доступ на соединение
+reader = new BufferedReader(new InputStreamReader(System.in));
+// читать соообщения с сервера
+in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+// писать туда же
+out = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
+
+System.out.println("Вы что-то хотели сказать? Введите это здесь:");
+// если соединение произошло и потоки успешно созданы - мы можем
+//  работать дальше и предложить клиенту что то ввести
+// если нет - вылетит исключение
+String word = reader.readLine(); // ждём пока клиент что-нибудь
+// не напишет в консоль
+out.write(word + "\n"); // отправляем сообщение на сервер
+out.flush();
+String serverWord = in.readLine(); // ждём, что скажет сервер
+System.out.println(serverWord); // получив - выводим на экран
+
+```
+
+[к оглавлению](#IO)
+
+## Какие существуют виды потоков ввода/вывода
+
+Разделяют два вида потоков ввода/вывода: байтовые и символьные.
+
+[к оглавлению](#IO)
+
+## Назовите основные предки потоков ввода/вывода
+
++ Байтовые: java.io.InputStream, java.io.OutputStream;
+
++ Символьные: java.io.Reader, java.io.Writer;
+
+[к оглавлению](#IO)
+
+## Что общего и чем отличаются следующие потоки: InputStream OutputStream Reader Writer
+
+Базовый класс InputStream представляет классы, которые получают данные из различных источников:
++  массив байтов
++ строка (String)
++ файл
++ канал (pipe): данные помещаются с одного конца и извлекаются с другого
++ последовательность различных потоков, которые можно объединить в одном потоке
++ другие источники (например, подключение к интернету)
+
+Класс OutputStream — это абстрактный класс, определяющий потоковый байтовый вывод. В этой категории находятся классы, определяющие, куда направляются ваши данные: в массив байтов (но не напрямую в String; предполагается что вы сможете создать их из массива байтов), в файл или канал.
+
+Символьные потоки имеют два основных абстрактных класса Reader и Writer, управляющие потоками символов Unicode. Класс Reader — абстрактный класс, определяющий символьный потоковый ввод. Класс Writer — абстрактный класс, определяющий символьный потоковый вывод. В случае ошибок все методы класса передают исключение IOException.
+
+[к оглавлению](#IO)
+
+## Что вы знаете о RandomAccessFile
+
+Класс RandomAccessFile наследуется напрямую от Object и не наследуется от вышеприведенных базовых классов ввода\вывода. Предназначен для работы с файлами, поддерживая произвольный доступ к их содержимому.
+
+Работа с классом RandomAccessFile напоминает использование совмещенных в одном классе потоков DataInputStream и DataOutputStream (они реализуют те же интерфейсы DataInput и DataOutput). Кроме того, метод seek() позволяет переместиться к определенной позиции и изменить хранящееся там значение.
+
+При использовании RandomAccessFile необходимо знать структуру файла. Класс RandomAccessFile содержит методы для чтения и записи примитивов и строк UTF-8.
+
+[к оглавлению](#IO)
+
+## Какой класс надстройка позволяет читать данные из входного байтового потока в формате примитивных типов данных
+
+Для чтения байтовых данных (не строк) применяется класс DataInputStream. В этом случае необходимо использовать классы из группы InputStream.
+
+Для преобразования строки в массив байтов, пригодный для помещения в поток ByteArrayInputStream, в классе String предусмотрен метод getBytes(). Полученный ByteArrayInputStream представляет собой поток InputStream, подходящий для передачи DataInputStream.
+
+При побайтовом чтении символов из форматированного потока DataInputStream методом readByte() любое полученное значение будет считаться действительным, поэтому возвращаемое значение неприменимо для идентификации конца потока. Вместо этого можно использовать метод available(), который сообщает, сколько еще осталось символов.
+
+Класс DataInputStream позволяет читать элементарные данные из потока через интерфейс DataInput, который определяет методы, преобразующие элементарные значения в форму последовательности байтов. Такие потоки облегчают сохранение в файле двоичных данных.
+
+Конструктор: DataInputStream(InputStream stream)
+Методы: readDouble(), readBoolean(), readInt()
+
+[к оглавлению](#IO)
+
+## Какой класс надстройка позволяет ускорить чтение/запись за счет использования буфера
+
+Для этого используются классы, позволяющие буферизировать поток:
+java.io.BufferedInputStream(InputStream in) || BufferedInputStream(InputStream in, int size),
+java.io.BufferedOutputStream(OutputStream out) || BufferedOutputStream(OutputStream out, int size),
+java.io.BufferedReader(Reader r) || BufferedReader(Reader in, int sz),
+java.io.BufferedWriter(Writer out) || BufferedWriter(Writer out, int sz)
+
+[к оглавлению](#IO)
+
+## Какие классы позволяют преобразовать байтовые потоки в символьные и обратно
+
+OutputStreamWriter — мост между классом OutputStream и классом Writer. Символы, записанные в поток, преобразовываются в байты.
+
+```java
+OutputStream outputStream       = new FileOutputStream("c:\\data\\output.txt");
+Writer       outputStreamWriter = new OutputStreamWriter(outputStream, "UTF-8");
+
+outputStreamWriter.write("Hello World");
+
+outputStreamWriter.close();
+```
+
+InputStreamReader — аналог для чтения. При помощи методов класса Reader читаются байты из потока InputStream и далее преобразуются в символы.
+
+```java
+InputStream inputStream       = new FileInputStream("c:\\data\\input.txt");
+Reader      inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
+
+int data = inputStreamReader.read();
+while(data != -1){
+    char theChar = (char) data;
+    data = inputStreamReader.read();
+}
+
+inputStreamReader.close();
+```
+
+[к оглавлению](#IO)
+
+## Какой символ является разделителем при указании пути к ЭФС
+
+Для различных систем символ разделителя различается. Вытащить его можно используя file.separator, а так же в статическом поле File.separator.  Для Windows это ‘\’.
+
+[к оглавлению](#IO)
+
+## Что вы знаете об интерфейсе FilenameFilter
+
+Интерфейс FilenameFilter применяется для проверки попадает ли объект File под некоторое условие. Этот интерфейс содержит единственный метод boolean accept(File pathName). Этот метод необходимо переопределить и реализовать. Например:
+
+[к оглавлению](#IO)
+
+## Что такое сериализация
+
+Сериализация это процесс сохранения состояния объекта в последовательность байт; десериализация это процесс восстановления объекта, из этих байт. Java Serialization API предоставляет стандартный механизм для создания сериализуемых объектов.
 
 [к оглавлению](#IO)
