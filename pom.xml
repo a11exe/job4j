@@ -26,6 +26,7 @@
      <module>chapter_006</module>
      <module>utils</module>
      <module>search_files</module>
+     <module>chapter_007</module>
  </modules>
 
  <dependencies>
