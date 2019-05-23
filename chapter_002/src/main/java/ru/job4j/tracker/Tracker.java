@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
  * @version 1
  * @since 01.02.2019
  */
-public class Tracker {
+public class Tracker implements ITracker {
 
     /**
      * Массив для хранение заявок.
