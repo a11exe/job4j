@@ -40,7 +40,7 @@ public class MenuTracker {
     /**
      * хранит ссылку на объект .
      */
-    private final Tracker tracker;
+    private final ITracker tracker;
     /**
      * хранит ссылку на массив типа UserAction.
      */
@@ -52,7 +52,7 @@ public class MenuTracker {
      * @param input   объект типа Input
      * @param tracker объект типа Tracker
      */
-    public MenuTracker(Input input, Tracker tracker, Consumer<String> output) {
+    public MenuTracker(Input input, ITracker tracker, Consumer<String> output) {
         this.input = input;
         this.tracker = tracker;
         this.output = output;
@@ -111,7 +111,7 @@ public class MenuTracker {
         }
 
         @Override
-        public void execute(Input input, Tracker tracker) {
+        public void execute(Input input, ITracker tracker) {
             output.accept("------------ Adding new item --------------");
             String name = input.ask("Please, provide item name:");
             String desc = input.ask("Please, provide item description:");
@@ -128,7 +128,7 @@ public class MenuTracker {
             super(key, name);
         }
         @Override
-        public void execute(Input input, Tracker tracker) {
+        public void execute(Input input, ITracker tracker) {
             output.accept("------------Список всех заявок------------");
             tracker.findAll().forEach(System.out::println);
         }
@@ -141,7 +141,7 @@ public class MenuTracker {
         }
 
         @Override
-        public void execute(Input input, Tracker tracker) {
+        public void execute(Input input, ITracker tracker) {
             output.accept("------------ Редактирование заявки по номеру --------------");
             String id = input.ask("Введите номер заявки :");
             Item item = tracker.findById(id);
@@ -167,7 +167,7 @@ public class MenuTracker {
             super(key, name);
         }
         @Override
-        public void execute(Input input, Tracker tracker) {
+        public void execute(Input input, ITracker tracker) {
             output.accept("------------ Удаление заявки по номеру --------------");
             String id = input.ask("Введите номер заявки :");
             if (tracker.delete(id)) {
@@ -183,7 +183,7 @@ public class MenuTracker {
             super(key, name);
         }
         @Override
-        public void execute(Input input, Tracker tracker) {
+        public void execute(Input input, ITracker tracker) {
             output.accept("------------ Поиск заявки по номеру --------------");
             String id = input.ask("Введите номер заявки :");
             Item item = tracker.findById(id);
@@ -196,7 +196,7 @@ public class MenuTracker {
             super(key, name);
         }
         @Override
-        public void execute(Input input, Tracker tracker) {
+        public void execute(Input input, ITracker tracker) {
             output.accept("------------ Поиск заявок по имени --------------");
             String name = input.ask("Введите имя заявки :");
             tracker.findByName(name).forEach(s->output.accept(s.toString()));
@@ -208,7 +208,7 @@ public class MenuTracker {
             super(key, name);
         }
         @Override
-        public void execute(Input input, Tracker tracker) {
+        public void execute(Input input, ITracker tracker) {
             setExit(true);
         }
     }

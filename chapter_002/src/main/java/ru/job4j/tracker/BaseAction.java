@@ -18,7 +18,7 @@ public abstract class BaseAction implements UserAction {
     }
 
     @Override
-    public abstract void execute(Input input, Tracker tracker);
+    public abstract void execute(Input input, ITracker tracker);
 
     @Override
     public int key() {
