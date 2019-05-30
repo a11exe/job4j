@@ -23,6 +23,10 @@ public class TrackerSQL implements ITracker, AutoCloseable {
 
     private static final org.apache.logging.log4j.Logger LOG = LogManager.getLogger(TrackerSQL.class);
 
+    public TrackerSQL(Connection connection) {
+        this.connection = connection;
+    }
+
     public boolean init() {
         try (InputStream in = TrackerSQL.class.getClassLoader().getResourceAsStream("app.properties")) {
             Properties config = new Properties();
@@ -41,7 +45,7 @@ public class TrackerSQL implements ITracker, AutoCloseable {
 
     @Override
     public Item add(Item item) {
-        String insertItem = "INSERT INTO item"
+        String insertItem = "INSERT INTO items"
                 + "(ITEM_NAME, ITEM_DESC, ITEM_CREATED) VALUES"
                 + "(?,?,?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(insertItem, Statement.RETURN_GENERATED_KEYS)) {
@@ -99,7 +103,7 @@ public class TrackerSQL implements ITracker, AutoCloseable {
 
         boolean replaced = false;
 
-        String updateItem = "UPDATE item SET "
+        String updateItem = "UPDATE items SET "
                 + "ITEM_NAME = ?, ITEM_DESC = ?, ITEM_CREATED = ? "
                 + "WHERE ITEM_ID = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(updateItem)) {
@@ -124,7 +128,7 @@ public class TrackerSQL implements ITracker, AutoCloseable {
     @Override
     public boolean delete(String id) {
         boolean deleted = false;
-        String deleteById = "DELETE FROM item "
+        String deleteById = "DELETE FROM items "
                 + "WHERE ITEM_ID = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(deleteById)) {
             preparedStatement.setInt(1, Integer.parseInt(id));
@@ -146,7 +150,7 @@ public class TrackerSQL implements ITracker, AutoCloseable {
     public List<Item> findAll() {
         List<Item> items = new ArrayList<>();
 
-        String selectAll = "SELECT ITEM_ID, ITEM_NAME, ITEM_DESC, ITEM_CREATED FROM item";
+        String selectAll = "SELECT ITEM_ID, ITEM_NAME, ITEM_DESC, ITEM_CREATED FROM items";
         try (PreparedStatement preparedStatement = connection.prepareStatement(selectAll)) {
 
             LOG.info(preparedStatement.toString());
@@ -183,7 +187,7 @@ public class TrackerSQL implements ITracker, AutoCloseable {
     public List<Item> findByName(String key) {
         List<Item> items = new ArrayList<>();
 
-        String selectByName = "SELECT ITEM_ID, ITEM_NAME, ITEM_DESC, ITEM_CREATED FROM item "
+        String selectByName = "SELECT ITEM_ID, ITEM_NAME, ITEM_DESC, ITEM_CREATED FROM items "
                 + "WHERE ITEM_NAME = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(selectByName)) {
             preparedStatement.setString(1, key);
@@ -223,7 +227,7 @@ public class TrackerSQL implements ITracker, AutoCloseable {
 
         Item item = null;
 
-        String selectById = "SELECT ITEM_ID, ITEM_NAME, ITEM_DESC, ITEM_CREATED FROM item "
+        String selectById = "SELECT ITEM_ID, ITEM_NAME, ITEM_DESC, ITEM_CREATED FROM items "
                 + "WHERE ITEM_ID = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(selectById)) {
             preparedStatement.setInt(1, Integer.parseInt(id));
