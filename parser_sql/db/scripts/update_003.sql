@@ -1,0 +1,1 @@
+ALTER TABLE Vacancies ADD COLUMN posted TIMESTAMP;
