@@ -1,13 +1,12 @@
 package ru.job4j.trackersql;
 
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.taskdefs.SQLExec;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import ru.job4j.tracker.Item;
 
-import java.io.File;
 import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Properties;
 
@@ -21,46 +20,61 @@ import static org.junit.Assert.*;
  */
 public class TrackerSQLTest {
 
-    @BeforeClass
+    //@BeforeClass
     public static void initDB() {
 
-        final class SqlExecuter extends SQLExec {
-            public SqlExecuter() {
-                Project project = new Project();
-                project.init();
-                setProject(project);
-                setTaskType("sql");
-                setTaskName("sql");
-            }
-        }
+//        final class SqlExecuter extends SQLExec {
+//            public SqlExecuter() {
+//                Project project = new Project();
+//                project.init();
+//                setProject(project);
+//                setTaskType("sql");
+//                setTaskName("sql");
+//            }
+//        }
+//
+//        try (InputStream in = TrackerSQLTest.class.getClassLoader().getResourceAsStream("app.properties")) {
+//            Properties config = new Properties();
+//            config.load(in);
+//
+//            SqlExecuter executer = new SqlExecuter();
+//            executer.setSrc(new File(TrackerSQLTest.class.getClassLoader().getResource("create.sql").getPath()));
+//            executer.setDriver(config.getProperty("driver-class-name"));
+//            executer.setPassword(config.getProperty("password"));
+//            executer.setUserid(config.getProperty("username"));
+//            executer.setUrl(config.getProperty("url"));
+//            executer.execute();
+//
+//        } catch (Exception e) {
+//            throw new IllegalStateException(e);
+//        }
+    }
 
-        try (InputStream in = TrackerSQLTest.class.getClassLoader().getResourceAsStream("app.properties")) {
+    public Connection init() {
+        try (InputStream in = TrackerSQL.class.getClassLoader().getResourceAsStream("app.properties")) {
             Properties config = new Properties();
             config.load(in);
+            Class.forName(config.getProperty("driver-class-name"));
+            return DriverManager.getConnection(
+                    config.getProperty("url"),
+                    config.getProperty("username"),
+                    config.getProperty("password")
 
-            SqlExecuter executer = new SqlExecuter();
-            executer.setSrc(new File(TrackerSQLTest.class.getClassLoader().getResource("create.sql").getPath()));
-            executer.setDriver(config.getProperty("driver-class-name"));
-            executer.setPassword(config.getProperty("password"));
-            executer.setUserid(config.getProperty("username"));
-            executer.setUrl(config.getProperty("url"));
-            executer.execute();
-
+            );
         } catch (Exception e) {
             throw new IllegalStateException(e);
         }
     }
 
     @Test
-    public void checkConnection() {
-        TrackerSQL sql = new TrackerSQL();
+    public void checkConnection() throws SQLException {
+        TrackerSQL sql = new TrackerSQL(ConnectionRollback.create(this.init()));
         assertThat(sql.init(), is(true));
     }
 
     @Test
-    public void whenFindAllShouldFoundAllItems() {
-        TrackerSQL sql = new TrackerSQL();
-        sql.init();
+    public void whenFindAllShouldFoundAllItems() throws SQLException {
+        TrackerSQL sql = new TrackerSQL(ConnectionRollback.create(this.init()));
         Item item1 = new Item("item 1", "res1", 0L);
         Item item2 = new Item("item 2", "res2", 0L);
         Item item3 = new Item("item 3", "res3", 0L);
@@ -72,10 +86,8 @@ public class TrackerSQLTest {
     }
 
     @Test
-    public void whenCreateItemAndGetByIdShouldBeSame() {
-        TrackerSQL sql = new TrackerSQL();
-        sql.init();
-
+    public void whenCreateItemAndGetByIdShouldBeSame() throws SQLException {
+        TrackerSQL sql = new TrackerSQL(ConnectionRollback.create(this.init()));
         Item item = new Item("test item", "test item desc", 0L);
         item.setComments(new String[] {"com1", "com2"});
         Item expected = sql.add(item);
@@ -84,9 +96,8 @@ public class TrackerSQLTest {
     }
 
     @Test
-    public void whenDeleteItemByIdShouldBeDeleted() {
-        TrackerSQL sql = new TrackerSQL();
-        sql.init();
+    public void whenDeleteItemByIdShouldBeDeleted() throws SQLException {
+        TrackerSQL sql = new TrackerSQL(ConnectionRollback.create(this.init()));
         Item item = new Item("delete item", "", 0L);
         sql.add(item);
         assertTrue(sql.delete(item.getId()));
@@ -95,9 +106,8 @@ public class TrackerSQLTest {
     }
 
     @Test
-    public void whenReplaceItemAndGetByIdShouldBeReplaced() {
-        TrackerSQL sql = new TrackerSQL();
-        sql.init();
+    public void whenReplaceItemAndGetByIdShouldBeReplaced() throws SQLException {
+        TrackerSQL sql = new TrackerSQL(ConnectionRollback.create(this.init()));
         Item item = new Item("replace item", "res", 0L);
         sql.add(item);
         item.setName("replaced");
@@ -106,9 +116,8 @@ public class TrackerSQLTest {
     }
 
     @Test
-    public void whenFindItemByNameShouldFoundAllItems() {
-        TrackerSQL sql = new TrackerSQL();
-        sql.init();
+    public void whenFindItemByNameShouldFoundAllItems() throws SQLException {
+        TrackerSQL sql = new TrackerSQL(ConnectionRollback.create(this.init()));
         Item item1 = new Item("same item", "res1", 0L);
         Item item2 = new Item("same item", "res2", 0L);
         Item item3 = new Item("same item", "res3", 0L);
