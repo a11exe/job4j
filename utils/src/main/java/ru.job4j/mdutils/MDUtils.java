@@ -1,5 +1,7 @@
 package ru.job4j.mdutils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -12,7 +14,14 @@ import java.util.Scanner;
  */
 public class MDUtils {
 
-    public String getMenuItem(String str) {
+    private final static String NAME = "SQL";
+
+    class QA {
+        String question;
+        String answer;
+    }
+
+    public QA getMenuItem(String str) {
         str = str.replaceAll("#", "");
         str = str.replaceAll("\\(", "");
         str = str.replaceAll("\\)", "");
@@ -32,13 +41,19 @@ public class MDUtils {
 
         String answer = removeNumberFromBeginOfLine(str);
 
-        return question + "(#" + answer + ")";
+        QA qa = new QA();
+        qa.question = question + "(#" + answer + ")";
+        qa.answer = "## "+answer.replaceAll("-", " ");
+
+        return qa;
     }
 
     private String removeNumberFromBeginOfLine(String str) {
-        String number = str.substring(str.indexOf("-") - 1);
-        if (isNumeric(number)) {
-            str = str.substring(str.indexOf("-") + 1);
+        if (str.indexOf("-") > 0) {
+            String number = str.substring(str.indexOf("-") - 1);
+            if (isNumeric(number)) {
+                str = str.substring(str.indexOf("-") + 1);
+            }
         }
         return str;
     }
@@ -57,13 +72,26 @@ public class MDUtils {
         String str;
         MDUtils mdUtils = new MDUtils();
         Scanner input = new Scanner(System.in);
+        List<String> lines = new ArrayList<>();
         while (input.hasNextLine()) {
             str = input.nextLine();
+            lines.add(str);
             if (str.isEmpty()) {
                 break;
             }
-            System.out.println(mdUtils.getMenuItem(str));
         }
+        System.out.println();
+        List<QA> qaList = new ArrayList<>();
+        lines.forEach(s->qaList.add(mdUtils.getMenuItem(s)));
+        qaList.forEach(qa -> System.out.println(qa.question));
+        qaList.forEach(qa -> {
+            System.out.println(qa.answer);
+            System.out.println();
+            System.out.println();
+            System.out.println();
+            System.out.println("[к оглавлению](#"+NAME+")");
+            System.out.println();
+        });
     }
 
 
