@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+  <vacancies id='31' name="vac1" text="vac text 77" link="https://www.sql.ru/forum/1313253/nuzhen-programmist-na-super-interesnuu-rabotu-tolko-g-krasnodar"/>
+  <vacancies id='32' name="vac3" text="vac text 88" link="https://www.sql.ru/forum/1313179/razrabotchik-python-moskva"/>
+  <vacancies id='33' name="vac4" text="vac text 99" link="https://www.sql.ru/forum/1313162/be-razrabotchik-java"/>
+  <log id="1" event="START" msg="start parsing" time="2019-06-05 08:58:50.335"/>
+  <log id="2" event="END" msg="end parsing" time="2019-06-05 08:58:54.509"/>
+  <log id="3" event="START" msg="start parsing" time="2019-06-05 08:59:41.038"/>
+  <log id="4" event="END" msg="end parsing" time="2019-06-05 09:01:04.29"/>
+</dataset>
