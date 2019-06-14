@@ -43,7 +43,7 @@ public class MDUtils {
 
         QA qa = new QA();
         qa.question = question + "(#" + answer + ")";
-        qa.answer = "## "+answer.replaceAll("-", " ");
+        qa.answer = "## " + answer.replaceAll("-", " ");
 
         return qa;
     }
@@ -89,7 +89,7 @@ public class MDUtils {
             System.out.println();
             System.out.println();
             System.out.println();
-            System.out.println("[к оглавлению](#"+NAME+")");
+            System.out.println("[к оглавлению](#" + NAME + ")");
             System.out.println();
         });
     }
