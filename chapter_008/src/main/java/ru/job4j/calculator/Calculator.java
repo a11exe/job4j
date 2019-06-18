@@ -54,4 +54,11 @@ public class Calculator {
         return this.result;
     }
 
+    /**
+     * Method setResult set result value.
+     * @param result result arg
+     */
+    public void setResult(double result) {
+        this.result = result;
+    }
 }
