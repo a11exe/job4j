@@ -70,6 +70,7 @@
      <module>search_files</module>
      <module>chapter_007</module>
      <module>parser_sql</module>
+     <module>chapter_008</module>
  </modules>
 
  <dependencies>
