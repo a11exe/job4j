@@ -23,6 +23,10 @@ public class Storage {
         foods = new ArrayList<>();
     }
 
+    public void setStorageStrategy(StorageStrategy storageStrategy) {
+        this.storageStrategy = storageStrategy;
+    }
+
     public List<Food> getFoods() {
         return foods;
     }
@@ -36,4 +40,10 @@ public class Storage {
         return this.storageStrategy.add(food, this.foods);
     }
 
+    /**
+     * clear storage
+     */
+    public void clear() {
+        foods.clear();
+    }
 }

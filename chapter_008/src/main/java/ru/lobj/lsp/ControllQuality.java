@@ -3,6 +3,7 @@ package ru.lobj.lsp;
 import ru.lobj.lsp.food.Food;
 import ru.lobj.lsp.storage.Storage;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -36,5 +37,17 @@ public class ControllQuality {
             }
         }
         return added;
+    }
+
+    /**
+     * Extract all foods from storages and redistribut again
+     */
+    public void resort() {
+        List<Food> redistribuitFood = new ArrayList<>();
+        storages.forEach(s-> {
+            redistribuitFood.addAll(s.getFoods());
+            s.clear();
+        });
+        redistribuitFood.forEach(this::addToStorage);
     }
 }
