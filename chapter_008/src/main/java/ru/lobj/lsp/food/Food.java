@@ -11,11 +11,11 @@ import java.time.LocalDate;
  * @version 1
  * @since 19.06.2019
  */
-public class Food {
+public abstract class Food implements Reproduct, Vegetable {
 
-    private String name;
-    private LocalDate expaireDate;
-    private LocalDate createDate;
+    private final String name;
+    private final LocalDate expaireDate;
+    private final LocalDate createDate;
     private BigDecimal price;
     private int discount;
 

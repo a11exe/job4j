@@ -14,4 +14,14 @@ public class Milk extends Food {
     public Milk(String name, LocalDate expaireDate, LocalDate createDate, BigDecimal price, int discount) {
         super(name, expaireDate, createDate, price, discount);
     }
+
+    @Override
+    public boolean isCanReproduct() {
+        return true;
+    }
+
+    @Override
+    public boolean isVegetable() {
+        return false;
+    }
 }
