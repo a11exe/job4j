@@ -80,8 +80,8 @@ public class InteractCalcTest {
     }
 
     @Test
-    public void whenSum2And2ResetAnd3Sum3Should6() {
-        InteractCalc interactCalc = new InteractCalc(new StubInput(new String[]{"2", "+", "2", "reset", "3", "+", "3", "="}), output);
+    public void whenSum2And2ResetAnd3Sum3Should0And3() {
+        InteractCalc interactCalc = new InteractCalc(new StubInput(new String[]{"2", "+", "2", "reset", "+", "3", "="}), output);
         interactCalc.next();
         interactCalc.next();
         interactCalc.next();
@@ -89,8 +89,7 @@ public class InteractCalcTest {
         interactCalc.next();
         interactCalc.next();
         interactCalc.next();
-        interactCalc.next();
-        assertThat(out.toString(), is("6.0" + System.lineSeparator()));
+        assertThat(out.toString(), is("0.0" + System.lineSeparator() + "3.0" + System.lineSeparator()));
     }
 
     @Test

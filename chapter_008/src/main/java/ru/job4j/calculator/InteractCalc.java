@@ -21,9 +21,33 @@ public class InteractCalc {
 
     private final Consumer<String> output;
 
-    private final String resetCommand = "reset";
-
     private final String exitCommand = "exit";
+
+    class Return implements ArithmeticOperation {
+
+        @Override
+        public Double execute(Double hold, Double input) {
+            return hold;
+        }
+
+        @Override
+        public CalculatorInputType nextInputType() {
+            return CalculatorInputType.OPERATION;
+        }
+    }
+
+    class Reset implements ArithmeticOperation {
+
+        @Override
+        public Double execute(Double hold, Double input) {
+            return 0D;
+        }
+
+        @Override
+        public CalculatorInputType nextInputType() {
+            return CalculatorInputType.OPERATION;
+        }
+    }
 
     class Add implements ArithmeticOperation {
         private final Calculator cal = new Calculator();
@@ -32,6 +56,11 @@ public class InteractCalc {
         public Double execute(Double hold, Double input) {
             cal.add(hold, input);
             return cal.getResult();
+        }
+
+        @Override
+        public CalculatorInputType nextInputType() {
+            return CalculatorInputType.NUMBER;
         }
     }
 
@@ -43,6 +72,11 @@ public class InteractCalc {
             cal.multiple(hold, input);
             return cal.getResult();
         }
+
+        @Override
+        public CalculatorInputType nextInputType() {
+            return CalculatorInputType.NUMBER;
+        }
     }
 
     class Subtract implements ArithmeticOperation {
@@ -53,6 +87,11 @@ public class InteractCalc {
             cal.subtract(hold, input);
             return cal.getResult();
         }
+
+        @Override
+        public CalculatorInputType nextInputType() {
+            return CalculatorInputType.NUMBER;
+        }
     }
 
     class Div implements ArithmeticOperation {
@@ -62,6 +101,11 @@ public class InteractCalc {
         public Double execute(Double hold, Double input) {
             cal.div(hold, input);
             return cal.getResult();
+        }
+
+        @Override
+        public CalculatorInputType nextInputType() {
+            return CalculatorInputType.NUMBER;
         }
     }
 
@@ -92,7 +136,7 @@ public class InteractCalc {
      *
      * @return exit command
      */
-    private boolean isExit() {
+    public boolean isExit() {
         return exit;
     }
 
@@ -109,8 +153,6 @@ public class InteractCalc {
             String answer = this.input.ask(nextInputType.getQuestion()).toLowerCase().trim();
             if (exitCommand.equals(answer)) {
                 valid = exit();
-            } else if (resetCommand.equals(answer)) {
-                valid = reset();
             } else if (nextInputType == CalculatorInputType.NUMBER) {
                 valid = getNumber(answer);
             } else {
@@ -126,17 +168,6 @@ public class InteractCalc {
      */
     private boolean exit() {
         this.exit = true;
-        return true;
-    }
-
-    /**
-     * Reset command.
-     *
-     * @return input valid.
-     */
-    private boolean reset() {
-        hold = 0D;
-        this.nextInputType = CalculatorInputType.NUMBER;
         return true;
     }
 
@@ -172,29 +203,23 @@ public class InteractCalc {
      * @return input valid.
      */
     private boolean getOperation(String answer) {
-        boolean valid = true;
-        if ("=".equals(answer)) {
-            this.output.accept(hold.toString());
-            this.nextInputType = CalculatorInputType.OPERATION;
-        } else {
-            valid = arithmeticOperations.keySet().contains(answer);
-            if (valid) {
+
+        boolean valid = arithmeticOperations.keySet().contains(answer);
+        if (valid) {
+            this.nextInputType = arithmeticOperations.get(answer).nextInputType();
+            if (this.nextInputType == CalculatorInputType.OPERATION) {
                 this.actualOperation = arithmeticOperations.get(answer);
-                this.nextInputType = CalculatorInputType.NUMBER;
+                hold = actualOperation.execute(hold, 0D);
+                this.output.accept(hold.toString());
+                this.actualOperation = null;
             } else {
-                this.output.accept(nextInputType.getErrorMsg());
-                arithmeticOperations.keySet().forEach(this.output);
-                this.output.accept("=");
+                this.actualOperation = arithmeticOperations.get(answer);
             }
+        } else {
+            this.output.accept(nextInputType.getErrorMsg());
+            arithmeticOperations.keySet().forEach(this.output);
         }
         return valid;
-    }
-
-    public static void main(String[] args) {
-        InteractCalc calc = new InteractCalc(new ConsoleInput(), System.out::println);
-        while (!calc.isExit()) {
-            calc.next();
-        }
     }
 
     protected void loadOperations() {
@@ -202,6 +227,13 @@ public class InteractCalc {
         this.arithmeticOperations.put("-", new Subtract());
         this.arithmeticOperations.put("*", new Multiple());
         this.arithmeticOperations.put("/", new Div());
+        this.arithmeticOperations.put("=", new Return());
+        this.arithmeticOperations.put("reset", new Reset());
     }
+
+    public void addOperation(String name, ArithmeticOperation operation) {
+        this.arithmeticOperations.put(name, operation);
+    }
+
 }
 
