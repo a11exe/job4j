@@ -1,7 +1,7 @@
-package ru.lobj.lsp;
+package ru.job4j.lsp;
 
-import ru.lobj.lsp.food.Food;
-import ru.lobj.lsp.storage.Storage;
+import ru.job4j.lsp.food.Food;
+import ru.job4j.lsp.storage.Storage;
 
 import java.util.List;
 

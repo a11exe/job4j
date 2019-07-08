@@ -1,4 +1,4 @@
-package ru.lobj.lsp.food;
+package ru.job4j.lsp.food;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

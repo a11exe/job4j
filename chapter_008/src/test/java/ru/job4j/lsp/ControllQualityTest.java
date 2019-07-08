@@ -3,12 +3,12 @@ package ru.job4j.lsp;
 
 import org.junit.Before;
 import org.junit.Test;
-import ru.lobj.lsp.ControllQuality;
-import ru.lobj.lsp.food.Milk;
-import ru.lobj.lsp.storage.ShopStrategy;
-import ru.lobj.lsp.storage.Storage;
-import ru.lobj.lsp.storage.TrashStrategy;
-import ru.lobj.lsp.storage.WarehouseStrategy;
+import ru.job4j.lsp.ControllQuality;
+import ru.job4j.lsp.food.Milk;
+import ru.job4j.lsp.storage.ShopStrategy;
+import ru.job4j.lsp.storage.Storage;
+import ru.job4j.lsp.storage.TrashStrategy;
+import ru.job4j.lsp.storage.WarehouseStrategy;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

@@ -3,11 +3,11 @@ package ru.job4j.lsp;
 
 import org.junit.Before;
 import org.junit.Test;
-import ru.lobj.lsp.ControllQuality;
-import ru.lobj.lsp.food.Corn;
-import ru.lobj.lsp.food.Meat;
-import ru.lobj.lsp.food.Milk;
-import ru.lobj.lsp.storage.*;
+import ru.job4j.lsp.ControllQuality;
+import ru.job4j.lsp.food.Corn;
+import ru.job4j.lsp.food.Meat;
+import ru.job4j.lsp.food.Milk;
+import ru.job4j.lsp.storage.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
