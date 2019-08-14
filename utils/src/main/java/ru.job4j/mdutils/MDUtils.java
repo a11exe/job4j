@@ -14,7 +14,7 @@ import java.util.Scanner;
  */
 public class MDUtils {
 
-    private final static String NAME = "SQL";
+    private final static String NAME = "LISP";
 
     class QA {
         String question;

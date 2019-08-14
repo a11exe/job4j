@@ -7,6 +7,7 @@
 + [FP, Lambda, Stream API](FPLambdaStreamAPI.md#fp-labmda-stream-api)![icon][done]
 + [Collection pro](CollectionPro.md#collections-pro)![icon][done]
 + [IO](IO.md#io)![icon][done]
-+ [SQL](SQL.md#sql)
++ [SQL](SQL.md#sql)![icon][done]
++ [SOLID](SOLID.md#solid)
 
 [done]:done.png
