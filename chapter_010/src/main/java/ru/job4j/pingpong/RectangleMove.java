@@ -12,32 +12,26 @@ public class RectangleMove implements Runnable {
     private final int width;
     private Direction direction;
     private int step;
-    private boolean exit;
 
     public RectangleMove(Rectangle rect, int width, int step) {
         this.rect = rect;
         this.width = width;
         this.step = step;
         this.direction = Direction.RIGHT;
-        this.exit = false;
     }
 
     @Override
     public void run() {
-        while (!exit) {
+        while (!Thread.currentThread().isInterrupted()) {
 
             moveX(this.step, getDirection());
 
             try {
                 Thread.sleep(50);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                Thread.currentThread().interrupt();
             }
         }
-    }
-
-    public void stop() {
-        exit = true;
     }
 
     private Direction getDirection() {
