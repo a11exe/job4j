@@ -23,7 +23,7 @@ public class ActionMenu extends Menu {
      */
     public void doAction() {
         if (action != null) {
-            action.action();
+            action.doAction();
         } else {
             System.out.println("no action");
         }
