@@ -10,33 +10,45 @@ import javafx.scene.shape.Rectangle;
 public class RectangleMove implements Runnable {
     private final Rectangle rect;
     private final int width;
-    private final int step;
+    private Direction direction;
+    private int step;
 
     public RectangleMove(Rectangle rect, int width, int step) {
         this.rect = rect;
         this.width = width;
         this.step = step;
+        this.direction = Direction.RIGHT;
     }
 
     @Override
     public void run() {
-        int direction = 1;
+        while (!Thread.currentThread().isInterrupted()) {
 
-        while (true) {
-            if (this.rect.getX() >= this.width) {
-                direction = -1;
-            }
-            if (this.rect.getX() <= 0) {
-                direction = 1;
-            }
-            this.rect.setX(this.rect.getX() + (direction * step));
+            moveX(this.step, getDirection());
 
             try {
-                Thread.sleep(100);
+                Thread.sleep(50);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                Thread.currentThread().interrupt();
             }
         }
+    }
+
+    private Direction getDirection() {
+        if (this.rect.getX() >= this.width) {
+            this.direction = Direction.LEFT;
+        }
+        if (this.rect.getX() <= 0) {
+            this.direction = Direction.RIGHT;
+        }
+        return this.direction;
+    }
+
+    private void moveX(int step, Direction direction) {
+        if (direction == Direction.LEFT) {
+            step = -step;
+        }
+        this.rect.setX(this.rect.getX() + step);
     }
 
 }
