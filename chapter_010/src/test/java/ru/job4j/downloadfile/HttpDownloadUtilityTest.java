@@ -22,6 +22,6 @@ public class HttpDownloadUtilityTest {
         String fileName = "http://www.h2database.com/h2-2018-03-18.zip";
         Path tempDirWithPrefix = Files.createTempDirectory("tmp");
         System.out.println(tempDirWithPrefix.toAbsolutePath().toString());
-        HttpDownloadUtility.downloadFile(fileName, tempDirWithPrefix.toAbsolutePath().toString(), 400);
+        HttpDownloadUtility.downloadFile(fileName, tempDirWithPrefix.toAbsolutePath().toString(), 100);
     }
 }

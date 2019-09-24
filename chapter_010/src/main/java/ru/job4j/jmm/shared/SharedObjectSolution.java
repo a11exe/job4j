@@ -11,6 +11,7 @@ public class SharedObjectSolution extends Thread {
 
     public void run() {
         while (keepRunning) {
+            System.out.println("s");
         }
 
         System.out.println("Thread terminated.");

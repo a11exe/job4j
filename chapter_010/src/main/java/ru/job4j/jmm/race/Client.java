@@ -18,8 +18,8 @@ public class Client implements Runnable  {
     }
 
     public void getMoney(int money) {
-
         while (bank.getMoney(money)) {
+            System.out.println("s");
         }
     }
 }
