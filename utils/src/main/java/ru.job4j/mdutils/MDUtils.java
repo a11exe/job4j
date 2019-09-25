@@ -14,7 +14,7 @@ import java.util.Scanner;
  */
 public class MDUtils {
 
-    private final static String NAME = "LISP";
+    private final static String NAME = "Multithreading";
 
     class QA {
         String question;
