@@ -5,11 +5,10 @@ import net.jcip.annotations.ThreadSafe;
 
 import java.util.LinkedList;
 import java.util.Queue;
-
 /**
  * @author Alexander Abramov (alllexe@mail.ru)
  * @version 1
- * @since 23.09.2019
+ * @since 24.09.2019
  */
 @ThreadSafe
 public class SimpleBlockingQueue<T> {
@@ -21,13 +20,9 @@ public class SimpleBlockingQueue<T> {
         this.size = size;
     }
 
-    public synchronized void offer(T value) {
+    public synchronized void offer(T value) throws InterruptedException {
         while (queue.size() == this.size) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            wait();
         }
         queue.offer(value);
         System.out.println(String.format("Producer set: %s actual size: %s", value, queue.size()));
@@ -35,14 +30,10 @@ public class SimpleBlockingQueue<T> {
 
     }
 
-    public synchronized T poll() {
+    public synchronized T poll() throws InterruptedException {
         T t = null;
         while (queue.size() == 0) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            wait();
         }
         t = queue.poll();
         System.out.println(String.format("Consumer get: %s actual size: %s", t, queue.size()));
