@@ -31,7 +31,7 @@ public class SimpleBlockingQueue<T> {
     }
 
     public synchronized T poll() throws InterruptedException {
-        T t = null;
+        T t;
         while (queue.size() == 0) {
             wait();
         }
