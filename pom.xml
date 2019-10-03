@@ -75,6 +75,7 @@
      <module>chapter_010</module>
      <module>bomberman</module>
      <module>strategy</module>
+     <module>chapter_011</module>
  </modules>
 
  <dependencies>
