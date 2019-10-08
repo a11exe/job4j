@@ -51,6 +51,18 @@ public class User {
         return login;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public LocalDate getCreateDate() {
+        return createDate;
+    }
+
     @Override
     public String toString() {
         return "User{"
