@@ -21,9 +21,14 @@ public class UserCreateServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("text/html;charset=utf-8");
-        response.getWriter().append(getHtmlCreateForm());
-        response.setStatus(HttpServletResponse.SC_OK);
+        request.setAttribute("action", "create");
+        request.setAttribute("title", "Create user");
+        request.setAttribute("id", "");
+        request.setAttribute("name", "");
+        request.setAttribute("login", "");
+        request.setAttribute("email", "");
+        request.setAttribute("buttonName", "Add user");
+        request.getRequestDispatcher(String.format("%s/user.jsp", request.getContextPath())).forward(request, response);
     }
 
     @Override
@@ -46,48 +51,11 @@ public class UserCreateServlet extends HttpServlet {
 
         // response.setStatus(result ? HttpServletResponse.SC_OK : HttpServletResponse.SC_BAD_REQUEST);
         if (logic.add(user)) {
-            response.sendRedirect("http://localhost:8080/users");
+            response.sendRedirect("http://localhost:8080/users.jsp");
         } else {
             response.setContentType("text/html;charset=utf-8");
             response.getWriter().append("error create user");
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         }
-    }
-
-    private String getHtmlCreateForm() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("<html>");
-        stringBuilder.append("<head>");
-        stringBuilder.append("<link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css\" integrity=\"sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm\" crossorigin=\"anonymous\">");
-        stringBuilder.append("<script src=\"https://code.jquery.com/jquery-3.2.1.slim.min.js\" integrity=\"sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN\" crossorigin=\"anonymous\"></script>");
-        stringBuilder.append("<script src=\"https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js\" integrity=\"sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q\" crossorigin=\"anonymous\"></script>");
-        stringBuilder.append("<script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js\" integrity=\"sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl\" crossorigin=\"anonymous\"></script>");
-        stringBuilder.append("</head>");
-        stringBuilder.append("<body>");
-        stringBuilder.append("<div class=\"container\">");
-        stringBuilder.append("<div class=\"col-5 offset-3\">");
-        stringBuilder.append("<h2>Create user</h2>");
-        stringBuilder
-                .append("<form method=\"post\" action=\"http://localhost:8080/users/create\">\n")
-                .append("  <div class=\"form-group\">\n")
-                .append("    <label for=\"InputName\">Name</label>\n")
-                .append("    <input type=\"text\" name=\"name\" class=\"form-control\" id=\"InputName\" placeholder=\"Enter name\">\n")
-                .append("  </div>\n")
-                .append("  <div class=\"form-group\">\n")
-                .append("    <label for=\"InputLogin\">Login</label>\n")
-                .append("    <input type=\"text\" name=\"login\" class=\"form-control\" id=\"InputLogin\" placeholder=\"Enter login\">\n")
-                .append("  </div>\n")
-                .append("  <div class=\"form-group\">\n")
-                .append("    <label for=\"InputEmail\">Email</label>\n")
-                .append("    <input type=\"email\" name=\"email\" class=\"form-control\" id=\"exampleInputPassword1\" placeholder=\"Email\">\n")
-                .append("  </div>\n")
-                .append("<button type=\"submit\" class=\"btn btn-primary\">Create</button>")
-                .append("</form>");
-
-        stringBuilder.append("</div>");
-        stringBuilder.append("</div>");
-        stringBuilder.append("</body></html>");
-        System.out.println(stringBuilder);
-        return stringBuilder.toString();
     }
 }

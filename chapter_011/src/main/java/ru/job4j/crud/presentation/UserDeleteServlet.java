@@ -26,7 +26,7 @@ public class UserDeleteServlet extends HttpServlet {
         User user = logic.findById(id);
 
         if (logic.delete(user)) {
-            response.sendRedirect("http://localhost:8080/users");
+            response.sendRedirect("http://localhost:8080/users.jsp");
         } else {
             response.setContentType("text/html;charset=utf-8");
             response.getWriter().append("error delete user with id ").append(String.valueOf(id)).append(" not found");
