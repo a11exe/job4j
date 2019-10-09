@@ -30,9 +30,9 @@ public class MemoryStore implements Store {
     }
 
     @Override
-    public void add(User user) {
+    public User add(User user) {
         user.setId(getNextId());
-        users.put(user.getId(), user);
+        return users.put(user.getId(), user);
     }
 
     @Override

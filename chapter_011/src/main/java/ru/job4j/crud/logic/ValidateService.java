@@ -1,6 +1,6 @@
 package ru.job4j.crud.logic;
 
-import ru.job4j.crud.dao.MemoryStore;
+import ru.job4j.crud.dao.DBStore;
 import ru.job4j.crud.dao.Store;
 import ru.job4j.crud.model.User;
 
@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class ValidateService implements Validate {
 
-    private final Store logic = MemoryStore.getInstance();
+    private final Store logic = DBStore.getInstance();
     private final static ValidateService INSTANCE = new ValidateService();
 
     private ValidateService() {

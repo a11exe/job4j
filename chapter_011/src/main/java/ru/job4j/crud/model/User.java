@@ -1,6 +1,7 @@
 package ru.job4j.crud.model;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 /**
  * @author Alexander Abramov (alllexe@mail.ru)
@@ -61,6 +62,24 @@ public class User {
 
     public LocalDate getCreateDate() {
         return createDate;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof User)) {
+            return false;
+        }
+        User user = (User) o;
+        return Objects.equals(id, user.id);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(id);
     }
 
     @Override

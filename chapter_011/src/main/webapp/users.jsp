@@ -1,5 +1,4 @@
 <%@ page import="ru.job4j.crud.model.User" %>
-<%@ page import="java.util.List" %>
 <%@ page import="ru.job4j.crud.logic.ValidateService" %><%--
   Created by IntelliJ IDEA.
   User: abramov_av.sit
