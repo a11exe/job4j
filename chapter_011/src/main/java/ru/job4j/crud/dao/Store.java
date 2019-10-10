@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface Store {
 
-    void add(User user);
+    User add(User user);
 
     void update(User user);
 
