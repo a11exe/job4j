@@ -6,39 +6,39 @@
          version="2.4">
 
     <servlet>
-        <servlet-name>UserCreateServlet</servlet-name>
-        <servlet-class>ru.job4j.crud.presentation.UserCreateServlet</servlet-class>
+        <servlet-name>UserCreateController</servlet-name>
+        <servlet-class>ru.job4j.crud.controller.UserCreateController</servlet-class>
         <load-on-startup>2</load-on-startup>
     </servlet>
     <servlet>
-        <servlet-name>UserUpdateServlet</servlet-name>
-        <servlet-class>ru.job4j.crud.presentation.UserUpdateServlet</servlet-class>
+        <servlet-name>UserUpdateController</servlet-name>
+        <servlet-class>ru.job4j.crud.controller.UserUpdateController</servlet-class>
         <load-on-startup>2</load-on-startup>
     </servlet>
     <servlet>
-        <servlet-name>UserDeleteServlet</servlet-name>
-        <servlet-class>ru.job4j.crud.presentation.UserDeleteServlet</servlet-class>
+        <servlet-name>UserDeleteController</servlet-name>
+        <servlet-class>ru.job4j.crud.controller.UserDeleteController</servlet-class>
         <load-on-startup>2</load-on-startup>
     </servlet>
     <servlet>
-        <servlet-name>EchoServlet</servlet-name>
-        <servlet-class>ru.job4j.servlets.EchoServlet</servlet-class>
+        <servlet-name>UserController</servlet-name>
+        <servlet-class>ru.job4j.crud.controller.UserController</servlet-class>
         <load-on-startup>2</load-on-startup>
     </servlet>
     <servlet-mapping>
-        <servlet-name>UserCreateServlet</servlet-name>
+        <servlet-name>UserCreateController</servlet-name>
         <url-pattern>/users/create</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>UserUpdateServlet</servlet-name>
+        <servlet-name>UserUpdateController</servlet-name>
         <url-pattern>/users/edit</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>UserDeleteServlet</servlet-name>
+        <servlet-name>UserDeleteController</servlet-name>
         <url-pattern>/users/delete</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>EchoServlet</servlet-name>
-        <url-pattern>/echo</url-pattern>
+        <servlet-name>UserController</servlet-name>
+        <url-pattern>/</url-pattern>
     </servlet-mapping>
 </web-app>

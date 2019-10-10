@@ -1,4 +1,4 @@
-package ru.job4j.crud.presentation;
+package ru.job4j.crud.controller;
 
 import ru.job4j.crud.logic.Validate;
 import ru.job4j.crud.logic.ValidateService;
@@ -15,7 +15,7 @@ import java.io.IOException;
  * @version 1
  * @since 04.10.2019
  */
-public class UserCreateServlet extends HttpServlet {
+public class UserCreateController extends HttpServlet {
 
     private final Validate logic = ValidateService.getInstance();
 
@@ -23,12 +23,9 @@ public class UserCreateServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setAttribute("action", "create");
         request.setAttribute("title", "Create user");
-        request.setAttribute("id", "");
-        request.setAttribute("name", "");
-        request.setAttribute("login", "");
-        request.setAttribute("email", "");
+        request.setAttribute("user", new User());
         request.setAttribute("buttonName", "Add user");
-        request.getRequestDispatcher(String.format("%s/user.jsp", request.getContextPath())).forward(request, response);
+        getServletContext().getRequestDispatcher("/WEB-INF/views/user.jsp").forward(request, response);
     }
 
     @Override
@@ -51,7 +48,7 @@ public class UserCreateServlet extends HttpServlet {
 
         // response.setStatus(result ? HttpServletResponse.SC_OK : HttpServletResponse.SC_BAD_REQUEST);
         if (logic.add(user)) {
-            response.sendRedirect("http://localhost:8080/users.jsp");
+            response.sendRedirect("/");
         } else {
             response.setContentType("text/html;charset=utf-8");
             response.getWriter().append("error create user");

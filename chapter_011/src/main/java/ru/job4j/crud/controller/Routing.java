@@ -1,4 +1,4 @@
-package ru.job4j.crud.presentation;
+package ru.job4j.crud.controller;
 
 import ru.job4j.crud.logic.Validate;
 import ru.job4j.crud.model.User;
