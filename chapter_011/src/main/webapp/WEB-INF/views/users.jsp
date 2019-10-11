@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="ru.job4j.crud.model.User" %>
 <%@ page import="ru.job4j.crud.logic.ValidateService" %><%--
   Created by IntelliJ IDEA.
@@ -38,27 +39,27 @@
                 <th>delete</th>
             </tr>
             </thead>
-            <% for (User user : ValidateService.getInstance().findAll()) {%>
+            <c:forEach var="user" items="${users}">
             <tr>
-                <td><%=user.getId()%>
+                <td><c:out value="${user.id}"/>
                 </td>
-                <td><%=user.getName()%>
+                <td><c:out value="${user.name}"/>
                 </td>
-                <td><%=user.getLogin()%>
+                <td><c:out value="${user.login}"/>
                 </td>
-                <td><%=user.getEmail()%>
+                <td><c:out value="${user.email}"/>
                 </td>
-                <td><%=user.getCreateDate()%>
+                <td><c:out value="${user.createDate}"/>
                 </td>
-                <td><a href="<%=request.getContextPath()%>/users/edit?id=<%=user.getId()%>" class="btn btn-link" role="button"
+                <td><a href="<c:out value="${pageContext.servletContext.contextPath}" />/users/edit?id=<c:out value="${user.id}"/>" class="btn btn-link" role="button"
                        aria-pressed="true">edit</a></td>
-                <td><a href="<%=request.getContextPath()%>/users/delete?id=<%=user.getId()%>" class="btn btn-danger"
+                <td><a href="<c:out value="${pageContext.servletContext.contextPath}" />/users/delete?id=<c:out value="${user.id}"/>" class="btn btn-danger"
                        role="button"
                        aria-pressed="true">delete</a></td>
             </tr>
-            <% }%>
+            </c:forEach>
         </table>
-        <a href="http://localhost:8080/users/create" class="btn btn-success" role="button" aria-pressed="true">Add
+        <a href="<c:out value="${pageContext.servletContext.contextPath}" />/users/create" class="btn btn-success" role="button" aria-pressed="true">Add
             user</a>
     </div>
 </div>

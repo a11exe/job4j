@@ -16,6 +16,8 @@ public class User {
     private String email;
     private LocalDate createDate;
 
+    public User() {
+    }
 
     public User(Integer id, String name, String login) {
         this.id = id;

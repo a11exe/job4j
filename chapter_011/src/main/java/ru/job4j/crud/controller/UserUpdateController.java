@@ -1,4 +1,4 @@
-package ru.job4j.crud.presentation;
+package ru.job4j.crud.controller;
 
 import ru.job4j.crud.logic.Validate;
 import ru.job4j.crud.logic.ValidateService;
@@ -15,7 +15,7 @@ import java.io.IOException;
  * @version 1
  * @since 04.10.2019
  */
-public class UserUpdateServlet extends HttpServlet {
+public class UserUpdateController extends HttpServlet {
 
     private final Validate logic = ValidateService.getInstance();
 
@@ -28,12 +28,9 @@ public class UserUpdateServlet extends HttpServlet {
         if (user != null) {
             request.setAttribute("action", "edit");
             request.setAttribute("title", "Edit user");
-            request.setAttribute("id", user.getId());
-            request.setAttribute("name", user.getName());
-            request.setAttribute("login", user.getLogin());
-            request.setAttribute("email", user.getEmail());
+            request.setAttribute("user", user);
             request.setAttribute("buttonName", "Edit user");
-            request.getRequestDispatcher(String.format("%s/user.jsp", request.getContextPath())).forward(request, response);
+            getServletContext().getRequestDispatcher("/WEB-INF/views/user.jsp").forward(request, response);
         } else {
             response.setContentType("text/html;charset=utf-8");
             response.getWriter().append("user with id ").append(String.valueOf(userId)).append(" not found");
@@ -60,7 +57,7 @@ public class UserUpdateServlet extends HttpServlet {
         User user = new User(id, name, login, email);
 
         if (logic.update(user)) {
-            response.sendRedirect("http://localhost:8080/users.jsp");
+            response.sendRedirect("/");
         } else {
             response.setContentType("text/html;charset=utf-8");
             response.getWriter().append("error update user with id ").append(String.valueOf(id)).append(" not found");

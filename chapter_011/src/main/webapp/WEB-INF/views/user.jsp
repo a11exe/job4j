@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: abramov_av.sit
@@ -24,27 +25,27 @@
 <body>
 <div class="container">
     <div class="col-5 offset-3">
-        <h2><%= request.getAttribute("title") %></h2>
-        <form method="post" action="http://localhost:8080/users/<%= request.getAttribute("action") %>">
+        <h2><c:out value="${title}"/></h2>
+        <form method="post" action="<c:out value="${pageContext.servletContext.contextPath}" />/users/<c:out value="${action}"/>">
             <div class="form-group">
-                <input type="hidden" name="id" class="form-control" id="InputId" value="<%= request.getAttribute("id") %>">
+                <input type="hidden" name="id" class="form-control" id="InputId" value="<c:out value="${user.id}"/>">
             </div>
             <div class="form-group">
                 <label for="InputName">Name</label>
                 <input type="text" name="name" class="form-control" id="InputName" placeholder="Enter name"
-                       value="<%= request.getAttribute("name") %>">
+                       value="<c:out value="${user.name}"/>">
             </div>
             <div class="form-group">
                 <label for="InputLogin">Login</label>
                 <input type="text" name="login" class="form-control" id="InputLogin" placeholder="Enter login"
-                       value="<%= request.getAttribute("login") %>">
+                       value="<c:out value="${user.login}"/>">
             </div>
             <div class="form-group">
                 <label for="InputEmail">Email</label>
                 <input type="email" name="email" class="form-control" id="InputEmail" placeholder="Email"
-                       value="<%= request.getAttribute("email") %>">
+                       value="<c:out value="${user.email}"/>">
             </div>
-            <button type="submit" class="btn btn-primary"><%= request.getAttribute("buttonName") %></button>
+            <button type="submit" class="btn btn-primary"><c:out value="${buttonName}"/></button>
         </form>
     </div>
 </div>
