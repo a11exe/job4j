@@ -16,4 +16,6 @@ public interface Store {
 
     User findById(int id);
 
+    boolean updatePhoto(User user);
+
 }

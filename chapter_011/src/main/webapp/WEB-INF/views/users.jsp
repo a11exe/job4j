@@ -24,8 +24,9 @@
             crossorigin="anonymous"></script>
 </head>
 <body>
+<c:set var = "baseUrl" scope = "session" value = "${pageContext.servletContext.contextPath}"/>
 <div class="container">
-    <div class="col-5 offset-3">
+    <div class="col-6 offset-2">
         <h2>Users</h2>
         <table class="table table-striped" id="datatable">
             <thead>
@@ -35,6 +36,8 @@
                 <th>login</th>
                 <th>email</th>
                 <th>createDate</th>
+                <th>image</th>
+                <th>download</th>
                 <th>edit</th>
                 <th>delete</th>
             </tr>
@@ -51,15 +54,27 @@
                 </td>
                 <td><c:out value="${user.createDate}"/>
                 </td>
-                <td><a href="<c:out value="${pageContext.servletContext.contextPath}" />/users/edit?id=<c:out value="${user.id}"/>" class="btn btn-link" role="button"
+                <td>
+                    <c:if test="${user.photoId != null && user.photoId != 0}">
+                        <img src="<c:out value="${baseUrl}" />/images/<c:out value="${user.photoId}"/>" class="rounded mx-auto d-block" width="100" height="100" alt="<c:out value="${user.photoId}"/>">
+                    </c:if>
+                </td>
+                <td>
+                    <c:if test="${user.photoId != null && user.photoId != 0}">
+                        <a href="<c:out value="${baseUrl}" />/download?photoId=<c:out value="${user.photoId}"/>"
+                           class="btn btn-link" role="button"
+                           aria-pressed="true">download</a>
+                    </c:if>
+                </td>
+                <td><a href="<c:out value="${baseUrl}" />/users/edit?id=<c:out value="${user.id}"/>" class="btn btn-link" role="button"
                        aria-pressed="true">edit</a></td>
-                <td><a href="<c:out value="${pageContext.servletContext.contextPath}" />/users/delete?id=<c:out value="${user.id}"/>" class="btn btn-danger"
+                <td><a href="<c:out value="${baseUrl}" />/users/delete?id=<c:out value="${user.id}"/>" class="btn btn-danger"
                        role="button"
                        aria-pressed="true">delete</a></td>
             </tr>
             </c:forEach>
         </table>
-        <a href="<c:out value="${pageContext.servletContext.contextPath}" />/users/create" class="btn btn-success" role="button" aria-pressed="true">Add
+        <a href="<c:out value="${baseUrl}" />/users/create" class="btn btn-success" role="button" aria-pressed="true">Add
             user</a>
     </div>
 </div>

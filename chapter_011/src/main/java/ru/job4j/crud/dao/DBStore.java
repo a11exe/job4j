@@ -22,9 +22,10 @@ public class DBStore implements Store {
     private static final DBStore INSTANCE = new DBStore();
     private static final String SQL_ADD = "INSERT INTO USERS (name, login, email, createDate) VALUES (?, ?, ?, ?)";
     private static final String SQL_UPDATE = "UPDATE USERS SET name = ?, login = ?, email = ?, createDate = ? WHERE id = ?";
+    private static final String SQL_UPDATE_PHOTO = "UPDATE USERS SET photoId = ? WHERE id = ?";
     private static final String SQL_DELETE = "DELETE FROM USERS WHERE id=?";
-    private static final String SQL_FIND_ALL = "SELECT id, name, login, email, createdate FROM USERS";
-    private static final String SQL_FIND_BY_ID = "SELECT id, name, login, email, createdate FROM USERS WHERE id=?";
+    private static final String SQL_FIND_ALL = "SELECT id, name, login, email, createdate, photoid FROM USERS";
+    private static final String SQL_FIND_BY_ID = "SELECT id, name, login, email, createdate, photoid FROM USERS WHERE id=?";
 
     private DBStore() {
 
@@ -110,9 +111,9 @@ public class DBStore implements Store {
                         rs.getString(2),
                         rs.getString(3),
                         rs.getString(4),
-                        rs.getDate(5).toLocalDate()
-
-                ));
+                        rs.getDate(5).toLocalDate(),
+                        rs.getInt(6)
+                        ));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -134,13 +135,30 @@ public class DBStore implements Store {
                         rs.getString(2),
                         rs.getString(3),
                         rs.getString(4),
-                        rs.getDate(5).toLocalDate()
-
+                        rs.getDate(5).toLocalDate(),
+                        rs.getInt(6)
                 );
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return user;
+    }
+
+    @Override
+    public boolean updatePhoto(User user) {
+        boolean updated = false;
+        try (Connection connection = SOURCE.getConnection();
+             PreparedStatement st = connection.prepareStatement(SQL_UPDATE_PHOTO)
+        ) {
+            st.setInt(1, user.getPhotoId());
+            st.setInt(2, user.getId());
+            st.executeUpdate();
+            updated = true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return updated;
     }
 }

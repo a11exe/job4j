@@ -15,6 +15,7 @@ public class User {
     private String login;
     private String email;
     private LocalDate createDate;
+    private Integer photoId;
 
     public User() {
     }
@@ -42,6 +43,15 @@ public class User {
         this.createDate = createDate;
     }
 
+    public User(Integer id, String name, String login, String email, LocalDate createDate, Integer photoId) {
+        this.id = id;
+        this.name = name;
+        this.login = login;
+        this.email = email;
+        this.createDate = createDate;
+        this.photoId = photoId;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -64,6 +74,14 @@ public class User {
 
     public LocalDate getCreateDate() {
         return createDate;
+    }
+
+    public Integer getPhotoId() {
+        return photoId;
+    }
+
+    public void setPhotoId(Integer photoId) {
+        this.photoId = photoId;
     }
 
     @Override
