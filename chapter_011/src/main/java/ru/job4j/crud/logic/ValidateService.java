@@ -74,4 +74,9 @@ public class ValidateService implements Validate {
         }
     }
 
+    @Override
+    public User findByLogin(String login) {
+        return logic.findByLogin(login);
+    }
+
 }

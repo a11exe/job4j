@@ -17,11 +17,12 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </head>
 <body>
-<c:set var = "baseUrl" scope = "session" value = "${pageContext.servletContext.contextPath}"/>
+<c:set var="baseUrl" scope="session" value="${pageContext.servletContext.contextPath}"/>
 <div class="container">
     <div class="col-5 offset-3">
         <h2><c:out value="${title}"/></h2>
-        <form method="post" action="<c:out value="${baseUrl}" />/users/<c:out value="${action}"/>" enctype="multipart/form-data">
+        <form method="post" action="<c:out value="${baseUrl}" />/users/<c:out value="${action}"/>"
+              enctype="multipart/form-data">
             <div class="form-group">
                 <input type="hidden" name="id" class="form-control" id="InputId" value="<c:out value="${user.id}"/>">
             </div>
@@ -41,10 +42,29 @@
                        value="<c:out value="${user.email}"/>">
             </div>
             <div class="form-group">
+                <label for="InputPassword">Password</label>
+                <input type="password" name="password" class="form-control" id="InputPassword" placeholder="Password"
+                       value="<c:out value="${user.password}"/>">
+            </div>
+            <div class="form-group">
                 <label for="customFile">Photo</label>
                 <div class="custom-file">
                     <input type="file" class="custom-file-input" id="customFile" name="customFile">
                     <label class="custom-file-label" for="customFile">Choose file</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group mb-3">
+                    <c:if test="${loggedUser.isAdmin()}">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="inputGroupSelect01">Role</label>
+                    </div>
+                        <select class="custom-select" id="inputGroupSelect01" name="role">
+                            <c:forEach var="role" items="${roles}">
+                                <option value="<c:out value="${role}"/>" ${role.equals(user.role) ? "selected" : ""}><c:out value="${role}"/></option>
+                            </c:forEach>
+                        </select>
+                    </c:if>
                 </div>
             </div>
             <button type="submit" class="btn btn-primary"><c:out value="${buttonName}"/></button>
@@ -53,7 +73,7 @@
 </div>
 <script>
     // Add the following code if you want the name of the file appear on select
-    $(".custom-file-input").on("change", function() {
+    $(".custom-file-input").on("change", function () {
         var fileName = $(this).val().split("\\").pop();
         $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
     });

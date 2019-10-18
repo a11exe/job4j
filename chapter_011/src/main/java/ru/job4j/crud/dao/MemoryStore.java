@@ -56,6 +56,11 @@ public class MemoryStore implements Store {
     }
 
     @Override
+    public User findByLogin(String login) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public boolean updatePhoto(User user) {
         throw new UnsupportedOperationException();
     }

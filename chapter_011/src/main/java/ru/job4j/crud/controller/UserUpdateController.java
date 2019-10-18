@@ -2,18 +2,20 @@ package ru.job4j.crud.controller;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
+import ru.job4j.crud.logic.SecurityService;
+import ru.job4j.crud.logic.SecurityServiceImpl;
 import ru.job4j.crud.logic.ServletUtil;
 import ru.job4j.crud.logic.ServletUtilImpl;
 import ru.job4j.crud.logic.Validate;
 import ru.job4j.crud.logic.ValidateService;
+import ru.job4j.crud.model.Role;
 import ru.job4j.crud.model.User;
-import ru.job4j.crud.util.RequestWrapper;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Map;
 
 /**
@@ -25,11 +27,13 @@ public class UserUpdateController extends HttpServlet {
 
     private final Validate logic = ValidateService.getInstance();
     private final ServletUtil servletUtil = ServletUtilImpl.getInstance();
+    private final SecurityService securityService = SecurityServiceImpl.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int userId = Integer.parseInt(request.getParameter("id"));
+        User loggedUser = securityService.getLoggedUser(request.getSession());
 
+        int userId = Integer.parseInt(request.getParameter("id"));
         User user = logic.findById(userId);
 
         if (user != null) {
@@ -37,6 +41,7 @@ public class UserUpdateController extends HttpServlet {
             request.setAttribute("title", "Edit user");
             request.setAttribute("user", user);
             request.setAttribute("buttonName", "Edit user");
+            request.setAttribute("roles", loggedUser.isAdmin() ? Role.values() : securityService.getLoggedUserAvaliableRoles(request.getSession()));
             getServletContext().getRequestDispatcher("/WEB-INF/views/user.jsp").forward(request, response);
         } else {
             response.setContentType("text/html;charset=utf-8");
@@ -48,14 +53,26 @@ public class UserUpdateController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=utf-8");
-        RequestWrapper requestWrapper = new RequestWrapper(request);
+        User loggedUser = securityService.getLoggedUser(request.getSession());
 
         try {
-            Map<String, String> params = servletUtil.getPostParams(requestWrapper);
+            Map<String, String> params = servletUtil.getPostParams(request);
 
-            User user = new User(Integer.parseInt(params.get("id")), params.get("name"), params.get("login"), params.get("email"));
-            FileItem fileItem = servletUtil.getUploadedFileFromPostParametrs(requestWrapper);
-            String uploadPath = servletUtil.getUploadPath(requestWrapper);
+            User user = new User.Builder()
+                    .withId(Integer.parseInt(params.get("id")))
+                    .withName(params.get("name"))
+                    .withLogin(params.get("login"))
+                    .withEmail(params.get("email"))
+                    .withPassword(params.get("password"))
+                    .withCreateDate(LocalDate.now())
+                    .withRole(Role.valueOf(params.get("role")))
+                    .build();
+
+            if (!loggedUser.isAdmin()) {
+                user.setRole(loggedUser.getRole());
+            }
+            FileItem fileItem = servletUtil.getUploadedFileFromPostParametrs(request);
+            String uploadPath = servletUtil.getUploadPath(request);
 
             if (logic.update(user, fileItem, uploadPath)) {
                 response.sendRedirect("/");
