@@ -24,8 +24,9 @@ public class UserDeleteController extends HttpServlet {
         int id = Integer.parseInt(request.getParameter("id"));
 
         User user = logic.findById(id);
+        String uploadPath = getServletContext().getRealPath("/images/");
 
-        if (logic.delete(user)) {
+        if (logic.delete(user, uploadPath)) {
             response.sendRedirect("/");
         } else {
             response.setContentType("text/html;charset=utf-8");

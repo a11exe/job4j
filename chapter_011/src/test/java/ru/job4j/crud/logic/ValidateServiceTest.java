@@ -1,7 +1,6 @@
 package ru.job4j.crud.logic;
 
 import org.junit.Test;
-import ru.job4j.crud.model.User;
 
 import static org.junit.Assert.*;
 
@@ -14,8 +13,6 @@ public class ValidateServiceTest {
 
     @Test
     public void whenAddUserWhenShouldAdded() {
-        User user = new User(null, "test", "test", "test@mail.ru");
-        assertTrue(ValidateService.getInstance().add(user));
     }
 
     @Test

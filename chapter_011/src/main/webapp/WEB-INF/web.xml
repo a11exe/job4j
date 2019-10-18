@@ -5,40 +5,58 @@
          http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
          version="2.4">
 
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>/images/*</url-pattern>
+    </servlet-mapping>
+
     <servlet>
         <servlet-name>UserCreateController</servlet-name>
         <servlet-class>ru.job4j.crud.controller.UserCreateController</servlet-class>
-        <load-on-startup>2</load-on-startup>
-    </servlet>
-    <servlet>
-        <servlet-name>UserUpdateController</servlet-name>
-        <servlet-class>ru.job4j.crud.controller.UserUpdateController</servlet-class>
-        <load-on-startup>2</load-on-startup>
-    </servlet>
-    <servlet>
-        <servlet-name>UserDeleteController</servlet-name>
-        <servlet-class>ru.job4j.crud.controller.UserDeleteController</servlet-class>
-        <load-on-startup>2</load-on-startup>
-    </servlet>
-    <servlet>
-        <servlet-name>UserController</servlet-name>
-        <servlet-class>ru.job4j.crud.controller.UserController</servlet-class>
         <load-on-startup>2</load-on-startup>
     </servlet>
     <servlet-mapping>
         <servlet-name>UserCreateController</servlet-name>
         <url-pattern>/users/create</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>UserUpdateController</servlet-name>
+        <servlet-class>ru.job4j.crud.controller.UserUpdateController</servlet-class>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
     <servlet-mapping>
         <servlet-name>UserUpdateController</servlet-name>
         <url-pattern>/users/edit</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>UserDeleteController</servlet-name>
+        <servlet-class>ru.job4j.crud.controller.UserDeleteController</servlet-class>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
     <servlet-mapping>
         <servlet-name>UserDeleteController</servlet-name>
         <url-pattern>/users/delete</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>UserController</servlet-name>
+        <servlet-class>ru.job4j.crud.controller.UserController</servlet-class>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
     <servlet-mapping>
         <servlet-name>UserController</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>DownloadController</servlet-name>
+        <servlet-class>ru.job4j.crud.controller.DownloadController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DownloadController</servlet-name>
+        <url-pattern>/download</url-pattern>
+    </servlet-mapping>
+
 </web-app>

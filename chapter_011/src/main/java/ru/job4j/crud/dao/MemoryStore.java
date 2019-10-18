@@ -54,4 +54,9 @@ public class MemoryStore implements Store {
     public User findById(int id) {
         return users.get(id);
     }
+
+    @Override
+    public boolean updatePhoto(User user) {
+        throw new UnsupportedOperationException();
+    }
 }
