@@ -8,7 +8,8 @@
 + [Collection pro](CollectionPro.md#collections-pro)![icon][done]
 + [IO](IO.md#io)![icon][done]
 + [SQL](SQL.md#sql)![icon][done]
-+ [SOLID](SOLID.md#solid)
++ [SOLID](SOLID.md#solid)![icon][done]
 + [Multithreading](Multithreading.md#multithreading)
++ [Servlet](Servlet.md#servlet)
 
 [done]:done.png
