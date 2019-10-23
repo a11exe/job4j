@@ -10,6 +10,7 @@
 + [SQL](SQL.md#sql)![icon][done]
 + [SOLID](SOLID.md#solid)![icon][done]
 + [Multithreading](Multithreading.md#multithreading)
++ [XML](XML.md#xml)
 + [Servlet](Servlet.md#servlet)
 + [Hibernate](Hibernate.md#hibernate)
 
