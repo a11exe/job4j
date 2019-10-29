@@ -1,0 +1,5 @@
+ALTER TABLE users
+   ADD password VARCHAR(25);
+
+ALTER TABLE users
+   ADD role VARCHAR(20) DEFAULT 'USER' NOT NULL;

@@ -16,40 +16,73 @@ public class User {
     private String email;
     private LocalDate createDate;
     private Integer photoId;
+    private Role role;
+    private String password;
 
-    public User() {
+    public User(final Builder builder) {
+        this.id = builder.id;
+        this.name = builder.name;
+        this.login = builder.login;
+        this.email = builder.email;
+        this.createDate = builder.createDate;
+        this.photoId = builder.photoId;
+        this.role = builder.role;
+        this.password = builder.password;
     }
 
-    public User(Integer id, String name, String login) {
-        this.id = id;
-        this.name = name;
-        this.login = login;
-        this.createDate = LocalDate.now();
-    }
+    public static class Builder {
+        private Integer id;
+        private String name;
+        private String login;
+        private String email;
+        private LocalDate createDate;
+        private Integer photoId;
+        private Role role;
+        private String password;
 
-    public User(Integer id, String name, String login, String email) {
-        this.id = id;
-        this.name = name;
-        this.login = login;
-        this.email = email;
-        this.createDate = LocalDate.now();
-    }
+        public User build() {
+            return new User(this);
+        }
 
-    public User(Integer id, String name, String login, String email, LocalDate createDate) {
-        this.id = id;
-        this.name = name;
-        this.login = login;
-        this.email = email;
-        this.createDate = createDate;
-    }
+        public Builder withId(final Integer id) {
+            this.id = id;
+            return this;
+        }
 
-    public User(Integer id, String name, String login, String email, LocalDate createDate, Integer photoId) {
-        this.id = id;
-        this.name = name;
-        this.login = login;
-        this.email = email;
-        this.createDate = createDate;
-        this.photoId = photoId;
+        public Builder withName(final String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder withLogin(final String login) {
+            this.login = login;
+            return this;
+        }
+
+        public Builder withEmail(final String email) {
+            this.email = email;
+            return this;
+        }
+
+        public Builder withCreateDate(final LocalDate createDate) {
+            this.createDate = createDate;
+            return this;
+        }
+
+        public Builder withPhotoId(final Integer photoId) {
+            this.photoId = photoId;
+            return this;
+        }
+
+        public Builder withRole(final Role role) {
+            this.role = role;
+            return this;
+        }
+
+        public Builder withPassword(final String password) {
+            this.password = password;
+            return this;
+        }
     }
 
     public Integer getId() {
@@ -76,13 +109,34 @@ public class User {
         return createDate;
     }
 
-    public Integer getPhotoId() {
+    public int getPhotoId() {
         return photoId;
     }
 
-    public void setPhotoId(Integer photoId) {
+    public void setPhotoId(int photoId) {
         this.photoId = photoId;
     }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public boolean isAdmin() {
+        return this.role.equals(Role.ADMIN);
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -110,6 +164,8 @@ public class User {
                 + ", login='" + login + '\''
                 + ", email='" + email + '\''
                 + ", createDate=" + createDate
+                + ", photoId=" + photoId
+                + ", role=" + role
                 + '}';
     }
 }

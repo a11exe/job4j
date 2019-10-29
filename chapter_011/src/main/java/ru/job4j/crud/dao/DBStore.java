@@ -1,6 +1,7 @@
 package ru.job4j.crud.dao;
 
 import org.apache.commons.dbcp2.BasicDataSource;
+import ru.job4j.crud.model.Role;
 import ru.job4j.crud.model.User;
 
 import java.io.InputStream;
@@ -20,12 +21,13 @@ public class DBStore implements Store {
 
     private static final BasicDataSource SOURCE = new BasicDataSource();
     private static final DBStore INSTANCE = new DBStore();
-    private static final String SQL_ADD = "INSERT INTO USERS (name, login, email, createDate) VALUES (?, ?, ?, ?)";
-    private static final String SQL_UPDATE = "UPDATE USERS SET name = ?, login = ?, email = ?, createDate = ? WHERE id = ?";
+    private static final String SQL_ADD_USER = "INSERT INTO USERS (name, login, email, password, createDate, role) VALUES (?, ?, ?, ?, ?, ?)";
     private static final String SQL_UPDATE_PHOTO = "UPDATE USERS SET photoId = ? WHERE id = ?";
-    private static final String SQL_DELETE = "DELETE FROM USERS WHERE id=?";
-    private static final String SQL_FIND_ALL = "SELECT id, name, login, email, createdate, photoid FROM USERS";
-    private static final String SQL_FIND_BY_ID = "SELECT id, name, login, email, createdate, photoid FROM USERS WHERE id=?";
+    private static final String SQL_UPDATE_USER = "UPDATE USERS SET name = ?, login = ?, email = ?, password = ?, role = ? WHERE id = ?";
+    private static final String SQL_DELETE_USER = "DELETE FROM USERS WHERE id=?";
+    private static final String SQL_FIND_ALL_USERS = "SELECT id, name, login, email, photoId FROM USERS";
+    private static final String SQL_FIND_USER_BY_ID = "SELECT id, name, login, email, password, photoId, createDate, role FROM USERS WHERE id=?";
+    private static final String SQL_FIND_USER_BY_LOGIN = "SELECT id, name, login, email, password, photoId, createDate, role FROM USERS WHERE login=?";
 
     private DBStore() {
 
@@ -51,12 +53,14 @@ public class DBStore implements Store {
     @Override
     public User add(User user) {
         try (Connection connection = SOURCE.getConnection();
-             PreparedStatement st = connection.prepareStatement(SQL_ADD)
+             PreparedStatement st = connection.prepareStatement(SQL_ADD_USER)
         ) {
             st.setString(1, user.getName());
             st.setString(2, user.getLogin());
             st.setString(3, user.getEmail());
-            st.setDate(4, java.sql.Date.valueOf(user.getCreateDate()));
+            st.setString(4, user.getPassword());
+            st.setDate(5, java.sql.Date.valueOf(user.getCreateDate()));
+            st.setString(6, user.getRole().toString());
             st.executeUpdate();
             ResultSet rs = st.getGeneratedKeys();
             if (rs != null && rs.next()) {
@@ -64,81 +68,6 @@ public class DBStore implements Store {
                 user.setId(key);
             }
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return user;
-    }
-
-    @Override
-    public void update(User user) {
-        try (Connection connection = SOURCE.getConnection();
-             PreparedStatement st = connection.prepareStatement(SQL_UPDATE)
-        ) {
-            st.setString(1, user.getName());
-            st.setString(2, user.getLogin());
-            st.setString(3, user.getEmail());
-            st.setDate(4, java.sql.Date.valueOf(user.getCreateDate()));
-            st.setInt(5, user.getId());
-            st.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void delete(User user) {
-        try (Connection connection = SOURCE.getConnection();
-             PreparedStatement st = connection.prepareStatement(SQL_DELETE)
-        ) {
-            st.setInt(1, user.getId());
-            st.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public List<User> findAll() {
-        List<User> users = new ArrayList<>();
-        try (Connection connection = SOURCE.getConnection();
-             PreparedStatement st = connection.prepareStatement(SQL_FIND_ALL)
-        ) {
-            ResultSet rs = st.executeQuery();
-            while (rs.next()) {
-                users.add(new User(
-                        rs.getInt(1),
-                        rs.getString(2),
-                        rs.getString(3),
-                        rs.getString(4),
-                        rs.getDate(5).toLocalDate(),
-                        rs.getInt(6)
-                        ));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return users;
-    }
-
-    @Override
-    public User findById(int id) {
-        User user = null;
-        try (Connection connection = SOURCE.getConnection();
-             PreparedStatement st = connection.prepareStatement(SQL_FIND_BY_ID)
-        ) {
-            st.setInt(1, id);
-            ResultSet rs = st.executeQuery();
-            if (rs.next()) {
-                user = new User(
-                        rs.getInt(1),
-                        rs.getString(2),
-                        rs.getString(3),
-                        rs.getString(4),
-                        rs.getDate(5).toLocalDate(),
-                        rs.getInt(6)
-                );
-            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -160,5 +89,108 @@ public class DBStore implements Store {
             e.printStackTrace();
         }
         return updated;
+    }
+
+    @Override
+    public void update(User user) {
+        try (Connection connection = SOURCE.getConnection();
+             PreparedStatement st = connection.prepareStatement(SQL_UPDATE_USER)
+        ) {
+            st.setString(1, user.getName());
+            st.setString(2, user.getLogin());
+            st.setString(3, user.getEmail());
+            st.setString(4, user.getPassword());
+            st.setString(5, user.getRole().toString());
+            st.setInt(6, user.getId());
+            st.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void delete(User user) {
+        try (Connection connection = SOURCE.getConnection();
+             PreparedStatement st = connection.prepareStatement(SQL_DELETE_USER)
+        ) {
+            st.setInt(1, user.getId());
+            st.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public List<User> findAll() {
+        List<User> users = new ArrayList<>();
+        try (Connection connection = SOURCE.getConnection();
+             PreparedStatement st = connection.prepareStatement(SQL_FIND_ALL_USERS)
+        ) {
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                users.add(new User.Builder()
+                        .withId(rs.getInt("id"))
+                        .withName(rs.getString("name"))
+                        .withLogin(rs.getString("login"))
+                        .withEmail(rs.getString("email"))
+                        .withPhotoId(rs.getInt("photoId"))
+                        .build());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return users;
+    }
+
+    @Override
+    public User findById(int id) {
+        User user = null;
+        try (Connection connection = SOURCE.getConnection();
+             PreparedStatement st = connection.prepareStatement(SQL_FIND_USER_BY_ID)
+        ) {
+            st.setInt(1, id);
+            ResultSet rs = st.executeQuery();
+            if (rs.next()) {
+                user = new User.Builder()
+                        .withId(rs.getInt("id"))
+                        .withName(rs.getString("name"))
+                        .withLogin(rs.getString("login"))
+                        .withEmail(rs.getString("email"))
+                        .withPassword(rs.getString("password"))
+                        .withPhotoId(rs.getInt("photoId"))
+                        .withCreateDate(rs.getTimestamp("createDate").toLocalDateTime().toLocalDate())
+                        .withRole(Role.valueOf(rs.getString(8)))
+                        .build();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return user;
+    }
+
+    @Override
+    public User findByLogin(String login) {
+        User user = null;
+        try (Connection connection = SOURCE.getConnection();
+             PreparedStatement st = connection.prepareStatement(SQL_FIND_USER_BY_LOGIN)
+        ) {
+            st.setString(1, login);
+            ResultSet rs = st.executeQuery();
+            if (rs.next()) {
+                user = new User.Builder()
+                        .withId(rs.getInt("id"))
+                        .withName(rs.getString("name"))
+                        .withLogin(rs.getString("login"))
+                        .withEmail(rs.getString("email"))
+                        .withPassword(rs.getString("password"))
+                        .withPhotoId(rs.getInt("photoId"))
+                        .withCreateDate(rs.getTimestamp("createDate").toLocalDateTime().toLocalDate())
+                        .withRole(Role.valueOf(rs.getString(8)))
+                        .build();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return user;
     }
 }

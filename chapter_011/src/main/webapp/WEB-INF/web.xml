@@ -10,6 +10,46 @@
         <url-pattern>/images/*</url-pattern>
     </servlet-mapping>
 
+    <filter>
+        <filter-name>AuthFilter</filter-name>
+        <filter-class>ru.job4j.crud.filer.AuthFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AuthFilter</filter-name>
+        <url-pattern>*</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>AdminRoleFilter</filter-name>
+        <filter-class>ru.job4j.crud.filer.AdminRoleFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AdminRoleFilter</filter-name>
+        <url-pattern>/users/create</url-pattern>
+        <url-pattern>/users/delete</url-pattern>
+        <url-pattern>/users/edit</url-pattern>
+    </filter-mapping>
+
+    <servlet>
+        <servlet-name>LoginController</servlet-name>
+        <servlet-class>ru.job4j.crud.controller.LoginController</servlet-class>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LoginController</servlet-name>
+        <url-pattern>/login</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>LogoutController</servlet-name>
+        <servlet-class>ru.job4j.crud.controller.LogoutController</servlet-class>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LogoutController</servlet-name>
+        <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
+
     <servlet>
         <servlet-name>UserCreateController</servlet-name>
         <servlet-class>ru.job4j.crud.controller.UserCreateController</servlet-class>
