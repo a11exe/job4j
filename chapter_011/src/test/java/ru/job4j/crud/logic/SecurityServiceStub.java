@@ -10,22 +10,19 @@ import java.util.List;
 /**
  * @author Alexander Abramov (alllexe@mail.ru)
  * @version 1
- * @since 14.10.2019
+ * @since 15.10.2019
  */
-public class SecurityServiceImpl implements SecurityService {
+public class SecurityServiceStub implements SecurityService {
 
-    private final static SecurityServiceImpl INSTANCE = new SecurityServiceImpl();
+    private final User loggedUser;
 
-    private SecurityServiceImpl() {
-    }
-
-    public static SecurityService getInstance() {
-        return INSTANCE;
+    public SecurityServiceStub(User loggedUser) {
+        this.loggedUser = loggedUser;
     }
 
     @Override
     public User getLoggedUser(HttpSession session) {
-        return (User) session.getAttribute("loggedUser");
+        return this.loggedUser;
     }
 
     @Override

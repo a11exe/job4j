@@ -24,8 +24,8 @@ import java.util.Map;
  */
 public class UserCreateController extends HttpServlet {
 
-    private final Validate logic = ValidateService.getInstance();
     private final ServletUtil servletUtil = ServletUtilImpl.getInstance();
+    private final Validate logic = ValidateService.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -33,12 +33,11 @@ public class UserCreateController extends HttpServlet {
         request.setAttribute("title", "Create user");
         request.setAttribute("user", new User.Builder().build());
         request.setAttribute("buttonName", "Add user");
-        request.setAttribute("roles", Role.values());
         getServletContext().getRequestDispatcher("/WEB-INF/views/user.jsp").forward(request, response);
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html;charset=utf-8");
 
         try {
@@ -51,10 +50,10 @@ public class UserCreateController extends HttpServlet {
                     .withEmail(params.get("email"))
                     .withPassword(params.get("password"))
                     .withCreateDate(LocalDate.now())
-                    .withRole(Role.valueOf(params.get("role")))
+                    .withRole(params.get("role") != null ? Role.valueOf(params.get("role")) : null)
                     .build();
 
-            FileItem fileItem = servletUtil.getUploadedFileFromPostParametrs(request);
+            FileItem fileItem = servletUtil.getUploadedFileFromPostParameters(request);
             String uploadPath = servletUtil.getUploadPath(request);
 
             if (logic.add(user, fileItem, uploadPath)) {

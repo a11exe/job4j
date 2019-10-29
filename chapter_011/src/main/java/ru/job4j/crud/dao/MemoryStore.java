@@ -32,7 +32,8 @@ public class MemoryStore implements Store {
     @Override
     public User add(User user) {
         user.setId(getNextId());
-        return users.put(user.getId(), user);
+        users.put(user.getId(), user);
+        return user;
     }
 
     @Override

@@ -1,10 +1,11 @@
 package ru.job4j.crud.controller;
 
+import ru.job4j.crud.logic.ServletUtilImpl;
+import ru.job4j.crud.logic.ServletUtil;
 import ru.job4j.crud.logic.Validate;
 import ru.job4j.crud.logic.ValidateService;
 import ru.job4j.crud.model.User;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,13 +19,14 @@ import java.io.IOException;
 public class UserDeleteController extends HttpServlet {
 
     private final Validate logic = ValidateService.getInstance();
+    private final ServletUtil servletUtil = ServletUtilImpl.getInstance();
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         int id = Integer.parseInt(request.getParameter("id"));
 
         User user = logic.findById(id);
-        String uploadPath = getServletContext().getRealPath("/images/");
+        String uploadPath = servletUtil.getUploadPath(request);
 
         if (logic.delete(user, uploadPath)) {
             response.sendRedirect("/");

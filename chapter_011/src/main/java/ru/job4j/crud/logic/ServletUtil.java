@@ -4,6 +4,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -15,8 +16,10 @@ public interface ServletUtil {
 
     Map<String, String> getPostParams(HttpServletRequest request) throws FileUploadException;
 
-    FileItem getUploadedFileFromPostParametrs(HttpServletRequest request) throws FileUploadException;
+    FileItem getUploadedFileFromPostParameters(HttpServletRequest request) throws FileUploadException;
 
     String getUploadPath(HttpServletRequest request);
+
+    List<FileItem> getFileItems(HttpServletRequest request) throws FileUploadException;
 
 }

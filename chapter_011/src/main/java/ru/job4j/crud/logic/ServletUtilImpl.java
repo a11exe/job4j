@@ -37,7 +37,7 @@ public class ServletUtilImpl implements ServletUtil {
     }
 
     @Override
-    public FileItem getUploadedFileFromPostParametrs(HttpServletRequest request) throws FileUploadException {
+    public FileItem getUploadedFileFromPostParameters(HttpServletRequest request) throws FileUploadException {
         List<FileItem> items = getFileItems(request);
         return items.stream().filter(f->!f.isFormField()).findAny().orElse(null);
     }
@@ -47,7 +47,7 @@ public class ServletUtilImpl implements ServletUtil {
         return request.getSession().getServletContext().getRealPath("/images/");
     }
 
-    private List<FileItem> getFileItems(HttpServletRequest request) throws FileUploadException {
+    public List<FileItem> getFileItems(HttpServletRequest request) throws FileUploadException {
         DiskFileItemFactory factory = new DiskFileItemFactory();
         ServletContext servletContext = request.getSession().getServletContext();
         File repository = (File) servletContext.getAttribute("javax.servlet.context.tempdir");
