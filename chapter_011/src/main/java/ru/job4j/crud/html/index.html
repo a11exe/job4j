@@ -28,6 +28,22 @@
         alert("Не заполнены поля: " + emptyFields.substr(0, emptyFields.length - 1));
       }
     }
+    function addRow() {
+
+      let name = $('#name').val();
+      let lastName = $('#lastName').val();
+      let sex = $('#sex').val();
+      let description = $('#description').val();
+
+      //получаем ссылку на последний элемент в таблице.
+      //и после него добавляем html
+      $('#table tr:last').after('<tr>' +
+          '<td>' + name +'</td>' +
+          '<td>' + lastName +'</td>' +
+          '<td>' + sex +'</td>' +
+          '<td>' + description +'</td>' +
+          '</tr>');
+    }
   </script>
 </head>
 <body>
@@ -74,7 +90,8 @@
 
 
   <div class="col-sm-offset-2 col-sm-5">
-    <table class="table table-striped">
+    <button type="button" class="btn btn-success" onclick="addRow()">Add user</button>
+    <table class="table table-striped" id="table">
       <tr>
         <th>Name</th>
         <th>Last Name</th>
