@@ -62,7 +62,7 @@
 + [60. Hibernate](#60-Hibernate)
 + [61. Способы аутентификации пользователя](#61-Способы-аутентификации-пользователя)
 + [62. Паттерны. Написать реализацию паттерна Singleton. Abstract Factory vs factory method.](#62-Паттерны-Написать-реализацию-паттерна-Singleton-Abstract-Factory-vs-factory-method)
-+ [63. How to define immutable object:](#63-How-to-define-immutable-object:)
++ [63. How to define immutable object](#63-How-to-define-immutable-object)
 
 ## 1 Что такое java характеристики языка
 
@@ -436,7 +436,7 @@
 
 [к оглавлению](#Вопросы-для-собеседования-минимум)
 
-## 63 How to define immutable object:
+## 63 How to define immutable object
 
 
 
