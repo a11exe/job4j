@@ -63,6 +63,7 @@
 + [61. Способы аутентификации пользователя](#61-Способы-аутентификации-пользователя)
 + [62. Паттерны. Написать реализацию паттерна Singleton. Abstract Factory vs factory method.](#62-Паттерны-Написать-реализацию-паттерна-Singleton-Abstract-Factory-vs-factory-method)
 + [63. How to define immutable object](#63-How-to-define-immutable-object)
++ [64. Spring DispatcherServlet – how it works?](#64-Spring-DispatcherServlet–how-it-works)
 
 ## 1 Что такое java характеристики языка
 
@@ -1220,5 +1221,17 @@ A more sophisticated approach is to make the constructor private and construct i
 Never store references to external, mutable objects passed to the constructor; 
 if necessary, create copies, and store references to the copies. 
 Similarly, create copies of your internal mutable objects when necessary to avoid returning the originals in your methods.
+
+[к оглавлению](#Вопросы-для-собеседования-минимум)
+
+## 64 Spring DispatcherServlet how it works
+
+DispatcherServlet acts as front controller for Spring based web applications. 
+It provides a mechanism for request processing where actual work is performed by configurable, 
+delegate components. It is inherited from javax.servlet.http.HttpServlet, it is typically configured in the web.xml file.
+
+DispatcherServlet uses Spring configuration classes to discover the delegate components it needs for request mapping, view resolution, exception handling etc.
+
+WebApplicationContext is an extension of a plain ApplicationContext. it is web aware ApplicationContext i.e it has Servlet Context information. When DispatcherServlet is loaded, it looks for the bean configuration file of WebApplicationContext and initializes it.
 
 [к оглавлению](#Вопросы-для-собеседования-минимум)
