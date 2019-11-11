@@ -1008,13 +1008,137 @@ public ModelAndView getEmployee(@PathVariable String id) { … }
 
 ## 59 JPA
 
+Основные аннотации @Entity @Column @Table @Embedable @MappedSupperClass @Id @ManyToMany @ManyToOne @OneToMany
+*EntityManager* - интерфейс содержащий основные операции над сущностями (persist / refresh / detach/ remove / merge)
 
+![jpa](https://github.com/a11exe/job4j/blob/master/interview_questions/jpa.jpg)
+
+[Управления сущностями JPA](https://easyjava.ru/data/jpa/jpa-entitymanager-upravlyaem-sushhnostyami/)
+
+```java
+@Entity
+@Table(name = "EMPLOYEE")
+public class Employee {
+   @Id @GeneratedValue
+   @Column(name = "id")
+   private int id;
+}
+```
+
+*MappedSuperclass* - позволяет включать класс и его jpa аннотации в производный класс, не делая базовый класс сущностью. Типичное использование в примере выше — абстрактный базовый класс, несущий в себе суррогатный первичный ключ.
+В базе данных всё будет выглядеть, как если бы поля базового класса были определены непосредственно в производном классе.
+
+@Embeddable annotation to declare that a class will be embedded by other entities
+
+```java
+@Embeddable
+public class ContactPerson {
+ 
+    private String firstName;
+ 
+    private String lastName;
+ 
+    private String phone;
+ 
+    // standard getters, setters
+}
+```
+
+```java
+@Entity
+public class Company {
+ 
+    @Id
+    @GeneratedValue
+    private Integer id;
+ 
+    private String name;
+ 
+    private String address;
+ 
+    private String phone;
+ 
+    @Embedded
+    private ContactPerson contactPerson;
+ 
+    // standard getters, setters
+}
+```
+
+As a result, we have our entity Company, embedding contact person details, and mapping to a single database table
 
 [к оглавлению](#Вопросы-для-собеседования-минимум)
 
 ## 60 Hibernate
 
+[Hibernate](https://github.com/a11exe/job4j/blob/master/interview_questions/Hibernate.md#hibernate)
 
+ORM - маппинг объектов на БД.
+Жизненный цикл Entiity:
++ *Transient:* состояние, при котором объект никогда не был связан с какой-либо сессией и не является персистентностью.
++ *Persistent:* когда объект связан с уникальной сессией он находится в состоянии persistent (персистентности). Любой экземпляр, возвращаемый методами get() или load() находится в состоянии persistent.
++ *Detached:* если объект был персистентным, но сейчас не связан с какой-либо сессией, то он находится в отвязанном (detached) состоянии. Такой объект можно сделать персистентным используя методы update(), saveOrUpdate(), lock() или replicate(). Состояния transient или detached так же могут перейти в состояние persistent как новый объект персистентности после вызова метода merge().
+SessionFactory immutable (неизменяемый), то да, он потокобезопасный.
+
+*Session* — это основной интерфейс, который отвечает за связь с базой данных.
++ является оберткой для jdbc подключения к базе данных
++ является фабрикой для транзакций
+
+*Hibernate session* обладает различными методами для загрузки данных из базы данных. Наиболее часто используемые методы для этого — get() и load().
++ get() загружает данные сразу при вызове, в то время как load() использует прокси объект и загружает данные только тогда, когда это требуется на самом деле. В этом плане load() имеет преимущество в плане ленивой загрузки данных.
++ load() бросает исключение, когда данные не найдены. Поэтому его нужно использовать только при уверенности в существовании данных.
+
+flush vs commit
++ flush() синхронизирует вашу базу данных с текущим состоянием объекта/объектов, хранящихся в памяти, но не совершает транзакцию.
++ commit() сделает данные, хранящиеся в базе данных постоянными. Вы не можете отменить свою транзакцию после успешного завершения commit()
+
+*Методы*
++ save() используется для сохранения сущности в базу данных.  немедленно возвращает сгенерированный идентификатор/
++ persist() аналогичен save() с транзакцией. persist() не возвращает сгенерированный идентификатор сразу.
++ saveOrUpdate() использует запрос для вставки или обновления, основываясь на предоставленных данных.
++ merge() может быть использован для обновления существующих значений
+
+In summary  save() method saves records into database by INSERT SQL query, Generates a new identifier and return the Serializable identifier back.
+On the other hand  saveOrUpdate() method either INSERT or UPDATE based upon existence of object in database. If persistence object already exists in database then UPDATE SQL will execute and if there is no corresponding object in database than INSERT will run.
+
+save() flushes the entity to the database when you make the call. persist() actually just marks the entity to be persisted in the upcoming flush.
+The save method is an “original” Hibernate method. Its purpose is basically the same as persist. 
+he call of save on a detached instance creates a new persistent instance and assigns it a new identifier, which results in a duplicate record in a database
+
+*Transaction*
+Вместо вызовов session.openTransaction() и session.commit() используется аннотация @Transactional
+
+*Eager vs Lazy*
++ Eager Loading is a design pattern in which data initialization occurs on the spot. Загружаются все данные по цепочке.
++ Lazy Loading is a design pattern which is used to defer initialization of an object as long as it's possible. Данные подгружаются при обращении.
+
+*Named SQL*
+Именованные запросы поддерживают как HQL, так и Native SQL.
+Создать именованный запрос можно с помощью JPA аннотаций @NamedQuery, @NamedNativeQuery
+
+*Аннотации*
++ *javax.persistence.Entity*: используется для указания класса как entity bean.
++ *javax.persistence.Table*: используется для определения имени таблицы из БД, которая будет отображаться на entity bean.
++ *javax.persistence.Access*: определяет тип доступа, поле или свойство. Поле — является значением по умолчанию и если нужно, чтобы hibernate использовал методы getter/setter, то их необходимо задать для нужного свойства.
++ *javax.persistence.Id*: определяет primary key в entity bean.
++ *javax.persistence.EmbeddedId*: используется для определения составного ключа в бине.
++ *javax.persistence.Column*: определяет имя колонки из таблицы в базе данных.
++ *javax.persistence.GeneratedValue*: задает стратегию создания основных ключей. Используется в сочетании с javax.persistence.GenerationType enum.
++ *javax.persistence.OneToOne*: задает связь один-к-одному между двумя сущностными бинами. Соответственно есть другие аннотации OneToMany, ManyToOne и ManyToMany.
++ *org.hibernate.annotations.Cascade*: определяет каскадную связь между двумя entity бинами. Используется в связке с org.hibernate.annotations.CascadeType.
++ *javax.persistence.PrimaryKeyJoinColumnм: определяет внешний ключ для свойства. Используется вместе с org.hibernate.annotations.GenericGenerator и org.hibernate.annotations.Parameter.
+
+*Criteria API*
+```java
+Session session = HibernateUtil.getHibernateSession();
+CriteriaBuilder cb = session.getCriteriaBuilder();
+CriteriaQuery<Item> cr = cb.createQuery(Item.class);
+Root<Item> root = cr.from(Item.class);
+cr.select(root);
+ 
+Query<Item> query = session.createQuery(cr);
+List<Item> results = query.getResultList();
+```
 
 [к оглавлению](#Вопросы-для-собеседования-минимум)
 
