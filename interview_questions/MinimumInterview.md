@@ -1156,6 +1156,13 @@ Query<Item> query = session.createQuery(cr);
 List<Item> results = query.getResultList();
 ```
 
+*Итоги*
++ Для сохранения сущности следует использовать метод JPA *persist*
++ Для копирования состояния detached-сущности предпочтительным является *merge*
++ Метод update полезен только для задач пакетной обработки.
++ Методы save и saveOrUpdate — это просто псевдонимы для update, и вам не следует использовать их вообще.
++ Некоторые разработчики используют save, даже если объект уже управляется, но это ошибка и вызывает лишнее событие, так как для управляемых сущностей UPDATE автоматически обрабатывается Persistence context во время flush.
+
 [к оглавлению](#Вопросы-для-собеседования-минимум)
 
 ## 61 Способы аутентификации пользователя
@@ -1220,5 +1227,8 @@ delegate components. It is inherited from javax.servlet.http.HttpServlet, it is 
 DispatcherServlet uses Spring configuration classes to discover the delegate components it needs for request mapping, view resolution, exception handling etc.
 
 WebApplicationContext is an extension of a plain ApplicationContext. it is web aware ApplicationContext i.e it has Servlet Context information. When DispatcherServlet is loaded, it looks for the bean configuration file of WebApplicationContext and initializes it.
+
++ An ApplicationContext cannot have more than 1 parent ApplicationContext.
++ When a given ApplicationContext cannot resolve a bean, it will pass on the resolution request to its parent.
 
 [к оглавлению](#Вопросы-для-собеседования-минимум)
