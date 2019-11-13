@@ -287,20 +287,7 @@ Called by the garbage collector on an object when garbage collection determines 
 + \- WeekHashMap - реализация хэш-таблицы, которая организована с использованием weak references. 
 Другими словами, Garbage Collector автоматически удалит элемент из коллекции при следующей сборке мусора, если на ключ этого элеметна нет жёстких ссылок
 
-					                    Среднее										Худшее
-							Индекс 	Поиск		Вставка		Удаление 		Индекс 	        Поиск		Вставка		Удаление	
-    ArrayList				O(1)    	O(n)		O(n)		O(n)			O(1)	        O(n)		O(n)		O(n)
-	Vector					O(1)	        O(n)		O(n)		O(n)			O(1)	        O(n)		O(n)		O(n)
-	LinkedList				O(n)	        O(n)		O(1)		O(1)			O(n)	        O(n)		O(1)		O(1)
-	
-	HashTable				n/a		O(1)		O(1)		O(1)			n/a		O(n)		O(n)		O(n)
-	HashMap					n/a		O(1)		O(1)		O(1)			n/a		O(n)		O(n)		O(n)
-	LinkedHashMap			        n/a		O(1)		O(1)		O(1)			n/a		O(n)		O(n)		O(n)
-	TreeMap					n/a		O(log(n))	O(log(n))	O(log(n))		n/a		O(log(n))	O(log(n))	O(log(n))
-	
-	HashSet					n/a		O(1)		O(1)		O(1)			n/a		O(n)		O(n)		O(n)
-	LinkedHashSet			        n/a		O(1)		O(1)		O(1)			n/a		O(n)		O(n)		O(n)
-	TreeSet					n/a		O(log(n))	O(log(n))	O(log(n))		n/a		O(log(n))	O(log(n))	O(log(n))
+![collection](https://github.com/a11exe/job4j/blob/master/interview_questions/O.png)					   
 
 [к оглавлению](#Вопросы-для-собеседования-минимум)
 
