@@ -10,6 +10,7 @@ import ru.job4j.crud.logic.Validate;
 import ru.job4j.crud.logic.ValidateService;
 import ru.job4j.crud.model.Role;
 import ru.job4j.crud.model.User;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -41,7 +42,7 @@ public class UserUpdateController extends HttpServlet {
             request.setAttribute("title", "Edit user");
             request.setAttribute("user", user);
             request.setAttribute("buttonName", "Edit user");
-            request.setAttribute("roles", loggedUser.isAdmin() ? Role.values() : securityService.getLoggedUserAvaliableRoles(request.getSession()));
+            request.setAttribute("roles", loggedUser.isAdmin() ? Role.values() : securityService.getLoggedUserAvailableRoles(request.getSession()));
             getServletContext().getRequestDispatcher("/WEB-INF/views/user.jsp").forward(request, response);
         } else {
             response.setContentType("text/html;charset=utf-8");
@@ -51,7 +52,7 @@ public class UserUpdateController extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html;charset=utf-8");
         User loggedUser = securityService.getLoggedUser(request.getSession());
 
@@ -65,13 +66,13 @@ public class UserUpdateController extends HttpServlet {
                     .withEmail(params.get("email"))
                     .withPassword(params.get("password"))
                     .withCreateDate(LocalDate.now())
-                    .withRole(Role.valueOf(params.get("role")))
+                    .withRole(params.get("role") != null ? Role.valueOf(params.get("role")) : null)
                     .build();
 
             if (!loggedUser.isAdmin()) {
                 user.setRole(loggedUser.getRole());
             }
-            FileItem fileItem = servletUtil.getUploadedFileFromPostParametrs(request);
+            FileItem fileItem = servletUtil.getUploadedFileFromPostParameters(request);
             String uploadPath = servletUtil.getUploadPath(request);
 
             if (logic.update(user, fileItem, uploadPath)) {

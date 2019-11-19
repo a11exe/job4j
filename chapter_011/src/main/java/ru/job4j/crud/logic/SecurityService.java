@@ -12,6 +12,6 @@ public interface SecurityService {
 
     boolean hasEditRight(HttpSession session, User user);
 
-    List<Role> getLoggedUserAvaliableRoles(HttpSession session);
+    List<Role> getLoggedUserAvailableRoles(HttpSession session);
 
 }
