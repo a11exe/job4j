@@ -66,7 +66,7 @@
                         </select>
                     </c:if>
                 </div>
-            </div>
+            </div>e
             <button type="submit" class="btn btn-primary"><c:out value="${buttonName}"/></button>
         </form>
     </div>

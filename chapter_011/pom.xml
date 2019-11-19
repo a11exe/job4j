@@ -16,6 +16,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <com.h2database.h2.version>1.4.187</com.h2database.h2.version>
+        <jackson.core>2.9.8</jackson.core>
     </properties>
 
     <dependencies>
@@ -55,6 +56,12 @@
             <groupId>commons-fileupload</groupId>
             <artifactId>commons-fileupload</artifactId>
             <version>1.4</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.core}</version>
         </dependency>
 
     </dependencies>
