@@ -32,13 +32,23 @@ public class UserCreateJsonController extends HttpServlet {
     ObjectMapper mapper = new ObjectMapper();
     User user = mapper.readValue(requestData, User.class);
     user.setCreateDate(LocalDate.now());
-    if (logic.add(user, null, "")) {
+
+    User userFromDB = logic.findByLogin(user.getLogin());
+
+    if (userFromDB != null) {
       response.setContentType("text/html;charset=utf-8");
-      response.setStatus(HttpServletResponse.SC_OK);
+      response.getWriter().append("login is already busy");
+      response.setStatus(HttpServletResponse.SC_CONFLICT);
     } else {
-      response.setContentType("text/html;charset=utf-8");
-      response.getWriter().append("error create user");
-      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+      if (logic.add(user, null, "")) {
+        response.setContentType("text/html;charset=utf-8");
+        response.setStatus(HttpServletResponse.SC_OK);
+      } else {
+        response.setContentType("text/html;charset=utf-8");
+        response.getWriter().append("error create user");
+        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+      }
     }
+
   }
 }

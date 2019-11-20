@@ -18,6 +18,7 @@ public class User {
     private Integer photoId;
     private Role role;
     private String password;
+    private City city;
 
     public User() {
     }
@@ -31,6 +32,7 @@ public class User {
         this.photoId = builder.photoId;
         this.role = builder.role;
         this.password = builder.password;
+        this.city = builder.city;
     }
 
     public static class Builder {
@@ -42,6 +44,7 @@ public class User {
         private Integer photoId;
         private Role role;
         private String password;
+        private City city;
 
         public User build() {
             return new User(this);
@@ -84,6 +87,11 @@ public class User {
 
         public Builder withPassword(final String password) {
             this.password = password;
+            return this;
+        }
+
+        public Builder withCity(final City city) {
+            this.city = city;
             return this;
         }
     }
@@ -144,6 +152,14 @@ public class User {
         this.createDate = createDate;
     }
 
+    public City getCity() {
+        return city;
+    }
+
+    public void setCity(City city) {
+        this.city = city;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -165,13 +181,14 @@ public class User {
     @Override
     public String toString() {
         return "User{"
-                + "id=" + id
-                + ", name='" + name + '\''
-                + ", login='" + login + '\''
-                + ", email='" + email + '\''
-                + ", createDate=" + createDate
-                + ", photoId=" + photoId
-                + ", role=" + role
-                + '}';
+            + "id=" + id
+            + ", name='" + name + '\''
+            + ", login='" + login + '\''
+            + ", email='" + email + '\''
+            + ", createDate=" + createDate
+            + ", photoId=" + photoId
+            + ", role=" + role
+            + ", city=" + city
+            + '}';
     }
 }

@@ -1,5 +1,7 @@
 package ru.job4j.crud.dao;
 
+import ru.job4j.crud.model.City;
+import ru.job4j.crud.model.Country;
 import ru.job4j.crud.model.User;
 
 import java.util.ArrayList;
@@ -63,5 +65,15 @@ public class MemoryStore implements Store {
     @Override
     public boolean updatePhoto(User user) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public List<City> findAllCities() {
+        Country country = new Country("RU", "Russia");
+        List<City> cities = new ArrayList<>();
+        cities.add(new City(1, "Moscow", country));
+        cities.add(new City(2, "SPB", country));
+        cities.add(new City(3, "Volgograd", country));
+        return cities;
     }
 }

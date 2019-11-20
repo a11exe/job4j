@@ -22,7 +22,58 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
             integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
             crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.26/jquery.form-validator.min.js"></script>
+
     <script>
+
+      var cities = "";
+
+      function validateForm() {
+        inputName = $('#InputName').val();
+        inputlogin = $('#InputLogin').val();
+        inputEmail = $('#InputEmail').val();
+        inputPassword = $('#InputPassword').val();
+
+        var errMsg = "";
+        if (inputName == "") {
+          errMsg += "Name must be filled out\n\n"
+        }
+        if (inputlogin == "") {
+          errMsg += "Login must be filled out\n\n"
+        }
+        if (inputEmail == "") {
+          errMsg += "Email must be filled out\n\n"
+        }
+        if (inputPassword == "") {
+          errMsg += "Password must be filled out\n\n"
+        }
+
+        if (errMsg != "") {
+          alert(errMsg);
+          return false;
+        }
+      }
+
+      function getCities() {
+        $.ajax({
+          url: "/cities/get",
+          type: 'GET',
+          success: function (data) {
+            cities = data;
+            var result = "";
+            for (var i = 0; i != cities.length; ++i) {
+              result += " <option value=\"" + i + "\">" + cities[i].name + "</option>";
+            }
+            var tableBody = document.getElementById("inputGroupSelectCity");
+            tableBody.innerHTML = result;
+          },
+          error: function(jqXHR, textStatus, errorThrown) {
+            console.log("Error... " + textStatus + "        " + errorThrown);
+          },
+        });
+      }
+
+
         function deleteUser(userId) {
           $.ajax({
             url: "/users/deletejson",
@@ -60,6 +111,10 @@
         // }
         function save() {
 
+          if (validateForm() == false) {
+            return
+          }
+
           // get inputs
           var user = new Object();
           user.name = $('#InputName').val();
@@ -67,6 +122,8 @@
           user.email = $('#InputEmail').val();
           user.password = $('#InputPassword').val();
           user.role = $('#inputGroupSelect01').val();
+          city = cities[$('#inputGroupSelectCity').val()];
+          user.city = city;
 
           $.ajax({
             url: "/users/createjson",
@@ -75,8 +132,15 @@
             datatype: 'json',
             contentType: 'application/json;charset=UTF-8',
             data: JSON.stringify(user),
-            success: function (data) {
+            success: function () {
               updateTable();
+              $('#addEditUser').modal('hide')
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+              if (jqXHR.status == 409) {
+                alert(jqXHR.responseText);
+              }
+              console.log("Error... " + textStatus + "        " + errorThrown);
             },
 
           });
@@ -92,7 +156,6 @@
               var users = data;
               var result = "";
               var editUrl = "";
-              var deleteUrl = "";
               var imgUser = "";
               var imgDownload = "";
               var createDate = "";
@@ -120,6 +183,8 @@
                     "<td>" + createDate + "</td>" +
                     "<td>" + imgUser + "</td>" +
                     "<td>" + imgDownload + "</td>" +
+                    "<td>" + users[i].city.name + "</td>" +
+                    "<td>" + users[i].city.country.name + "</td>" +
                     <c:if test="${loggedUser.isAdmin()}">
                         "<td>" +
                             "<a href=" + editUrl +
@@ -172,6 +237,8 @@
                 <th>createDate</th>
                 <th>image</th>
                 <th>download</th>
+                <th>city</th>
+                <th>country</th>
                 <c:if test="${loggedUser.isAdmin()}">
                     <th>edit</th>
                     <th>delete</th>
@@ -204,6 +271,10 @@
                            aria-pressed="true">download</a>
                         </c:if>
                     </td>
+                    <td><c:out value="${user.city.name}"/>
+                    </td>
+                    <td><c:out value="${user.city.country.name}"/>
+                    </td>
                     <c:if test="${loggedUser.isAdmin()}">
                         <td><a href="<c:out value="${baseUrl}" />/users/edit?id=<c:out value="${user.id}"/>"
                                class="btn btn-link" role="button"
@@ -218,7 +289,7 @@
         </table>
         <c:if test="${loggedUser.isAdmin()}">
             <a href="" class="btn btn-success" role="button"
-               aria-pressed="true" data-toggle="modal" data-target="#addEditUser">Add user</a>
+               aria-pressed="true" data-toggle="modal" data-target="#addEditUser" onclick="getCities()">Add user</a>
         </c:if>
     </div>
 
@@ -239,7 +310,7 @@
                         </div>
                         <div class="form-group">
                             <label for="InputName">Name</label>
-                            <input type="text" name="name" class="form-control" id="InputName" placeholder="Enter name"
+                            <input type="text" name="name" class="form-control" id="InputName" data-validator="required|min:4|max:10" placeholder="Enter name"
                                    value="<c:out value="${user.name}"/>">
                         </div>
                         <div class="form-group">
@@ -266,6 +337,18 @@
                         </div>
                         <div class="form-group">
                             <div class="input-group mb-3">
+
+                                <div class="input-group-prepend">
+                                    <label class="input-group-text"
+                                           for="inputGroupSelectCity">City</label>
+                                </div>
+                                <select class="custom-select" id="inputGroupSelectCity" name="city">
+                                </select>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group mb-3">
                                 <c:if test="${loggedUser.isAdmin()}">
                                     <div class="input-group-prepend">
                                         <label class="input-group-text" for="inputGroupSelect01">Role</label>
@@ -278,11 +361,12 @@
                                 </c:if>
                             </div>
                         </div>
+
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="save()">Save changes</button>
+                    <button type="button" class="btn btn-primary" onclick="save()">Save changes</button>
                 </div>
             </div>
         </div>

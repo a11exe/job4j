@@ -3,6 +3,7 @@ package ru.job4j.crud.logic;
 import org.apache.commons.fileupload.FileItem;
 import ru.job4j.crud.dao.DBStore;
 import ru.job4j.crud.dao.Store;
+import ru.job4j.crud.model.City;
 import ru.job4j.crud.model.User;
 
 import java.util.List;
@@ -79,4 +80,8 @@ public class ValidateService implements Validate {
         return logic.findByLogin(login);
     }
 
+    @Override
+    public List<City> findAllCities() {
+        return logic.findAllCities();
+    }
 }

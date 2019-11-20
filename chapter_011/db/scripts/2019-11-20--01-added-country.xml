@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+  <changeSet author="allexe"
+    id="2019-11-20--01-added-country"
+    objectQuotingStrategy="LEGACY">
+    <createTable tableName="COUNTRY">
+      <column name="ID" type="varchar(2)" />
+      <column name="NAME" type="varchar(255)"/>
+    </createTable>
+    <addNotNullConstraint columnDataType="INT" columnName="ID" tableName="COUNTRY" />
+    <addPrimaryKey tableName="COUNTRY" columnNames="ID"/>
+  </changeSet>
+</databaseChangeLog>

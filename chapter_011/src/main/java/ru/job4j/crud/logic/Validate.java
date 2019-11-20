@@ -1,6 +1,7 @@
 package ru.job4j.crud.logic;
 
 import org.apache.commons.fileupload.FileItem;
+import ru.job4j.crud.model.City;
 import ru.job4j.crud.model.User;
 
 import java.util.List;
@@ -17,4 +18,6 @@ public interface Validate {
     User findById(int id);
 
     User findByLogin(String login);
+
+    List<City> findAllCities();
 }

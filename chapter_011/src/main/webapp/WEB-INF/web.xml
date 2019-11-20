@@ -51,6 +51,16 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>CitiesJsonController</servlet-name>
+        <servlet-class>ru.job4j.crud.controller.json.CitiesJsonController</servlet-class>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CitiesJsonController</servlet-name>
+        <url-pattern>/cities/get</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>UsersJsonController</servlet-name>
         <servlet-class>ru.job4j.crud.controller.json.UsersJsonController</servlet-class>
         <load-on-startup>2</load-on-startup>

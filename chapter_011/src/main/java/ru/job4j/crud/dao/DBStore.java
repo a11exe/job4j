@@ -1,6 +1,8 @@
 package ru.job4j.crud.dao;
 
 import org.apache.commons.dbcp2.BasicDataSource;
+import ru.job4j.crud.model.City;
+import ru.job4j.crud.model.Country;
 import ru.job4j.crud.model.Role;
 import ru.job4j.crud.model.User;
 
@@ -21,13 +23,22 @@ public class DBStore implements Store {
 
     private static final BasicDataSource SOURCE = new BasicDataSource();
     private static final DBStore INSTANCE = new DBStore();
-    private static final String SQL_ADD_USER = "INSERT INTO USERS (name, login, email, password, createDate, role) VALUES (?, ?, ?, ?, ?, ?)";
+    private static final String SQL_ADD_USER = "INSERT INTO USERS (name, login, email, password, createDate, role, city_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
     private static final String SQL_UPDATE_PHOTO = "UPDATE USERS SET photoId = ? WHERE id = ?";
-    private static final String SQL_UPDATE_USER = "UPDATE USERS SET name = ?, login = ?, email = ?, password = ?, role = ? WHERE id = ?";
+    private static final String SQL_UPDATE_USER = "UPDATE USERS SET name = ?, login = ?, email = ?, password = ?, role = ?, city_id = ? WHERE id = ?";
     private static final String SQL_DELETE_USER = "DELETE FROM USERS WHERE id=?";
-    private static final String SQL_FIND_ALL_USERS = "SELECT id, name, login, email, photoId FROM USERS";
-    private static final String SQL_FIND_USER_BY_ID = "SELECT id, name, login, email, password, photoId, createDate, role FROM USERS WHERE id=?";
+    private static final String SQL_FIND_ALL_USERS =
+        "SELECT USERS.id, users.name, login, email, password, photoId, createDate, role, city.id as cityId, city.name as cityName, country.id as countryId, country.name as countryName FROM USERS "
+            + "LEFT JOIN city ON users.CITY_ID = CITY.ID "
+            + "LEFT JOIN country on city.country_id = country.id";
+    private static final String SQL_FIND_USER_BY_ID =
+        "SELECT USERS.id, users.name, login, email, password, photoId, createDate, role, city.id as cityId, city.name as cityName, country.id as countryId, country.name as countryName FROM USERS "
+            + "LEFT JOIN city ON users.CITY_ID = CITY.ID "
+            + "LEFT JOIN country on city.country_id = country.id  WHERE users.id=?";
     private static final String SQL_FIND_USER_BY_LOGIN = "SELECT id, name, login, email, password, photoId, createDate, role FROM USERS WHERE login=?";
+    private static final String SQL_FIND_ALL_CITIES =
+        "SELECT city.id as cityId, city.name as cityName, country.id as countryId, country.name as countryName FROM CITY "
+        + "LEFT JOIN country on city.country_id = country.id";
 
     private DBStore() {
 
@@ -61,6 +72,7 @@ public class DBStore implements Store {
             st.setString(4, user.getPassword());
             st.setDate(5, java.sql.Date.valueOf(user.getCreateDate()));
             st.setString(6, user.getRole().toString());
+            st.setInt(7, user.getCity().getId());
             st.executeUpdate();
             ResultSet rs = st.getGeneratedKeys();
             if (rs != null && rs.next()) {
@@ -102,6 +114,7 @@ public class DBStore implements Store {
             st.setString(4, user.getPassword());
             st.setString(5, user.getRole().toString());
             st.setInt(6, user.getId());
+            st.setInt(7, user.getCity().getId());
             st.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -134,6 +147,14 @@ public class DBStore implements Store {
                         .withLogin(rs.getString("login"))
                         .withEmail(rs.getString("email"))
                         .withPhotoId(rs.getInt("photoId"))
+                        .withCity(
+                            new City(
+                                rs.getInt("cityId"),
+                                rs.getString("cityName"),
+                                new Country(
+                                    rs.getString("countryId"),
+                                    rs.getString("countryName")
+                                    )))
                         .build());
             }
         } catch (Exception e) {
@@ -160,6 +181,14 @@ public class DBStore implements Store {
                         .withPhotoId(rs.getInt("photoId"))
                         .withCreateDate(rs.getTimestamp("createDate").toLocalDateTime().toLocalDate())
                         .withRole(Role.valueOf(rs.getString(8)))
+                        .withCity(
+                            new City(
+                                rs.getInt("cityId"),
+                                rs.getString("cityName"),
+                                new Country(
+                                    rs.getString("countryId"),
+                                    rs.getString("countryName")
+                                )))
                         .build();
             }
         } catch (Exception e) {
@@ -192,5 +221,27 @@ public class DBStore implements Store {
             e.printStackTrace();
         }
         return user;
+    }
+
+    @Override
+    public List<City> findAllCities() {
+        List<City> cities = new ArrayList<>();
+        try (Connection connection = SOURCE.getConnection();
+            PreparedStatement st = connection.prepareStatement(SQL_FIND_ALL_CITIES)
+        ) {
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                cities.add(new City(
+                    rs.getInt("cityId"),
+                    rs.getString("cityName"),
+                    new Country(
+                        rs.getString("countryId"),
+                        rs.getString("countryName")
+                    )));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return cities;
     }
 }

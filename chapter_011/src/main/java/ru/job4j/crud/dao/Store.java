@@ -1,5 +1,6 @@
 package ru.job4j.crud.dao;
 
+import ru.job4j.crud.model.City;
 import ru.job4j.crud.model.User;
 
 import java.util.List;
@@ -20,4 +21,5 @@ public interface Store {
 
     boolean updatePhoto(User user);
 
+    List<City> findAllCities();
 }
