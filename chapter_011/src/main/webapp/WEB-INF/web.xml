@@ -51,6 +51,36 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>UsersJsonController</servlet-name>
+        <servlet-class>ru.job4j.crud.controller.json.UsersJsonController</servlet-class>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UsersJsonController</servlet-name>
+        <url-pattern>/users/get</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>UserCreateJsonController</servlet-name>
+        <servlet-class>ru.job4j.crud.controller.json.UserCreateJsonController</servlet-class>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UserCreateJsonController</servlet-name>
+        <url-pattern>/users/createjson</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>UserDeleteJsonController</servlet-name>
+        <servlet-class>ru.job4j.crud.controller.json.UserDeleteJsonController</servlet-class>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UserDeleteJsonController</servlet-name>
+        <url-pattern>/users/deletejson</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>UserCreateController</servlet-name>
         <servlet-class>ru.job4j.crud.controller.UserCreateController</servlet-class>
         <load-on-startup>2</load-on-startup>

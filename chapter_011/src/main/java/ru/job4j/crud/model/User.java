@@ -19,6 +19,9 @@ public class User {
     private Role role;
     private String password;
 
+    public User() {
+    }
+
     public User(final Builder builder) {
         this.id = builder.id;
         this.name = builder.name;
@@ -134,9 +137,12 @@ public class User {
     }
 
     public boolean isAdmin() {
-        return this.role.equals(Role.ADMIN);
+        return Role.ADMIN.equals(this.role);
     }
 
+    public void setCreateDate(LocalDate createDate) {
+        this.createDate = createDate;
+    }
 
     @Override
     public boolean equals(Object o) {

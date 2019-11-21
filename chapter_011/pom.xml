@@ -18,6 +18,7 @@
         <com.h2database.h2.version>1.4.187</com.h2database.h2.version>
         <junit.version>4.12</junit.version>
         <powermock.version>1.6.1</powermock.version>
+        <jackson.core>2.9.8</jackson.core>
     </properties>
 
     <dependencies>
@@ -57,6 +58,12 @@
             <groupId>commons-fileupload</groupId>
             <artifactId>commons-fileupload</artifactId>
             <version>1.4</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.core}</version>
         </dependency>
 
         <dependency>

@@ -2,6 +2,7 @@ package ru.job4j.crud.controller;
 
 import ru.job4j.crud.logic.Validate;
 import ru.job4j.crud.logic.ValidateService;
+import ru.job4j.crud.model.Role;
 import ru.job4j.crud.model.User;
 
 import javax.servlet.ServletException;
@@ -24,6 +25,7 @@ public class UserController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<User> users = logic.findAll();
         request.setAttribute("users", users);
+        request.setAttribute("roles", Role.values());
         request.getRequestDispatcher("WEB-INF/views/users.jsp").forward(request, response);
     }
 }
