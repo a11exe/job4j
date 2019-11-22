@@ -13,8 +13,10 @@ public interface Store {
 
   Hall getHall(String sessionId);
 
-  void bookSeat(Seat seat, String sessionId);
+  boolean bookSeat(Seat seat, String sessionId);
 
-  void buyTicket(Seat seat, String sessionId, Account account);
+  boolean cancelBooking(Seat seat, String sessionId);
+
+  boolean confirmBooking(Seat seat, String sessionId, Account account);
 
 }

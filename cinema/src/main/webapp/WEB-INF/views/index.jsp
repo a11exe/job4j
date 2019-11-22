@@ -24,6 +24,7 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
+<script src="/js/jquery.cookie.js"></script>
 
 <div class="container">
   <div class="row pt-3">
@@ -106,13 +107,34 @@
     loadHall();
   } ,10000);
 
+  function getCellSeat(i) {
+      var seatNum = seats[i].number;
+      var row = seats[i].row;
+      var seatStr = "<td id =\"seat" + i + "\" class=\"alert alert-secondary\"><input type=\"radio\" value=\"" + seats[i].id + "\" disabled> Ряд "
+          + row + ", Место " + seatNum + "</td>";
+      debugger
+      if (seats[i].state == "BOOKED") {
+          seatStr = "<td id =\"seat" + i + "\" class=\"alert alert-danger\"><input type=\"radio\" value=\"" + seats[i].id + "\" disabled> Ряд "
+              + row + ", Место " + seatNum + "</td>";
+      }
+      if (seats[i].state == "PENDING") {
+          seatStr = "<td id =\"seat" + i + "\" class=\"alert alert-danger\"><input type=\"radio\" value=\"" + seats[i].id + "\" disabled> Ряд "
+              + row + ", Место " + seatNum + "</td>";
+      }
+      if (seats[i].state == "FREE") {
+          seatStr = "<td id =\"seat" + i + "\" class=\"alert alert-light\"><input type=\"radio\" name=\"place\" value=\"" + seats[i].id + "\" onclick='book(" + i + ")'> Ряд "
+              + row + ", Место " + seatNum + "</td>";
+      }
+      return seatStr;
+  }
+
 
   function loadHall() {
     $.ajax({
       url: "/hall",
       type: 'GET',
       data: {
-        sessionUID: sessionUID,
+        sessionID: sessionID,
       },
       cache: false,
       success: function (data) {
@@ -130,9 +152,7 @@
                 + "      <tr>\n"
                 + "        <th>" + row + "</th>"
           }
-          seatNum = seats[i].number;
-          result += "<td id =\"seat" + i + "\" class=\"alert alert-light\"><input type=\"radio\" name=\"place\" value=\"" + seats[i].id + "\" onclick='book(" + i + ")'> Ряд "
-              + row + ", Место " + seatNum + "</td>";
+          result += getCellSeat(i);
         }
         result += "</tr>"
         var tableBody = document.getElementById("tbody");
@@ -160,7 +180,7 @@
     seconds = 300;
     countdownTimer = setInterval('secondPassed()', 1000);
     var seat = seats[selectedSeatIndex];
-    seat.sessionUID = sessionUID;
+    seat.sessionID = sessionID;
     $.ajax({
       url: "/book",
       type: 'POST',
@@ -189,11 +209,12 @@
     } else {
       seconds--;
     }
+
   }
 
   // var countdownTimer = setInterval('secondPassed()', 1000);
 
-  var sessionUID = Math.floor(Math.random() * 26) + Date.now();
+  var sessionID = $.cookie("sessionId");
 
 </script>
 </html>

@@ -14,17 +14,19 @@ public class Seat {
   private int row;
   private int number;
   private BigDecimal price;
-  private String sessionUID;
+  private String sessionID;
   private Account account;
+  private State state;
 
   public Seat() {
   }
 
-  public Seat(int id, int row, int number, BigDecimal price) {
+  public Seat(int id, int row, int number, BigDecimal price, State state) {
     this.id = id;
     this.row = row;
     this.number = number;
     this.price = price;
+    this.state = state;
   }
 
   public void setId(int id) {
@@ -55,12 +57,20 @@ public class Seat {
     this.account = account;
   }
 
-  public String getSessionUID() {
-    return sessionUID;
+  public String getSessionID() {
+    return sessionID;
   }
 
-  public void setSessionUID(String sessionUID) {
-    this.sessionUID = sessionUID;
+  public void setSessionID(String sessionID) {
+    this.sessionID = sessionID;
+  }
+
+  public State getState() {
+    return state;
+  }
+
+  public void setState(State state) {
+    this.state = state;
   }
 
   @Override

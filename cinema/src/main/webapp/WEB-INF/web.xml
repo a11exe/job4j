@@ -8,6 +8,7 @@
     <servlet-mapping>
         <servlet-name>default</servlet-name>
         <url-pattern>/images/*</url-pattern>
+        <url-pattern>/js/*</url-pattern>
     </servlet-mapping>
 
     <servlet>

@@ -2,8 +2,10 @@ package ru.job4j.cinema.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,7 +27,16 @@ public class HallJsonServlet extends HttpServlet {
       throws ServletException, IOException {
 
     resp.setContentType("text/json");
-    Hall hall = service.getHall(req.getParameter("sessionUID"));
+
+    String sessionId = "";
+    Cookie cookie = Arrays.stream(req.getCookies())
+            .filter(c -> c.getName().equals("sessionId"))
+            .findFirst().orElse(null);
+    if (cookie != null) {
+      sessionId = cookie.getValue();
+    }
+
+    Hall hall = service.getHall(sessionId);
     ObjectMapper mapper = new ObjectMapper();
     String jsonInString = mapper.writeValueAsString(hall);
     resp.getWriter().write(jsonInString);

@@ -11,9 +11,9 @@
     <createTable tableName="HALLS">
       <column name="ID" type="INT" />
       <column name="ROW" type="INT" />
-      <column name="SEAT" type="INT" />
+      <column name="SEAT_NUMBER" type="INT" />
       <column name="PRICE" type="DECIMAL(10, 2)"/>
-      <column name="BOOKING_TIME" type="TIMESTAMP"/>
+      <column name="BOOKED_UNTIL" type="TIMESTAMP"/>
       <column name="SESSION_ID" type="VARCHAR(255)"/>
       <column name="ACCOUNT_ID" type="INT"/>
     </createTable>

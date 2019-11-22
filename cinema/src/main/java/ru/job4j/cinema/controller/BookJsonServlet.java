@@ -4,8 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.stream.Collectors;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,6 +32,15 @@ public class BookJsonServlet extends HttpServlet {
     String requestData = reader.lines().collect(Collectors.joining());
     ObjectMapper mapper = new ObjectMapper();
     Seat seat = mapper.readValue(requestData, Seat.class);
-    service.bookSeat(seat, req.getSession().getId());
+
+    String sessionId = "";
+    Cookie cookie = Arrays.stream(req.getCookies())
+            .filter(c -> c.getName().equals("sessionId"))
+            .findFirst().orElse(null);
+    if (cookie != null) {
+      sessionId = cookie.getValue();
+    }
+
+    service.bookSeat(seat, sessionId);
   }
 }

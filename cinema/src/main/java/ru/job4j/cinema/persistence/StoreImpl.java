@@ -8,10 +8,13 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
+
 import org.apache.commons.dbcp2.BasicDataSource;
 import ru.job4j.model.Account;
 import ru.job4j.model.Hall;
 import ru.job4j.model.Seat;
+import ru.job4j.model.State;
 
 /**
  * @author Alexander Abramov (alllexe@mail.ru)
@@ -23,9 +26,22 @@ public class StoreImpl implements Store {
   private static final BasicDataSource SOURCE = new BasicDataSource();
 
   private final static Store INSTANCE = new StoreImpl();
-  private static final String SQL_HALL = "SELECT id, row, seat, price FROM HALLS ORDER BY row, seat";
-  private static final String SQL_ADD_BOOK = "UPDATE HALLS SET session_id = ?, booking_time = ? WHERE row = ? AND seat = ?";
-  private static final String SQL_REMOVE_BOOK = "";
+  private static final String SQL_HALL =
+          "SELECT id, row, seat_number, price, booked_until, session_id, account_id " +
+                  "FROM HALLS ORDER BY row, seat_number";
+  private static final String SQL_BOOKING =
+          "UPDATE HALLS SET session_id = ?, booked_until = ? " +
+          "WHERE row = ? AND seat_number = ? " +
+          "AND ((session_id = ? OR session_id = ?) OR (booked_until <= ? OR booked_until is NULL)) " +
+          "AND (account_id = ? OR account_id is NULL)";
+  private static final String SQL_CANCEL_BOOKING =
+          "UPDATE HALLS SET session_id = ?, booked_until = ? " +
+          "WHERE row = ? AND seat_number = ? AND session_id = ? AND account_id = ?";
+  private static final String SQL_CONFIRM_BOOKING =
+          "UPDATE HALLS SET account_id = ? " +
+          "WHERE row = ? AND seat_number = ? " +
+          "AND ((session_id = ? OR session_id = ?) OR booked_until <= ?) " +
+          "AND account_id = ?";
 
   private StoreImpl() {
     Properties properties = new Properties();
@@ -47,6 +63,24 @@ public class StoreImpl implements Store {
     return INSTANCE;
   }
 
+  private State getState(
+          Timestamp now, Timestamp booked_until, int account_id, String session_id, String booked_session_id) {
+
+    State state = State.FREE;
+    if (account_id > 0) {
+      state = State.BOOKED;
+    } else {
+      if (booked_until != null && booked_until.getTime() > now.getTime()) {
+        if (!booked_session_id.equals("") && !booked_session_id.equals(session_id)) {
+          state = State.PENDING;
+        }
+      }
+    }
+
+    return state;
+
+  }
+
   @Override
   public Hall getHall(String sessionId) {
 
@@ -59,8 +93,15 @@ public class StoreImpl implements Store {
         seats.add(new Seat(
             rs.getInt("id"),
             rs.getInt("row"),
-            rs.getInt("seat"),
-            rs.getBigDecimal("price")
+            rs.getInt("seat_number"),
+            rs.getBigDecimal("price"),
+            getState(
+                    new Timestamp(System.currentTimeMillis()),
+                    rs.getTimestamp("booked_until"),
+                    rs.getInt("account_id"),
+                    sessionId,
+                    rs.getString("session_id"))
+
         ));
       }
     } catch (Exception e) {
@@ -70,25 +111,82 @@ public class StoreImpl implements Store {
   }
 
   @Override
-  public void bookSeat(Seat seat, String sessionId) {
+  public boolean bookSeat(Seat seat, String sessionId) {
+
+    boolean result = false;
+    int delayMinutes = 5;
+    Timestamp book_until = new Timestamp(System.currentTimeMillis());
+    book_until.setTime(book_until.getTime() + TimeUnit.MINUTES.toMillis(delayMinutes));
 
     try (Connection connection = SOURCE.getConnection();
-        PreparedStatement st = connection.prepareStatement(SQL_ADD_BOOK)
+        PreparedStatement st = connection.prepareStatement(SQL_BOOKING)
     ) {
       st.setString(1, sessionId);
-      st.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
+      st.setTimestamp(2, book_until);
       st.setInt(3, seat.getRow());
       st.setInt(4, seat.getNumber());
-      st.executeUpdate();
+      st.setString(5, sessionId);
+      st.setString(6, "");
+      st.setTimestamp(7, new Timestamp(System.currentTimeMillis()));
+      st.setInt(8, 0);
+
+      result = (st.executeUpdate() > 0);
 
     } catch (Exception e) {
       e.printStackTrace();
     }
 
+    return result;
   }
 
   @Override
-  public void buyTicket(Seat seat, String sessionId, Account account) {
+  public boolean cancelBooking(Seat seat, String sessionId) {
+    boolean result = false;
+    int delayMinutes = 5;
+    Timestamp book_until = new Timestamp(System.currentTimeMillis());
+    book_until.setTime(book_until.getTime() + TimeUnit.MINUTES.toMillis(delayMinutes));
 
+    try (Connection connection = SOURCE.getConnection();
+         PreparedStatement st = connection.prepareStatement(SQL_CANCEL_BOOKING)
+    ) {
+      st.setString(1, "");
+      st.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
+      st.setInt(3, seat.getRow());
+      st.setInt(4, seat.getNumber());
+      st.setString(5, sessionId);
+      st.setInt(6, 0);
+
+      result = (st.executeUpdate() > 0);
+
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+    return result;
+  }
+
+  @Override
+  public boolean confirmBooking(Seat seat, String sessionId, Account account) {
+
+    boolean result = false;
+
+    try (Connection connection = SOURCE.getConnection();
+         PreparedStatement st = connection.prepareStatement(SQL_CONFIRM_BOOKING)
+    ) {
+      st.setInt(1, account.getId());
+      st.setInt(2, seat.getRow());
+      st.setInt(3, seat.getNumber());
+      st.setString(4, sessionId);
+      st.setString(5, "");
+      st.setTimestamp(6, new Timestamp(System.currentTimeMillis()));
+      st.setInt(7, 0);
+
+      result = (st.executeUpdate() > 0);
+
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+    return result;
   }
 }
