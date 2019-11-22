@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+  <changeSet author="allexe"
+    id="2019-11-21--01-added-accounts"
+    objectQuotingStrategy="LEGACY">
+    <createTable tableName="ACCOUNTS">
+      <column name="ID" type="INT" />
+      <column name="FIO" type="VARCHAR(255)" />
+      <column name="PHONE" type="VARCHAR(10)" />
+    </createTable>
+    <addNotNullConstraint columnDataType="INT" columnName="ID" tableName="ACCOUNTS" />
+    <addPrimaryKey tableName="ACCOUNTS" columnNames="ID"/>
+  </changeSet>
+</databaseChangeLog>

@@ -76,6 +76,7 @@
      <module>bomberman</module>
      <module>strategy</module>
      <module>chapter_011</module>
+   <module>cinema</module>
  </modules>
 
  <dependencies>
