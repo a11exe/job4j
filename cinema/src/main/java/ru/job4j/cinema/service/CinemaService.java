@@ -15,8 +15,6 @@ public interface CinemaService {
 
   void bookSeat(Seat seat, String sessionId);
 
-  void cancelBooking(Seat seat, String sessionId);
-
-  void confirmBooking(Seat seat, String sessionId, Account account);
+  void confirmBooking(Seat seat, String sessionId);
 
 }

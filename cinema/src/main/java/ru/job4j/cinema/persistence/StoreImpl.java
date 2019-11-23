@@ -36,7 +36,7 @@ public class StoreImpl implements Store {
           "AND (account_id = ? OR account_id is NULL)";
   private static final String SQL_CANCEL_BOOKING =
           "UPDATE HALLS SET session_id = ?, booked_until = ? " +
-          "WHERE row = ? AND seat_number = ? AND session_id = ? AND account_id = ?";
+          "WHERE session_id = ? AND account_id is NULL";
   private static final String SQL_CONFIRM_BOOKING =
           "UPDATE HALLS SET account_id = ? " +
           "WHERE row = ? AND seat_number = ? " +
@@ -71,9 +71,7 @@ public class StoreImpl implements Store {
       state = State.BOOKED;
     } else {
       if (booked_until != null && booked_until.getTime() > now.getTime()) {
-        if (!booked_session_id.equals("") && !booked_session_id.equals(session_id)) {
-          state = State.PENDING;
-        }
+        state = State.PENDING;
       }
     }
 
@@ -119,18 +117,29 @@ public class StoreImpl implements Store {
     book_until.setTime(book_until.getTime() + TimeUnit.MINUTES.toMillis(delayMinutes));
 
     try (Connection connection = SOURCE.getConnection();
-        PreparedStatement st = connection.prepareStatement(SQL_BOOKING)
+        PreparedStatement cancelBookSt = connection.prepareStatement(SQL_CANCEL_BOOKING);
+        PreparedStatement bookSt = connection.prepareStatement(SQL_BOOKING)
     ) {
-      st.setString(1, sessionId);
-      st.setTimestamp(2, book_until);
-      st.setInt(3, seat.getRow());
-      st.setInt(4, seat.getNumber());
-      st.setString(5, sessionId);
-      st.setString(6, "");
-      st.setTimestamp(7, new Timestamp(System.currentTimeMillis()));
-      st.setInt(8, 0);
 
-      result = (st.executeUpdate() > 0);
+      connection.setAutoCommit(false);
+
+      cancelBookSt.setString(1, "");
+      cancelBookSt.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
+      cancelBookSt.setString(3, sessionId);
+      cancelBookSt.executeUpdate();
+
+      bookSt.setString(1, sessionId);
+      bookSt.setTimestamp(2, book_until);
+      bookSt.setInt(3, seat.getRow());
+      bookSt.setInt(4, seat.getNumber());
+      bookSt.setString(5, sessionId);
+      bookSt.setString(6, "");
+      bookSt.setTimestamp(7, new Timestamp(System.currentTimeMillis()));
+      bookSt.setInt(8, 0);
+
+      result = (bookSt.executeUpdate() > 0);
+
+      connection.commit();
 
     } catch (Exception e) {
       e.printStackTrace();
@@ -140,40 +149,14 @@ public class StoreImpl implements Store {
   }
 
   @Override
-  public boolean cancelBooking(Seat seat, String sessionId) {
-    boolean result = false;
-    int delayMinutes = 5;
-    Timestamp book_until = new Timestamp(System.currentTimeMillis());
-    book_until.setTime(book_until.getTime() + TimeUnit.MINUTES.toMillis(delayMinutes));
-
-    try (Connection connection = SOURCE.getConnection();
-         PreparedStatement st = connection.prepareStatement(SQL_CANCEL_BOOKING)
-    ) {
-      st.setString(1, "");
-      st.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
-      st.setInt(3, seat.getRow());
-      st.setInt(4, seat.getNumber());
-      st.setString(5, sessionId);
-      st.setInt(6, 0);
-
-      result = (st.executeUpdate() > 0);
-
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-
-    return result;
-  }
-
-  @Override
-  public boolean confirmBooking(Seat seat, String sessionId, Account account) {
+  public boolean confirmBooking(Seat seat, String sessionId) {
 
     boolean result = false;
 
     try (Connection connection = SOURCE.getConnection();
          PreparedStatement st = connection.prepareStatement(SQL_CONFIRM_BOOKING)
     ) {
-      st.setInt(1, account.getId());
+      st.setInt(1, seat.getAccount().getId());
       st.setInt(2, seat.getRow());
       st.setInt(3, seat.getNumber());
       st.setString(4, sessionId);

@@ -15,8 +15,6 @@ public interface Store {
 
   boolean bookSeat(Seat seat, String sessionId);
 
-  boolean cancelBooking(Seat seat, String sessionId);
-
-  boolean confirmBooking(Seat seat, String sessionId, Account account);
+  boolean confirmBooking(Seat seat, String sessionId);
 
 }

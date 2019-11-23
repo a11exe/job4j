@@ -36,12 +36,7 @@ public class CinemaServiceImpl implements CinemaService {
   }
 
   @Override
-  public void cancelBooking(Seat seat, String sessionId) {
-    logic.cancelBooking(seat, sessionId);
-  }
-
-  @Override
-  public void confirmBooking(Seat seat, String sessionId, Account account) {
-    logic.confirmBooking(seat, sessionId, account);
+  public void confirmBooking(Seat seat, String sessionId) {
+    logic.confirmBooking(seat, sessionId);
   }
 }

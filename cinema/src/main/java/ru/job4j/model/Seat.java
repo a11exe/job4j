@@ -14,7 +14,7 @@ public class Seat {
   private int row;
   private int number;
   private BigDecimal price;
-  private String sessionID;
+  private String sessionId;
   private Account account;
   private State state;
 
@@ -57,12 +57,12 @@ public class Seat {
     this.account = account;
   }
 
-  public String getSessionID() {
-    return sessionID;
+  public String getSessionId() {
+    return sessionId;
   }
 
-  public void setSessionID(String sessionID) {
-    this.sessionID = sessionID;
+  public void setSessionId(String sessionId) {
+    this.sessionId = sessionId;
   }
 
   public State getState() {

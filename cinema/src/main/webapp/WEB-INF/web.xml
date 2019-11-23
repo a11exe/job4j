@@ -41,4 +41,14 @@
         <url-pattern>/book</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>ConfirmBookJsonServlet</servlet-name>
+        <servlet-class>ru.job4j.cinema.controller.ConfirmBookJsonServlet</servlet-class>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ConfirmBookJsonServlet</servlet-name>
+        <url-pattern>/confirm</url-pattern>
+    </servlet-mapping>
+
 </web-app>

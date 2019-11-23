@@ -53,7 +53,7 @@
   </div>
   <div class="row float-right">
     <button type="button" class="btn btn-success"
-            aria-pressed="true" data-toggle="modal" data-target="#booking" onclick="pay()">Оплатить</button>
+            aria-pressed="true" data-toggle="modal" data-target="#booking" onclick="addBookingInfo()">Booking</button>
   </div>
 </div>
 
@@ -69,24 +69,24 @@
       <div class="modal-body">
         <form id="seat">
           <div class="form-group">
-            <h5 id="selectedSeat">Вы выбрали ряд 1 место 1, Сумма : 500 рублей. </h5>
+            <h5 id="selectedSeat"></h5>
           </div>
           <div class="form-group">
             <input type="hidden" name="id" class="form-control" id="id" value="">
           </div>
           <div class="form-group">
-            <label for="username">ФИО</label>
-            <input type="text" class="form-control" id="username" placeholder="ФИО">
+            <label for="username">Name</label>
+            <input name="username" type="text" class="form-control" id="username" placeholder="ФИО">
           </div>
           <div class="form-group">
-            <label for="phone">Номер телефона</label>
-            <input type="text" class="form-control" id="phone" placeholder="Номер телефона">
+            <label for="phone">Phone</label>
+            <input name="phone" type="text" class="form-control" id="phone" placeholder="Номер телефона">
           </div>
         </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="pay()">Оплатить</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="confirmBooking()">Confirm booking</button>
       </div>
     </div>
   </div>
@@ -110,19 +110,19 @@
   function getCellSeat(i) {
       var seatNum = seats[i].number;
       var row = seats[i].row;
-      var seatStr = "<td id =\"seat" + i + "\" class=\"alert alert-secondary\"><input type=\"radio\" value=\"" + seats[i].id + "\" disabled> Ряд "
+      var seatStr = "<td id =\"seat" + i + "\" class=\"alert alert-secondary\"><input id =\"input" + i + "\" type=\"radio\" value=\"" + seats[i].id + "\" disabled> Ряд "
           + row + ", Место " + seatNum + "</td>";
-      debugger
       if (seats[i].state == "BOOKED") {
-          seatStr = "<td id =\"seat" + i + "\" class=\"alert alert-danger\"><input type=\"radio\" value=\"" + seats[i].id + "\" disabled> Ряд "
+          seatStr = "<td id =\"seat" + i + "\" class=\"alert alert-danger\"><input id =\"input" + i + "\" type=\"radio\" value=\"" + seats[i].id + "\" disabled> Ряд "
               + row + ", Место " + seatNum + "</td>";
       }
       if (seats[i].state == "PENDING") {
-          seatStr = "<td id =\"seat" + i + "\" class=\"alert alert-danger\"><input type=\"radio\" value=\"" + seats[i].id + "\" disabled> Ряд "
+          debugger
+          seatStr = "<td id =\"seat" + i + "\" class=\"alert alert-warning\"><input id =\"input" + i + "\" type=\"radio\" value=\"" + seats[i].id + "\" disabled> Ряд "
               + row + ", Место " + seatNum + "</td>";
       }
       if (seats[i].state == "FREE") {
-          seatStr = "<td id =\"seat" + i + "\" class=\"alert alert-light\"><input type=\"radio\" name=\"place\" value=\"" + seats[i].id + "\" onclick='book(" + i + ")'> Ряд "
+          seatStr = "<td id =\"seat" + i + "\" class=\"alert alert-light\"><input id =\"input" + i + "\" type=\"radio\" name=\"place\" value=\"" + seats[i].id + "\" onclick='startBooking(" + i + ")'> Ряд "
               + row + ", Место " + seatNum + "</td>";
       }
       return seatStr;
@@ -134,7 +134,7 @@
       url: "/hall",
       type: 'GET',
       data: {
-        sessionID: sessionID,
+        sessionId: sessionId,
       },
       cache: false,
       success: function (data) {
@@ -157,7 +157,7 @@
         result += "</tr>"
         var tableBody = document.getElementById("tbody");
         tableBody.innerHTML = result;
-
+        markChecked();
       },
       error: function (jqXHR, textStatus, errorThrown) {
         console.log("Error... " + textStatus + "        " + errorThrown);
@@ -165,33 +165,82 @@
     });
   }
 
-  function book(id) {
+  function markChecked() {
+      debugger
+      if (selectedSeatIndex !== "") {
+          selectedSeat = seats[selectedSeatIndex];
+          if (selectedSeat.state = "PENDING") {
+              var selectedSeatEl = document.getElementById("selected");
+              var cell = document.getElementById("seat" + selectedSeatIndex);
+              $(cell).removeClass("alert-light").removeClass("alert-warning").addClass("alert-success");
+              var input = document.getElementById("input" + selectedSeatIndex);
+              $(input).prop("checked", true);
+              selectedSeatEl.innerHTML = "Выбрано. Ряд: " + selectedSeat.row + " место: " + selectedSeat.number;
+          }
+      }
+  }
+
+  function startBooking(id) {
     $(document.getElementById("selected")).removeClass("alert-light").addClass("alert-primary");
     if (selectedSeatIndex !== "") {
       var cellPrev = document.getElementById("seat" + selectedSeatIndex);
       $(cellPrev).removeClass("alert-success").addClass("alert-light");
     }
     selectedSeatIndex = id;
-    selectedSeat = seats[id];
-    var selectedSeatEl = document.getElementById("selected");
-    var cell = document.getElementById("seat" + selectedSeatIndex);
-    $(cell).removeClass("alert-light").addClass("alert-success");
-    selectedSeatEl.innerHTML = "Выбрано. Ряд: " + selectedSeat.row + " место: " + selectedSeat.number;
     seconds = 300;
     countdownTimer = setInterval('secondPassed()', 1000);
     var seat = seats[selectedSeatIndex];
-    seat.sessionID = sessionID;
-    $.ajax({
-      url: "/book",
-      type: 'POST',
-      cache: false,
-      datatype: 'json',
-      contentType: 'application/json;charset=UTF-8',
-      data: JSON.stringify(seats[selectedSeatIndex]),
-      success: function (data) {
+    seat.sessionId = sessionId;
+      $.ajax({
+          url: "/book",
+          type: 'POST',
+          cache: false,
+          datatype: 'json',
+          contentType: 'application/json;charset=UTF-8',
+          data: JSON.stringify(seats[selectedSeatIndex]),
+          success: function (data) {
+              markChecked();
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
+              selectedSeatIndex = "";
+              console.log("Error... " + textStatus + "        " + errorThrown);
+          },
+      })
+  }
 
-      }
-    })
+  function addBookingInfo() {
+      var selectedSeat = document.getElementById("selectedSeat");
+
+      selectedSeat.innerHTML =
+          "Вы выбрали ряд " + seats[selectedSeatIndex].row +
+          " место " + seats[selectedSeatIndex].number +
+          ", Сумма : " + seats[selectedSeatIndex].price + " рублей.";
+  }
+
+  function confirmBooking() {
+      var seat = seats[selectedSeatIndex];
+      seat.sessionId = sessionId;
+      var account = new Object();
+      account.name = $('#username').val();
+      account.phone = $('#phone').val();
+      seat.account = account;
+
+      debugger
+
+      $.ajax({
+          url: "/confirm",
+          type: 'POST',
+          cache: false,
+          datatype: 'json',
+          contentType: 'application/json;charset=UTF-8',
+          data: JSON.stringify(seat),
+          success: function (data) {
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
+              selectedSeatIndex = "";
+              console.log("Error... " + textStatus + "        " + errorThrown);
+          },
+      })
   }
 
   var seconds = 300; //**change 120 for any number you want, it's the seconds **//
@@ -214,7 +263,7 @@
 
   // var countdownTimer = setInterval('secondPassed()', 1000);
 
-  var sessionID = $.cookie("sessionId");
+  var sessionId = $.cookie("sessionId");
 
 </script>
 </html>
