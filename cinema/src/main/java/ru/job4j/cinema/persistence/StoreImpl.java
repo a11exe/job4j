@@ -41,7 +41,7 @@ public class StoreImpl implements Store {
           "UPDATE HALLS SET account_id = ? " +
           "WHERE row = ? AND seat_number = ? " +
           "AND ((session_id = ? OR session_id = ?) OR booked_until <= ?) " +
-          "AND account_id = ?";    n
+          "AND account_id = ?";
   private static final String SQL_FIND_ACCOUNT =
           "SELECT id, name, phone " +
                   "FROM ACCOUNTS WHERE name = ? AND phone = ?";
