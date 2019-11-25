@@ -31,12 +31,12 @@ public class CinemaServiceImpl implements CinemaService {
   }
 
   @Override
-  public void bookSeat(Seat seat, String sessionId) {
-    logic.bookSeat(seat, sessionId);
+  public void bookSeat(Seat seat) {
+    logic.bookSeat(seat);
   }
 
   @Override
-  public void confirmBooking(Seat seat, String sessionId) {
-    logic.confirmBooking(seat, sessionId);
+  public void confirmBooking(Seat seat) {
+    logic.confirmBooking(seat);
   }
 }

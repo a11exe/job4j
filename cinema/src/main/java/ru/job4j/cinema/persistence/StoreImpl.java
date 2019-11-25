@@ -41,7 +41,12 @@ public class StoreImpl implements Store {
           "UPDATE HALLS SET account_id = ? " +
           "WHERE row = ? AND seat_number = ? " +
           "AND ((session_id = ? OR session_id = ?) OR booked_until <= ?) " +
-          "AND account_id = ?";
+          "AND account_id = ?";    n
+  private static final String SQL_FIND_ACCOUNT =
+          "SELECT id, name, phone " +
+                  "FROM ACCOUNTS WHERE name = ? AND phone = ?";
+  private static final String SQL_INSERT_ACCOUNT =
+          "INSERT INTO ACCOUNTS (name, phone) VALUES (?, ?)";
 
   private StoreImpl() {
     Properties properties = new Properties();
@@ -109,7 +114,7 @@ public class StoreImpl implements Store {
   }
 
   @Override
-  public boolean bookSeat(Seat seat, String sessionId) {
+  public boolean bookSeat(Seat seat) {
 
     boolean result = false;
     int delayMinutes = 5;
@@ -125,14 +130,14 @@ public class StoreImpl implements Store {
 
       cancelBookSt.setString(1, "");
       cancelBookSt.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
-      cancelBookSt.setString(3, sessionId);
+      cancelBookSt.setString(3, seat.getSessionId());
       cancelBookSt.executeUpdate();
 
-      bookSt.setString(1, sessionId);
+      bookSt.setString(1, seat.getSessionId());
       bookSt.setTimestamp(2, book_until);
       bookSt.setInt(3, seat.getRow());
       bookSt.setInt(4, seat.getNumber());
-      bookSt.setString(5, sessionId);
+      bookSt.setString(5, seat.getSessionId());
       bookSt.setString(6, "");
       bookSt.setTimestamp(7, new Timestamp(System.currentTimeMillis()));
       bookSt.setInt(8, 0);
@@ -149,7 +154,7 @@ public class StoreImpl implements Store {
   }
 
   @Override
-  public boolean confirmBooking(Seat seat, String sessionId) {
+  public boolean confirmBooking(Seat seat) {
 
     boolean result = false;
 
@@ -159,7 +164,7 @@ public class StoreImpl implements Store {
       st.setInt(1, seat.getAccount().getId());
       st.setInt(2, seat.getRow());
       st.setInt(3, seat.getNumber());
-      st.setString(4, sessionId);
+      st.setString(4, seat.getSessionId());
       st.setString(5, "");
       st.setTimestamp(6, new Timestamp(System.currentTimeMillis()));
       st.setInt(7, 0);

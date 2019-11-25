@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
@@ -41,6 +42,7 @@ public class ConfirmBookJsonServlet extends HttpServlet {
     if (cookie != null) {
       sessionId = cookie.getValue();
     }
+    seat.setSessionId(sessionId);
 
     service.confirmBooking(seat, sessionId);
   }

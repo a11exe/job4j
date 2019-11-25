@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 import javax.servlet.ServletException;
@@ -40,6 +41,7 @@ public class BookJsonServlet extends HttpServlet {
     if (cookie != null) {
       sessionId = cookie.getValue();
     }
+    seat.setSessionId(sessionId);
 
     service.bookSeat(seat, sessionId);
   }

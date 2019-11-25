@@ -8,7 +8,7 @@
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-  <title>Бронирование мест на сеанс</title>
+  <title>Movie tickets online booking</title>
 </head>
 <body>
 <!-- Optional JavaScript -->
@@ -24,16 +24,15 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
-<script src="/js/jquery.cookie.js"></script>
 
 <div class="container">
   <div class="row pt-3">
     <div>
-    <h4>Бронирование мест на сеанс</h4>
+    <h4>Tickets online booking</h4>
     </div>
     <br>
     <div class="container">
-    <div id="selected" class="alert alert-light" role="alert">Выберите место</div>
+    <div id="selected" class="alert alert-light" role="alert">Book a seat</div>
       <div class="text-danger">
         <div id="bookTime"></div>
       </div>
@@ -41,7 +40,7 @@
     <table class="table table-bordered">
       <thead>
       <tr>
-        <th style="width: 120px;">Ряд / Место</th>
+        <th style="width: 120px;">Row / Seat Number</th>
         <th>1</th>
         <th>2</th>
         <th>3</th>
@@ -133,9 +132,6 @@
     $.ajax({
       url: "/hall",
       type: 'GET',
-      data: {
-        sessionId: sessionId,
-      },
       cache: false,
       success: function (data) {
         var result = "";
@@ -190,7 +186,6 @@
     seconds = 300;
     countdownTimer = setInterval('secondPassed()', 1000);
     var seat = seats[selectedSeatIndex];
-    seat.sessionId = sessionId;
       $.ajax({
           url: "/book",
           type: 'POST',
@@ -219,7 +214,6 @@
 
   function confirmBooking() {
       var seat = seats[selectedSeatIndex];
-      seat.sessionId = sessionId;
       var account = new Object();
       account.name = $('#username').val();
       account.phone = $('#phone').val();
@@ -250,20 +244,16 @@
     if (remainingSeconds < 10) {
       remainingSeconds = "0" + remainingSeconds;
     }
-    document.getElementById('bookTime').innerHTML = "Бронь будет снята через <span id=\"countdown\" class=\"timer\"></span>";
+    document.getElementById('bookTime').innerHTML = "Booking will be canceled after <span id=\"countdown\" class=\"timer\"></span>";
     document.getElementById('countdown').innerHTML = minutes + ":" + remainingSeconds;
     if (seconds == 0) {
       clearInterval(countdownTimer);
-      document.getElementById('countdown').innerHTML = "Бронь снята";
+      document.getElementById('countdown').innerHTML = "Booking canceled";
     } else {
       seconds--;
     }
 
   }
-
-  // var countdownTimer = setInterval('secondPassed()', 1000);
-
-  var sessionId = $.cookie("sessionId");
 
 </script>
 </html>

@@ -13,8 +13,8 @@ public interface CinemaService {
 
   Hall getHall(String sessionId);
 
-  void bookSeat(Seat seat, String sessionId);
+  void bookSeat(Seat seat);
 
-  void confirmBooking(Seat seat, String sessionId);
+  void confirmBooking(Seat seat);
 
 }

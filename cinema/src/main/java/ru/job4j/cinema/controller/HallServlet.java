@@ -20,12 +20,6 @@ public class HallServlet extends HttpServlet {
   protected void doGet(HttpServletRequest req, HttpServletResponse resp)
       throws ServletException, IOException {
 
-    boolean newUser = !Arrays.stream(req.getCookies()).anyMatch(cookie -> cookie.getName().equals("sessioID"));
-    if (newUser) {
-      String sessionId = "" + Math.floor(Math.random() * 26) + LocalDateTime.now();
-      Cookie ck = new Cookie("sessionId", sessionId);
-      resp.addCookie(ck);
-    }
     req.getRequestDispatcher("WEB-INF/views/index.jsp").forward(req, resp);
   }
 }
