@@ -44,6 +44,6 @@ public class ConfirmBookJsonServlet extends HttpServlet {
     }
     seat.setSessionId(sessionId);
 
-    service.confirmBooking(seat, sessionId);
+    service.confirmBooking(seat);
   }
 }

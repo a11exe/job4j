@@ -4,7 +4,9 @@ import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.sql.Timestamp;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -32,21 +34,21 @@ public class StoreImpl implements Store {
   private static final String SQL_BOOKING =
           "UPDATE HALLS SET session_id = ?, booked_until = ? " +
           "WHERE row = ? AND seat_number = ? " +
-          "AND ((session_id = ? OR session_id = ?) OR (booked_until <= ? OR booked_until is NULL)) " +
-          "AND (account_id = ? OR account_id is NULL)";
+          "AND ((session_id = ? OR session_id is NULL) OR (booked_until <= ? OR booked_until is NULL)) " +
+          "AND account_id is NULL";
   private static final String SQL_CANCEL_BOOKING =
           "UPDATE HALLS SET session_id = ?, booked_until = ? " +
           "WHERE session_id = ? AND account_id is NULL";
   private static final String SQL_CONFIRM_BOOKING =
           "UPDATE HALLS SET account_id = ? " +
           "WHERE row = ? AND seat_number = ? " +
-          "AND ((session_id = ? OR session_id = ?) OR booked_until <= ?) " +
-          "AND account_id = ?";
+          "AND ((session_id = ? OR session_id is NULL) OR booked_until <= ?) " +
+          "AND account_id is NULL";
   private static final String SQL_FIND_ACCOUNT =
-          "SELECT id, name, phone " +
-                  "FROM ACCOUNTS WHERE name = ? AND phone = ?";
+          "SELECT id, fio, phone " +
+                  "FROM ACCOUNTS WHERE fio = ? AND phone = ?";
   private static final String SQL_INSERT_ACCOUNT =
-          "INSERT INTO ACCOUNTS (name, phone) VALUES (?, ?)";
+          "INSERT INTO ACCOUNTS (fio, phone) VALUES (?, ?)";
 
   private StoreImpl() {
     Properties properties = new Properties();
@@ -128,7 +130,7 @@ public class StoreImpl implements Store {
 
       connection.setAutoCommit(false);
 
-      cancelBookSt.setString(1, "");
+      cancelBookSt.setNull(1, Types.NULL);
       cancelBookSt.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
       cancelBookSt.setString(3, seat.getSessionId());
       cancelBookSt.executeUpdate();
@@ -138,9 +140,7 @@ public class StoreImpl implements Store {
       bookSt.setInt(3, seat.getRow());
       bookSt.setInt(4, seat.getNumber());
       bookSt.setString(5, seat.getSessionId());
-      bookSt.setString(6, "");
-      bookSt.setTimestamp(7, new Timestamp(System.currentTimeMillis()));
-      bookSt.setInt(8, 0);
+      bookSt.setTimestamp(6, new Timestamp(System.currentTimeMillis()));
 
       result = (bookSt.executeUpdate() > 0);
 
@@ -159,17 +159,45 @@ public class StoreImpl implements Store {
     boolean result = false;
 
     try (Connection connection = SOURCE.getConnection();
-         PreparedStatement st = connection.prepareStatement(SQL_CONFIRM_BOOKING)
+         PreparedStatement findAccSt = connection.prepareStatement(SQL_FIND_ACCOUNT);
+         PreparedStatement createAccSt =
+             connection.prepareStatement(SQL_INSERT_ACCOUNT, Statement.RETURN_GENERATED_KEYS);
+         PreparedStatement confirmSt = connection.prepareStatement(SQL_CONFIRM_BOOKING)
     ) {
-      st.setInt(1, seat.getAccount().getId());
-      st.setInt(2, seat.getRow());
-      st.setInt(3, seat.getNumber());
-      st.setString(4, seat.getSessionId());
-      st.setString(5, "");
-      st.setTimestamp(6, new Timestamp(System.currentTimeMillis()));
-      st.setInt(7, 0);
 
-      result = (st.executeUpdate() > 0);
+      connection.setAutoCommit(false);
+
+      Integer accountId = null;
+
+      findAccSt.setString(1, seat.getAccount().getName());
+      findAccSt.setString(2, seat.getAccount().getPhone());
+
+      ResultSet rs = findAccSt.executeQuery();
+      while (rs.next()) {
+        accountId = rs.getInt("id");
+      }
+      if (accountId == null) {
+        createAccSt.setString(1, seat.getAccount().getName());
+        createAccSt.setString(2, seat.getAccount().getPhone());
+        createAccSt.executeUpdate();
+        rs = createAccSt.getGeneratedKeys();
+
+        if (rs.next()) {
+          accountId = rs.getInt(1);
+        }
+      }
+
+      seat.getAccount().setId(accountId);
+
+      confirmSt.setInt(1, seat.getAccount().getId());
+      confirmSt.setInt(2, seat.getRow());
+      confirmSt.setInt(3, seat.getNumber());
+      confirmSt.setString(4, seat.getSessionId());
+      confirmSt.setTimestamp(5, new Timestamp(System.currentTimeMillis()));
+
+      result = (confirmSt.executeUpdate() > 0);
+
+      connection.commit();
 
     } catch (Exception e) {
       e.printStackTrace();

@@ -9,7 +9,7 @@
     id="2019-11-21--02-added-halls"
     objectQuotingStrategy="LEGACY">
     <createTable tableName="HALLS">
-      <column name="ID" type="INT" />
+      <column name="ID" type="INT" autoIncrement="true" />
       <column name="ROW" type="INT" />
       <column name="SEAT_NUMBER" type="INT" />
       <column name="PRICE" type="DECIMAL(10, 2)"/>

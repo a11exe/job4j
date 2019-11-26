@@ -31,10 +31,16 @@ public class SessionFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
-        boolean newUser = !Arrays.stream(request.getCookies()).anyMatch(cookie -> cookie.getName().equals("sessioID"));
+        boolean newUser = true;
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            newUser = Arrays.stream(request.getCookies())
+                .noneMatch(cookie -> cookie.getName().equals("sessionId"));
+        }
         if (newUser) {
             String sessionId = "" + Math.floor(Math.random() * 26) + LocalDateTime.now();
             Cookie ck = new Cookie("sessionId", sessionId);
+            ck.setMaxAge(60*60*24);
             response.addCookie(ck);
         }
         filterChain.doFilter(servletRequest, servletResponse);

@@ -9,9 +9,9 @@
     id="2019-11-21--01-added-accounts"
     objectQuotingStrategy="LEGACY">
     <createTable tableName="ACCOUNTS">
-      <column name="ID" type="INT" />
+      <column name="ID" type="INT" autoIncrement="true"/>
       <column name="FIO" type="VARCHAR(255)" />
-      <column name="PHONE" type="VARCHAR(10)" />
+      <column name="PHONE" type="VARCHAR(25)" />
     </createTable>
     <addNotNullConstraint columnDataType="INT" columnName="ID" tableName="ACCOUNTS" />
     <addPrimaryKey tableName="ACCOUNTS" columnNames="ID"/>

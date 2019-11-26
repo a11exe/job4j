@@ -43,6 +43,6 @@ public class BookJsonServlet extends HttpServlet {
     }
     seat.setSessionId(sessionId);
 
-    service.bookSeat(seat, sessionId);
+    service.bookSeat(seat);
   }
 }
