@@ -1003,7 +1003,7 @@ public String loadPage(@PathVariable(value = "id") Long id) {
 
 ## 59 JPA
 
-
+![JPA](https://github.com/a11exe/job4j/blob/master/interview_questions/jpa.jpg)
 
 [к оглавлению](#Вопросы-для-собеседования-минимум)
 
