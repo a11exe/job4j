@@ -63,6 +63,26 @@
 + [61. Способы аутентификации пользователя](#61-Способы-аутентификации-пользователя)
 + [62. Паттерны. Написать реализацию паттерна Singleton. Abstract Factory vs factory method.](#62-Паттерны-Написать-реализацию-паттерна-Singleton-Abstract-Factory-vs-factory-method)
 + [63. How to define immutable object](#63-How-to-define-immutable-object)
++ [Algo 1: Binary search recursion](https://dev.to/javinpaul/20-basic-algorithms-problems-from-coding-interviews-4o76)
++ [Algo 2: Binary search without recursion]
++ [Algo 3: Buble sort]
++ [Algo 4: Level Order Search in a Binary Tree]
++ [Algo 5: Difference between a stable and unstable sorting algorithm]
++ [Algo 6: What is Depth First Search Algorithm for a binary tree]
++ [Algo 7: What is Depth First Search Algorithm for a binary tree]
++ [Algo 8: How is an iterative quicksort algorithm implemented]
++ [Algo 9: How do you implement a counting sort algorithm]
++ [Algo 10: How do you swap two numbers without using the third variable]
++ [Algo 11: How is a radix sort algorithm implemented]
++ [Algo 12: How do you implement an insertion sort algorithm]
++ [Algo 13: Write Algorithm to check if two rectangles overlap with each other]
++ [Algo 14: How is a merge sort algorithm implemented]
++ [Algo 15: How do you implement a bucket sort algorithm]
++ [Algo 16: Write Algorithms to Check if Two String are Anagram]
++ [Algo 17: Implement the QuickSort Algorithm in your Favorite Programing language]
++ [Algo 18: Difference between Comparison and Non-Comparison Sorting Algorithms]
++ [Algo 19: How to check if two String is rotations of each other]
++ [Algo 20: Implement Sieve of Eratosthenes Algorithms for Prime Number]
 
 ## 1 Что такое java характеристики языка
 
