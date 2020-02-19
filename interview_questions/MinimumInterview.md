@@ -64,10 +64,10 @@
 + [62. Паттерны. Написать реализацию паттерна Singleton. Abstract Factory vs factory method.](#62-Паттерны-Написать-реализацию-паттерна-Singleton-Abstract-Factory-vs-factory-method)
 + [63. How to define immutable object](#63-How-to-define-immutable-object)
 + [64. Spring DispatcherServlet how it works](#64-Spring-DispatcherServlet-how-it-works)
-+ [65. Какие существуют два вида методов для работы со стримами](#64-Какие-существуют-два-вида-методов-для-работы-со-стримами)
-+ [66. Чем отличается DI от IoC](#Чем-отличается-DI-от-IoC)
-+ [67. Что такое бин Spring](#Что-такое-бин-Spring)
-+ [68. Каков жизненный цикл бина Spring](#Каков-жизненный-цикл-бина-Spring)
++ [65. Какие существуют два вида методов для работы со стримами](#65-Какие-существуют-два-вида-методов-для-работы-со-стримами)
++ [66. Чем отличается DI от IoC](#66-Чем-отличается-DI-от-IoC)
++ [67. Что такое бин Spring](#67-Что-такое-бин-Spring)
++ [68. Каков жизненный цикл бина Spring](#68-Каков-жизненный-цикл-бина-Spring)
 + [Algo 1: Binary search recursion](https://dev.to/javinpaul/20-basic-algorithms-problems-from-coding-interviews-4o76)
 + [Algo 2: Binary search without recursion]
 + [Algo 3: Buble sort]
