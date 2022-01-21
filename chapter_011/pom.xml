@@ -15,7 +15,7 @@
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <com.h2database.h2.version>1.4.187</com.h2database.h2.version>
+        <com.h2database.h2.version>2.1.210</com.h2database.h2.version>
         <junit.version>4.12</junit.version>
         <powermock.version>1.6.1</powermock.version>
         <jackson.core>2.9.8</jackson.core>
