@@ -1339,3 +1339,62 @@ WebApplicationContext is an extension of a plain ApplicationContext. it is web a
 ## 70 Паттерны микросервисов
 ### Api Gateway
 Распределение внешних запросов по микросервисам
+### Service Discovery
+Определение и регистрация новых инстансов
+### Межсервисная коммуникация
+
+### Database per service
+Keep each microservice’s persistent data private to that service and accessible only via its API. A service’s transactions only involve its database.
+
+There are a few different ways to keep a service’s persistent data private. You do not need to provision a database server for each service. For example, if you are using a relational database then the options are:
++ Private-tables-per-service – each service owns a set of tables that must only be accessed by that service
++ Schema-per-service – each service has a database schema that’s private to that service
++ Database-server-per-service – each service has it’s own database server.
+
+There are various patterns/solutions for implementing transactions and queries that span services:
+
++ Implementing transactions that span services - use the Saga pattern.
++ Implementing queries that span services:
+++ **API Composition** - the application performs the join rather than the database. For example, a service (or the API gateway) could retrieve a customer and their orders by first retrieving the customer from the customer service and then querying the order service to return the customer’s most recent orders.
+++ **Command Query Responsibility Segregation (CQRS)** - maintain one or more materialized views that contain data from multiple services. The views are kept by services that subscribe to events that each services publishes when it updates its data. For example, the online store could implement a query that finds customers in a particular region and their recent orders by maintaining a view that joins customers and orders. The view is updated by a service that subscribes to customer and order events.
+
+### API Composition
+Implement a query by defining an API Composer, which invoking the services that own the data and performs an in-memory join of the results.
+Drawbacks: Some queries would result in inefficient, in-memory joins of large datasets.
+
+### CQRS - Command and Query Responsibility Segregation
+CQRS – подход проектирования программного обеспечения, при котором код, изменяющий состояние, отделяется от кода, просто читающего это состояние.
+
+Основная идея CQS в том, что в объекте методы могут быть двух типов:
++ Queries: Методы возвращают результат, не изменяя состояние объекта. Другими словами, у Query не никаких побочных эффектов.
++ Commands: Методы изменяют состояние объекта, не возвращая значение.
+
+You have applied the Microservices architecture pattern and the Database per service pattern. As a result, it is no longer straightforward to implement queries that join data from multiple services. Also, if you have applied the Event sourcing pattern then the data is no longer easily queried.
+
+Solution: Define a view database, which is a read-only replica that is designed to support that query. The application keeps the replica up to data by subscribing to Domain events published by the service that own the data.
+
+### Event sourcing
+The command must atomically update the database and send messages in order to avoid data inconsistencies and bugs. However, it is not viable to use a traditional distributed transaction (2PC) that spans the database and the message broker The database and/or the message broker might not support 2PC. And even if they do, it’s often undesirable to couple the service to both the database and the message broker.
+
+Problem: How to atomically update the database and send messages to a message broker?
+
+Solution: A good solution to this problem is to use event sourcing. Event sourcing persists the state of a business entity such an Order or a Customer as a sequence of state-changing events. Whenever the state of a business entity changes, a new event is appended to the list of events. Since saving an event is a single operation, it is inherently atomic. The application reconstructs an entity’s current state by replaying the events.
+
+### Retry pattern
+Determine the number of retry attempts and interval between it. Ensure that you design each step as an idempotent operation.
+
+### Timeout Pattern
+The Timeout pattern involves setting a maximum time for an operation or request to complete. If the operation exceeds this time limit, it is terminated, and the system can take appropriate action, like retrying the request, logging an error, or notifying the user.
++ Prevent System Freezes: Avoids the application getting stuck waiting for a response.
++ Improve User Experience: Ensures users aren’t waiting indefinitely for an action to complete.
++ Enhance System Reliability: Protects the system from overloads caused by slow or unresponsive external services.
+
+### Circuit Breaker
+Problem: How to prevent a network or service failure from cascading to other services?
+
+Solution: A service client should invoke a remote service via a proxy that functions in a similar fashion to an electrical circuit breaker. When the number of consecutive failures crosses a threshold, the circuit breaker trips, and for the duration of a timeout period all attempts to invoke the remote service will fail immediately. After the timeout expires the circuit breaker allows a limited number of test requests to pass through. If those requests succeed the circuit breaker resumes normal operation. Otherwise, if there is a failure the timeout period begins again.
+
+The CircuitBreaker is implemented via a finite state machine with three normal states: CLOSED, OPEN and HALF_OPEN and two special states DISABLED and FORCED_OPEN.
+
+## 71 Kubernetes
+Механизм для оркестрации контейнеров
