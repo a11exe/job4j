@@ -1396,5 +1396,9 @@ Solution: A service client should invoke a remote service via a proxy that funct
 
 The CircuitBreaker is implemented via a finite state machine with three normal states: CLOSED, OPEN and HALF_OPEN and two special states DISABLED and FORCED_OPEN.
 
+### Bulkhead Pattern
+This pattern is used to prevent the cascading failure of a system by partitioning it into isolated parts or “bulkheads.” The bulkheads act as a barrier between different parts of the system, limiting the damage that can be caused by any one component.
+It does this by partitioning system resources, such as threads or connections, into separate pools that can be allocated to specific components. This prevents a single component from monopolizing resources and causing a system-wide failure.
+
 ## 71 Kubernetes
 Механизм для оркестрации контейнеров
