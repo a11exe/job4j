@@ -575,7 +575,7 @@ public class Singleton {
 }
 ```
 LAZY
-```
+```java
 public class Singleton {
         private static volatile Singleton instance;
 	
