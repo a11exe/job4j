@@ -514,6 +514,13 @@ public class SAXExample {
 
 Аннотации используются для анализа кода, компиляции или выполнения. 
 Аннотированы могут быть пакеты, классы, методы, переменные и параметры.
+We use the @Retention annotation to say where in our program’s lifecycle our annotation applies.
+
+To do this, we need to configure @Retention with one of three retention policies:
+
++ RetentionPolicy.SOURCE – visible by neither the compiler nor the runtime
++ RetentionPolicy.CLASS – visible by the compiler
++ RetentionPolicy.RUNTIME – visible by the compiler and the runtime
 
 Для этого вам нужно создать новый тип, который использует Java тип @interface, 
 который будет содержать элементы, которые в свою очередь определяют детали метаданных.
