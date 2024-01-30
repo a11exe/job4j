@@ -428,12 +428,29 @@ StringBuilder is faster than StringBuffer because it's not synchronized.
 
 + *DOM* - обход XML документа в оба направлениях, грузит весь документ в память подходит для небольших файлов.
 Cчитывает сразу весь XML и сохраняет его, создавая иерархию в виде дерева, 
-по которой мы можем спокойно двигаться и получать доступ к нужным нам элементам.
+по которой мы можем спокойно двигаться и получать доступ к нужным нам элементам. По сути, самый частый тип данных в DOM – это Node (узел), который может быть всем. У каждого Node есть разные полезные методы. Например `getChildNodes`, `getParentNode`.
 [DOM](https://javarush.ru/groups/posts/656-konkurs-osnovih-xml-dlja-java-programmista---chastjh-31-iz-3---dom)
 + *Stax* - событийный, грузит документ частями, подходит для мелких документов. работает по пул модели. 
 Позволяет обрабатывать только те события которые нам необходимы. позволяет писать в XML файл.
+
 + *Sax* - событийный, грузит документ частями, позволяет работать с большими документам, 
 работает по пуш модели необходимо обрабатывать все события.
+Cамые частые и полезные события: startElement, endElement, characters
+++ Преимущества: высокая производительность благодаря "прямому" способу считывания данных, низкие затраты памяти.
+++ Недостатки: ограниченная функциональность в нелинейных задачах.
+```
+public class SAXExample {
+    public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException {
+        SAXParserFactory factory = SAXParserFactory.newInstance();
+        SAXParser parser = factory.newSAXParser();
+    }
+
+    private static class XMLHandler extends DefaultHandler {
+        @Override
+        public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+            // Тут будет логика реакции на начало элемента
+        }
+```
 [Sax](https://javarush.ru/groups/posts/650-konkurs-osnovih-xml-dlja-java-programmista---chastjh-31-iz-3---sax)
 
 [к оглавлению](#Вопросы-для-собеседования-минимум)
