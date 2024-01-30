@@ -432,12 +432,24 @@ Cчитывает сразу весь XML и сохраняет его, созд
 [DOM](https://javarush.ru/groups/posts/656-konkurs-osnovih-xml-dlja-java-programmista---chastjh-31-iz-3---dom)
 + *Stax* - событийный, грузит документ частями, подходит для мелких документов. работает по пул модели. 
 Позволяет обрабатывать только те события которые нам необходимы. позволяет писать в XML файл.
+```
+try (StaxStreamProcessor processor = new StaxStreamProcessor(Files.newInputStream(Paths.get("payload.xml")))) {
+     XMLStreamReader reader = processor.getReader();
+     while (reader.hasNext()) {       // while not end of XML
+         int event = reader.next();   // read next event
+         if (event == XMLEvent.START_ELEMENT && 
+"City".equals(reader.getLocalName())) {
+             System.out.println(reader.getElementText());
+         }
+     }
+}
+```
 
 + *Sax* - событийный, грузит документ частями, позволяет работать с большими документам, 
 работает по пуш модели необходимо обрабатывать все события.
 Cамые частые и полезные события: startElement, endElement, characters
-+ + Преимущества: высокая производительность благодаря "прямому" способу считывания данных, низкие затраты памяти.
-+ + Недостатки: ограниченная функциональность в нелинейных задачах.
+ + Преимущества: высокая производительность благодаря "прямому" способу считывания данных, низкие затраты памяти.
+ + Недостатки: ограниченная функциональность в нелинейных задачах.
 ```
 public class SAXExample {
     public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException {
