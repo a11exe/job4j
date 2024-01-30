@@ -500,6 +500,7 @@ public class SAXExample {
 
 ## 27 Иерархия исключений Отличия checked от unchecked исключений Назвать некоторые checked и unchecked исключения
 
+![exceptions](./ExceptionsHierarchy.png)
 Все исключения наследуются от Throwable.
 
 + Error (unchecked)- восстановление дальнейшей нормальной работы программы невозможно. 
