@@ -557,9 +557,9 @@ To create an immutable class in java, you have to do following steps.
 [к оглавлению](#Вопросы-для-собеседования-минимум)
 
 ## 30 Назовите паттерны проектирования которые вы использовали
-
-+ *Builder* - StringBulider
-+ *Factory Method* (Фабрика)- Calendar calendar = Calendar.getInstance(); 
+### Creational patterns
++ *Builder* - `java.lang.StringBuilder#append()` Когда конструктор содержить много параметров. Есть в `@Builder` в Lombok.
++ *Factory Method* (Фабрика) - `Calendar calendar = Calendar.getInstance()`  
 (Если мы посмотрим в конструктор, то увидим, что в зависимости от условий создаются разные реализации Calendar)
 Возвращает объекты через абстрактные типы или интерфейсы. Необходим для ликвидирования зависимости кода от создания конкретных объектов.
 + *Abstract Factory* - Абстрактная фабрика предоставляет интерфейс для создания целых семейств объектов без указания конкретных классов. 
@@ -575,10 +575,34 @@ public class Singleton {
 }
 ```
 LAZY
+```
+public class Singleton {
+        private static volatile Singleton instance;
+	
+        public static Singleton getInstance() {
+		Singleton localInstance = instance;
+		if (localInstance == null) {
+			synchronized (Singleton.class) {
+				localInstance = instance;
+				if (localInstance == null) {
+					instance = localInstance = new Singleton();
+				}
+			}
+		}
+		return localInstance;
+	}
+}
+```
+
+### Structural patterns
 + *Decorator (Wrapper)* - декоратор оборачивается вокруг чего-то, что передали на вход. 
-Было побайтовое чтение, раз и добавили оберткой буферизацию, а потом еще что-нибудь
+Было побайтовое чтение, раз и добавили оберткой буферизацию, а потом еще что-нибудь. All subclasses of `java.io.InputStream`, `OutputStream`, `Reader` and `Writer` have a constructor taking an instance of same type.
 + *Adapter* - Он похож на декоратор — на вход декоратор принимает один объект и возвращает обёртку над этим объектом. 
-Отличие в том, что цель у этого не изменение функционала, а адаптация одного интерфейса к другому. 
+Отличие в том, что цель у этого не изменение функционала, а адаптация одного интерфейса к другому. `java.util.Arrays#asList()`
++ **Facade** - methods which internally uses instances of different independent abstract/interface types
++ **Proxy** - methods which returns an implementation of given abstract/interface type which in turn delegates/uses a different implementation of given abstract/interface type `java.lang.reflect.Proxy`
+
+### Behavioral patterns
 
 [к оглавлению](#Вопросы-для-собеседования-минимум)
 
