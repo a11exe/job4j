@@ -603,6 +603,11 @@ public class Singleton {
 + **Proxy** - methods which returns an implementation of given abstract/interface type which in turn delegates/uses a different implementation of given abstract/interface type `java.lang.reflect.Proxy`
 
 ### Behavioral patterns
++ **Chain of responsibility** - methods which (indirectly) invokes the same method in another implementation of same abstract/interface type in a queue
++ **Command** - methods in an abstract/interface type which invokes a method in an implementation of a different abstract/interface type which has been encapsulated by the command implementation during its creation. All implementations of `java.lang.Runnable`
++ **Iterator** - All implementations of `java.util.Iterator`
++ **Strategy** - methods in an abstract/interface type which invokes a method in an implementation of a different abstract/interface type which has been passed-in as method argument into the strategy implementation.
++ **Visitor** - `java.nio.file.FileVisitor` Позволяет добавлять в программу новые операции, не изменяя классы объектов, над которыми эти операции могут выполняться.
 
 [к оглавлению](#Вопросы-для-собеседования-минимум)
 
