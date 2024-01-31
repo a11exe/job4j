@@ -1274,6 +1274,23 @@ Query<Item> query = session.createQuery(cr);
 List<Item> results = query.getResultList();
 ```
 
+*Уровин кеша в Hibernate*
+[Работа с кешем в SpringBoot](https://www.baeldung.com/spring-cache-tutorial)
+
++ First level: Кеширование на уровне сессии (Session). Самый простой вид кеширования (его еще называют кэшем первого уровня) реализован на уровне Hibernate-сессии. Hibernate всегда по умолчанию использует этот кэш и его нельзя отключить. Пример ниже выполниться только один запрос в базу.
+  ```java
+Employee director1 = session.get(Employee.class, 4);
+Employee director2 = session.get(Employee.class, 4);
+
+assertTrue(director1 == director2);
+  ```
++ Second Level: кэш второго уровня привязан к объекту SessionFactory. Кэширование второго уровня по умолчанию отключено.
+
+Методы работы с кешем:
++ `Session.evict()`: to remove the cached/stored entity.
++ `refresh()`: method to refresh the cache.
++ `clear()`: method to remove all the entities from the cache.
+
 *Итоги*
 + Для сохранения сущности следует использовать метод JPA *persist*
 + Для копирования состояния detached-сущности предпочтительным является *merge*
