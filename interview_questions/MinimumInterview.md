@@ -61,7 +61,7 @@
 + [59. JPA](#59-JPA)
 + [60. Hibernate](#60-Hibernate)
 + [61. Способы аутентификации пользователя](#61-Способы-аутентификации-пользователя)
-+ [62. Паттерны. Написать реализацию паттерна Singleton. Abstract Factory vs factory method.](#62-Паттерны-Написать-реализацию-паттерна-Singleton-Abstract-Factory-vs-factory-method)
++ [62. Способы конфигурации бинов.](#62-Способы-конфигурации-бинов)
 + [63. How to define immutable object](#63-How-to-define-immutable-object)
 + [64. Spring DispatcherServlet how it works](#64-Spring-DispatcherServlet-how-it-works)
 + [65. Какие существуют два вида методов для работы со стримами](#65-Какие-существуют-два-вида-методов-для-работы-со-стримами)
