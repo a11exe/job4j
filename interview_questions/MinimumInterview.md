@@ -1278,18 +1278,21 @@ List<Item> results = query.getResultList();
 [Работа с кешем в SpringBoot](https://www.baeldung.com/spring-cache-tutorial)
 
 + First level: Кеширование на уровне сессии (Session). Самый простой вид кеширования (его еще называют кэшем первого уровня) реализован на уровне Hibernate-сессии. Hibernate всегда по умолчанию использует этот кэш и его нельзя отключить. Пример ниже выполниться только один запрос в базу.
-  ```java
+```java
 Employee director1 = session.get(Employee.class, 4);
 Employee director2 = session.get(Employee.class, 4);
 
 assertTrue(director1 == director2);
-  ```
+```
 + Second Level: кэш второго уровня привязан к объекту SessionFactory. Кэширование второго уровня по умолчанию отключено.
 
 Методы работы с кешем:
 + `Session.evict()`: to remove the cached/stored entity.
 + `refresh()`: method to refresh the cache.
 + `clear()`: method to remove all the entities from the cache.
+
+*N+1 Problem*
+The N+1 problem is the situation when, for a single request, for example, fetching Users, we make additional requests for each User to get their information. Although this problem often is connected to lazy loading, it’s not always the case.
 
 *Итоги*
 + Для сохранения сущности следует использовать метод JPA *persist*
