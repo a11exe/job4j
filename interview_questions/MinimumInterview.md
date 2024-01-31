@@ -193,6 +193,22 @@ package -> protected, public
 + double - 8 байт (64 бит). Мин -2^63-1 Макс 2^63
 + boolean - по спецификации не определен в среднем 1 байт
 
+String - не примитив. Внутри char[], c версии java 9 `private final byte[] value;`. Строки immutable. Есть пул строк.
+```java
+String first = "Baeldung"; 
+String second = "Baeldung"; 
+System.out.println(first == second); // True
+
+String third = new String("Baeldung");
+String fourth = new String("Baeldung"); 
+System.out.println(third == fourth); // False
+
+String str3 = (new String("TopJava")).intern();
+String str4 = (new String("TopJava")).intern();
+System.out.println(str3 == str4); // True
+```
+Экземпляр класса String хранится в памяти, именуемой куча (heap), но есть некоторые нюансы. Если строка, созданная при помощи конструктора хранится непосредственно в куче, то строка, созданная как строковый литерал, уже хранится в специальном месте кучи — в так называемом пуле строк (string pool). В нем сохраняются исключительно уникальные значения строковых литералов, а не все строки подряд. Процесс помещения строк в пул называется интернирование (от англ. interning).
+
 [к оглавлению](#Вопросы-для-собеседования-минимум)
 
 ## 8 Последовательность инициализации блоков класса и его родителя
