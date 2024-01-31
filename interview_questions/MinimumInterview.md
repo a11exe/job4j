@@ -1315,8 +1315,19 @@ List<Item> results = query.getResultList();
 
 [к оглавлению](#Вопросы-для-собеседования-минимум)
 
-## 62 Паттерны Написать реализацию паттерна Singleton Abstract Factory vs factory method
-
+## 62 Способы конфигурации бинов
++ С помощью аннотаций `@Component`, `@Service` и т.п. Через конструкторы, сеттеры и `@Autowired`
++ С помощь XML
+  ```xml
+  <bean id="engine" class="ru.javalang.injection.Engine" />
+    <bean class="ru.javalang.injection.CarWithConstructor">
+        <constructor-arg ref="engine" />
+    </bean>
+    <bean class="ru.javalang.injection.CarWithSetter">
+        <property name="engine" ref="engine" />
+    </bean>
+  ```
++ С помощью `@Configuration` и аннотации `@Bean` (например для классов из других пакетов)
 Factory Method is used to create one product only but Abstract Factory is about creating families of related or dependent products.
 
 [к оглавлению](#Вопросы-для-собеседования-минимум)
@@ -1375,8 +1386,8 @@ WebApplicationContext is an extension of a plain ApplicationContext. it is web a
 
 Спринг бины инициализируются при инициализации котейнера. И происходит внедрение зависимостей.
 Для выполнения действии перед инициализацией или удалением:
-+ @PreDestroy
-+ @PostConstruct
++ `@PreDestroy`
++ `@PostConstruct`
 
 [к оглавлению](#Вопросы-для-собеседования-минимум)
 
