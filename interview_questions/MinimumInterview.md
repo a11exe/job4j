@@ -558,23 +558,23 @@ To create an immutable class in java, you have to do following steps.
 
 ## 30 Назовите паттерны проектирования которые вы использовали
 ### Creational patterns
-+ *Builder* - `java.lang.StringBuilder#append()` Когда конструктор содержить много параметров. Есть в `@Builder` в Lombok.
-+ *Factory Method* (Фабрика) - `Calendar calendar = Calendar.getInstance()`  
++ **Builder** - `java.lang.StringBuilder#append()` Когда конструктор содержить много параметров. Есть в `@Builder` в Lombok.
++ **Factory Method** (Фабрика) - `Calendar calendar = Calendar.getInstance()`  
 (Если мы посмотрим в конструктор, то увидим, что в зависимости от условий создаются разные реализации Calendar)
 Возвращает объекты через абстрактные типы или интерфейсы. Необходим для ликвидирования зависимости кода от создания конкретных объектов.
-+ *Abstract Factory* - Абстрактная фабрика предоставляет интерфейс для создания целых семейств объектов без указания конкретных классов. 
++ **Abstract Factory** - Абстрактная фабрика предоставляет интерфейс для создания целых семейств объектов без указания конкретных классов. 
 Объекты каждого семейства должны быть логически связаны между собой. Паттерн можно определить по методам, 
 возвращающим фабрику, которая, в свою очередь, используется для создания конкретных продуктов, возвращая их через абстрактные типы или интерфейсы.
-+ *Singleton* - Изначально, как замена глобальным переменным. Он один и следовательно все обращения к нему несут изменения во всём проекте. 
++ **Singleton** - Изначально, как замена глобальным переменным. Он один и следовательно все обращения к нему несут изменения во всём проекте. 
 В одном месте вы создали подключение к базе и дальше можете уже использовать его в любой части программы, 
 не пересоздавая подключение и не передавая каждый раз его как аргумент функции.
-Not Lazy (потокобезопасная)
+_Not Lazy (потокобезопасная)_
 ```java
 public class Singleton {
 	public static final Singleton INSTANCE = new Singleton();
 }
 ```
-LAZY
+_LAZY_
 ```java
 public class Singleton {
         private static volatile Singleton instance;
@@ -595,9 +595,9 @@ public class Singleton {
 ```
 
 ### Structural patterns
-+ *Decorator (Wrapper)* - декоратор оборачивается вокруг чего-то, что передали на вход. 
++ **Decorator (Wrapper)** - декоратор оборачивается вокруг чего-то, что передали на вход. 
 Было побайтовое чтение, раз и добавили оберткой буферизацию, а потом еще что-нибудь. All subclasses of `java.io.InputStream`, `OutputStream`, `Reader` and `Writer` have a constructor taking an instance of same type.
-+ *Adapter* - Он похож на декоратор — на вход декоратор принимает один объект и возвращает обёртку над этим объектом. 
++ **Adapter** - Он похож на декоратор — на вход декоратор принимает один объект и возвращает обёртку над этим объектом. 
 Отличие в том, что цель у этого не изменение функционала, а адаптация одного интерфейса к другому. `java.util.Arrays#asList()`
 + **Facade** - methods which internally uses instances of different independent abstract/interface types
 + **Proxy** - methods which returns an implementation of given abstract/interface type which in turn delegates/uses a different implementation of given abstract/interface type `java.lang.reflect.Proxy`
