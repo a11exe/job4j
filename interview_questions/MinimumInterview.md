@@ -1214,7 +1214,8 @@ ORM - маппинг объектов на БД.
 + *Detached:* если объект был персистентным, но сейчас не связан с какой-либо сессией, то он находится в отвязанном (detached) состоянии. Такой объект можно сделать персистентным используя методы update(), saveOrUpdate(), lock() или replicate(). Состояния transient или detached так же могут перейти в состояние persistent как новый объект персистентности после вызова метода merge().
 SessionFactory immutable (неизменяемый), то да, он потокобезопасный.
 
-*Session* — это основной интерфейс, который отвечает за связь с базой данных.
+### Session
+Это основной интерфейс, который отвечает за связь с базой данных.
 + является оберткой для jdbc подключения к базе данных
 + является фабрикой для транзакций
 
@@ -1239,18 +1240,18 @@ save() flushes the entity to the database when you make the call. persist() actu
 The save method is an “original” Hibernate method. Its purpose is basically the same as persist. 
 he call of save on a detached instance creates a new persistent instance and assigns it a new identifier, which results in a duplicate record in a database
 
-*Transaction*
+### Transaction
 Вместо вызовов session.openTransaction() и session.commit() используется аннотация @Transactional
 
-*Eager vs Lazy*
+### Eager vs Lazy
 + Eager Loading is a design pattern in which data initialization occurs on the spot. Загружаются все данные по цепочке.
 + Lazy Loading is a design pattern which is used to defer initialization of an object as long as it's possible. Данные подгружаются при обращении.
 
-*Named SQL*
+### Named SQL
 Именованные запросы поддерживают как HQL, так и Native SQL.
-Создать именованный запрос можно с помощью JPA аннотаций @NamedQuery, @NamedNativeQuery
+Создать именованный запрос можно с помощью JPA аннотаций `@NamedQuery`, `@NamedNativeQuery`
 
-*Аннотации*
+### Аннотации
 + *javax.persistence.Entity*: используется для указания класса как entity bean.
 + *javax.persistence.Table*: используется для определения имени таблицы из БД, которая будет отображаться на entity bean.
 + *javax.persistence.Access*: определяет тип доступа, поле или свойство. Поле — является значением по умолчанию и если нужно, чтобы hibernate использовал методы getter/setter, то их необходимо задать для нужного свойства.
@@ -1262,7 +1263,7 @@ he call of save on a detached instance creates a new persistent instance and ass
 + *org.hibernate.annotations.Cascade*: определяет каскадную связь между двумя entity бинами. Используется в связке с org.hibernate.annotations.CascadeType.
 + *javax.persistence.PrimaryKeyJoinColumnм: определяет внешний ключ для свойства. Используется вместе с org.hibernate.annotations.GenericGenerator и org.hibernate.annotations.Parameter.
 
-*Criteria API*
+### Criteria API
 ```java
 Session session = HibernateUtil.getHibernateSession();
 CriteriaBuilder cb = session.getCriteriaBuilder();
@@ -1274,7 +1275,7 @@ Query<Item> query = session.createQuery(cr);
 List<Item> results = query.getResultList();
 ```
 
-*Уровин кеша в Hibernate*
+### Уровин кеша в Hibernate
 [Работа с кешем в SpringBoot](https://www.baeldung.com/spring-cache-tutorial)
 
 + First level: Кеширование на уровне сессии (Session). Самый простой вид кеширования (его еще называют кэшем первого уровня) реализован на уровне Hibernate-сессии. Hibernate всегда по умолчанию использует этот кэш и его нельзя отключить. Пример ниже выполниться только один запрос в базу.
@@ -1291,10 +1292,10 @@ assertTrue(director1 == director2);
 + `refresh()`: method to refresh the cache.
 + `clear()`: method to remove all the entities from the cache.
 
-*N+1 Problem*
+### N+1 Problem
 The N+1 problem is the situation when, for a single request, for example, fetching Users, we make additional requests for each User to get their information. Although this problem often is connected to lazy loading, it’s not always the case.
 
-*Итоги*
+### Итоги
 + Для сохранения сущности следует использовать метод JPA *persist*
 + Для копирования состояния detached-сущности предпочтительным является *merge*
 + Метод update полезен только для задач пакетной обработки.
