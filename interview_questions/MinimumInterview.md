@@ -1349,7 +1349,6 @@ The N+1 problem is the situation when, for a single request, for example, fetchi
     </bean>
   ```
 + С помощью `@Configuration` и аннотации `@Bean` (например для классов из других пакетов)
-Factory Method is used to create one product only but Abstract Factory is about creating families of related or dependent products.
 
 [к оглавлению](#Вопросы-для-собеседования-минимум)
 
