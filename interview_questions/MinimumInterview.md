@@ -1142,7 +1142,7 @@ public String loadPage(@PathVariable(value = "id") Long id) {
 
 ## 59 JPA
 
-Основные аннотации @Entity @Column @Table @Embedable @MappedSupperClass @Id @ManyToMany @ManyToOne @OneToMany
+Основные аннотации `@Entity`, `@Column`, `@Table`, `@Embedable`, `@MappedSupperClass`, `@Id`, `@ManyToMany`, `@ManyToOne`, `@OneToMany`
 *EntityManager* - интерфейс содержащий основные операции над сущностями (persist / refresh / detach/ remove / merge)
 
 ![jpa](https://github.com/a11exe/job4j/blob/master/interview_questions/jpa.jpg)
