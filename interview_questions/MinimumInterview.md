@@ -1364,8 +1364,8 @@ WebApplicationContext is an extension of a plain ApplicationContext. it is web a
 
 ## 65 Какие существуют два вида методов для работы со стримами
 
-+ *Промежуточные*: filter(), skip(), map(), 
-+ *Конечные*: findFirst(), findAny(), collect(), forEach(), count().
++ *Промежуточные*: `filter()`, `skip()`, `map()`, 
++ *Конечные*: `findFirst()`, `findAny()`, `collect()`, `forEach()`, `count()`.
 
 [к оглавлению](#Вопросы-для-собеседования-минимум)
 
