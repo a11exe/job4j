@@ -729,6 +729,72 @@ Integer result = future.get(500, TimeUnit.MILLISECONDS);
 
 boolean canceled = future.cancel(true);
 ```
- 
+### CompletableFuture
+CompletableFuture is an implementation of the Future interface that was released with Java 8. It extends the basic functionality of Future to let us have a lot more control over the results of our asynchronous operations. One of the biggest pieces of added functionality is the option to chain function calls onto the result of the initial task.
+
+```java
+CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> "Hello");
+assertEquals("Hello", future.get());
+
+ExecutorService exec = Executors.newSingleThreadExecutor();
+    ObjectHydrator objectHydrator = new ObjectHydrator();
+    CompletableFuture<TestObject> future = CompletableFuture.supplyAsync(new ObjectSupplier(), exec)
+      .thenApply(objectHydrator::hydrateTestObject);
+TestObject retrievedObject = future.get();
+```
+
+When we need to execute multiple Futures in parallel, we usually want to wait for all of them to execute and then process their combined results.
+
+The CompletableFuture.allOf static method allows to wait for the completion of all of the Futures provided as a var-arg:
+```java
+CompletableFuture<String> future1  
+  = CompletableFuture.supplyAsync(() -> "Hello");
+CompletableFuture<String> future2  
+  = CompletableFuture.supplyAsync(() -> "Beautiful");
+CompletableFuture<String> future3  
+  = CompletableFuture.supplyAsync(() -> "World");
+
+CompletableFuture<Void> combinedFuture 
+  = CompletableFuture.allOf(future1, future2, future3);
+
+// ...
+
+combinedFuture.get();
+
+assertTrue(future1.isDone());
+assertTrue(future2.isDone());
+assertTrue(future3.isDone());
+```
+
+Fortunately, CompletableFuture.join() method and Java 8 Streams API makes it simple
+```java
+String combined = Stream.of(future1, future2, future3)
+  .map(CompletableFuture::join)
+  .collect(Collectors.joining(" "));
+
+assertEquals("Hello Beautiful World", combined);
+```
+
+For error handling in a chain of asynchronous computation steps, we have to adapt the throw/catch idiom in a similar fashion.
+
+Instead of catching an exception in a syntactic block, the CompletableFuture class allows us to handle it in a special handle method. This method receives two parameters: a result of a computation (if it finished successfully) and the exception thrown (if some computation step did not complete normally).
+
+```java
+String name = null;
+
+// ...
+
+CompletableFuture<String> completableFuture  
+  =  CompletableFuture.supplyAsync(() -> {
+      if (name == null) {
+          throw new RuntimeException("Computation error!");
+      }
+      return "Hello, " + name;
+  }).handle((s, t) -> s != null ? s : "Hello, Stranger!");
+
+assertEquals("Hello, Stranger!", completableFuture.get());
+```
+Most methods of the fluent API in the CompletableFuture class have two additional variants with the Async postfix. These methods are usually intended for running a corresponding execution step in another thread.
+
 
 [к оглавлению](#Multithreading)
