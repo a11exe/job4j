@@ -34,6 +34,7 @@
 + [33. Visibility Problem](#33-Visibility-Problem)
 + [34 ABA Problem](#34-ABA-Problem)
 + [35 Future vs CompletableFuture](#35-Future-vs-CompletableFuture)
++ [36 ForkJoinPool](#36-ForkJoinPool)
 
 ## 1 Чем отличается процесс от потока
 
@@ -796,5 +797,9 @@ assertEquals("Hello, Stranger!", completableFuture.get());
 ```
 Most methods of the fluent API in the CompletableFuture class have two additional variants with the Async postfix. These methods are usually intended for running a corresponding execution step in another thread.
 
+
+[к оглавлению](#Multithreading)
+
+## 36 ForkJoinPool
 
 [к оглавлению](#Multithreading)
