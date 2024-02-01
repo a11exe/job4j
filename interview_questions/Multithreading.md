@@ -31,6 +31,7 @@
 + [30. Расскажите про шаблон проектирования Producer Consumer.](#30-Расскажите-про-шаблон-проектирования-Producer-Consumer)
 + [31. ConcurrentMap](#31-ConcurrentMap)
 + [32. Atomic Variables](#32-Atomic-Variables)
++ [33. Visibility Problem](#33-Visibility-Problem)
 
 ## 1 Чем отличается процесс от потока
 
@@ -657,5 +658,29 @@ public ConcurrentHashMap(
 [к оглавлению](#Multithreading)
 
 ## 32 Atomic Variables
+
+Atomic classes ensure that, the increment will be an atomic operation.
+These algorithms exploit low-level atomic machine instructions such as compare-and-swap (CAS), to ensure data integrity.
+
+A typical CAS operation works on three operands:
+
++ The memory location on which to operate (M)
++ The existing expected value (A) of the variable
++ The new value (B) which needs to be set
+
+The CAS operation updates atomically the value in M to B, but only if the existing value in M matches A, otherwise no action is taken.
+When multiple threads attempt to update the same value through CAS, one of them wins and updates the value. However, unlike in the case of locks, no other thread gets suspended; instead, they’re simply informed that they did not manage to update the value. The threads can then proceed to do further work and context switches are completely avoided.
+
+
+[к оглавлению](#Multithreading)
+
+# 33 Visibility Problem
+A visibility problem is one of the issues when working in a multithreaded application. The visibility problem is tightly connected to the Java memory model.
+
+In multithreaded applications, each thread has its cached version of shared resources and updates the values in or from the main memory based on events or a schedule.
+
+The thread cache and main memory values might differ. Therefore, even if one thread updates the values in the main memory, these changes are not instantly visible to other threads. This is called a visibility problem.
+
+The `volatile` keyword helps us to resolve this issue by bypassing caching in a local thread. Thus, volatile variables are visible to all the threads, and all these threads will see the same value. Hence, when one thread updates the value, all the threads will see the new value. 
 
 [к оглавлению](#Multithreading)
