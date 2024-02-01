@@ -671,10 +671,9 @@ A typical CAS operation works on three operands:
 The CAS operation updates atomically the value in M to B, but only if the existing value in M matches A, otherwise no action is taken.
 When multiple threads attempt to update the same value through CAS, one of them wins and updates the value. However, unlike in the case of locks, no other thread gets suspended; instead, they’re simply informed that they did not manage to update the value. The threads can then proceed to do further work and context switches are completely avoided.
 
-
 [к оглавлению](#Multithreading)
 
-# 33 Visibility Problem
+## 33 Visibility Problem
 A visibility problem is one of the issues when working in a multithreaded application. The visibility problem is tightly connected to the Java memory model.
 
 In multithreaded applications, each thread has its cached version of shared resources and updates the values in or from the main memory based on events or a schedule.
@@ -684,3 +683,15 @@ The thread cache and main memory values might differ. Therefore, even if one thr
 The `volatile` keyword helps us to resolve this issue by bypassing caching in a local thread. Thus, volatile variables are visible to all the threads, and all these threads will see the same value. Hence, when one thread updates the value, all the threads will see the new value. 
 
 [к оглавлению](#Multithreading)
+
+## 34 ABA Problem
+Say, for example, that one activity reads some shared memory (A), in preparation for updating it. Then, another activity temporarily modifies that shared memory (B) and then restores it (A). Following that, once the first activity performs Compare and Swap, it will appear as if no change has been made, invalidating the integrity of the check.
+
+While in many scenarios this doesn’t cause a problem, at times, A is not as equal to A as we might think.
+
+We might encounter the ABA problem using reference types with the purpose of reusing them. In this case, at the end of the ABA scenario, we get the matching reference back, so the CAS operation succeeds, however, the reference might point to a different object than it did originally. This can lead to ambiguity.
+
+### Solutions
++ **Immutability**: the usage of immutable objects solves this problem, as we don’t reuse objects across the application. Whenever something changes, a new object is created, so the CAS will fail for sure.
++ **Double Compare and Swap**
+The idea behind the double compare and swap method is to keep track of one more variable, which is the version number, then use that in the comparison as well. In this case, the CAS operation will fail if we have the old version number, which is only possible when another thread modified our variable in the meantime.
