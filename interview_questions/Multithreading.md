@@ -33,6 +33,7 @@
 + [32. Atomic Variables](#32-Atomic-Variables)
 + [33. Visibility Problem](#33-Visibility-Problem)
 + [34 ABA Problem](#34-ABA-Problem)
++ [35 Future vs CompletableFuture](#35-Future-vs-CompletableFuture)
 
 ## 1 Чем отличается процесс от потока
 
@@ -696,3 +697,24 @@ We might encounter the ABA problem using reference types with the purpose of reu
 + **Immutability**: the usage of immutable objects solves this problem, as we don’t reuse objects across the application. Whenever something changes, a new object is created, so the CAS will fail for sure.
 + **Double Compare and Swap**
 The idea behind the double compare and swap method is to keep track of one more variable, which is the version number, then use that in the comparison as well. In this case, the CAS operation will fail if we have the old version number, which is only possible when another thread modified our variable in the meantime.
+
+[к оглавлению](#Multithreading)
+
+## 35 Future vs CompletableFuture
+### Future
+Future is a placeholder for a result that will be produced by an asynchronous process and may not yet be available.
+We can either cancel a task or get the result from a completed task and also check if a task has been canceled or completed.
+```java
+class ObjectCallable implements Callable<TestObject> {
+    @Override
+    TestObject call() {
+        return new TestObject();
+    }
+}
+
+Future<TestObject> future = exec.submit(new ObjectCallable());
+    TestObject retrievedObject = future.get();
+```
+ 
+
+[к оглавлению](#Multithreading)
