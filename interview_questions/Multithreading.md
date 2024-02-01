@@ -29,7 +29,8 @@
 + [28. Что такое ReadWriteLock?](#28-Что-такое-ReadWriteLock)
 + [29. В чём отличие Thread от FutureTask? В чём отличие Thread.interrupt и FutureTask.cancel.](#29-В-чём-отличие-Thread-от-FutureTask-В-чём-отличие-Threadinterrupt-и-FutureTaskcancel)
 + [30. Расскажите про шаблон проектирования Producer Consumer.](#30-Расскажите-про-шаблон-проектирования-Producer-Consumer)
-
++ [31. ConcurrentMap](#31-ConcurrentMap)
++ [32. Atomic Variables](#32-Atomic-Variables)
 
 ## 1 Чем отличается процесс от потока
 
@@ -642,5 +643,19 @@ r.interrupt(); }
 так как они не знают друг о друге, но знают только формат общения. 
 Другое преимущество - возможность поставщиков и потребителей работать на разной скорости: 
 медленный потребитель не будет тормозить быстрого поставщика.
+
+[к оглавлению](#Multithreading)
+
+## 31 ConcurrentMap
+disabling the null key/value support
+
+mainly uses CAS operations during updating. Each bucket can be independently locked by locking the very first node in the bucket. Read operations do not block, and update contentions are minimized. `concurrencyLevel` argument to control the number of estimated threads to use:
+```java
+public ConcurrentHashMap(
+ int initialCapacity, float loadFactor, int concurrencyLevel)
+```
+[к оглавлению](#Multithreading)
+
+## 32 Atomic Variables
 
 [к оглавлению](#Multithreading)
