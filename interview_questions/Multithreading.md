@@ -32,6 +32,7 @@
 + [31. ConcurrentMap](#31-ConcurrentMap)
 + [32. Atomic Variables](#32-Atomic-Variables)
 + [33. Visibility Problem](#33-Visibility-Problem)
++ [34 ABA Problem](#34-ABA-Problem)
 
 ## 1 Чем отличается процесс от потока
 
