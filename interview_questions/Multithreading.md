@@ -714,6 +714,19 @@ class ObjectCallable implements Callable<TestObject> {
 
 Future<TestObject> future = exec.submit(new ObjectCallable());
     TestObject retrievedObject = future.get();
+
+Future<Integer> future = new SquareCalculator().calculate(10);
+
+while(!future.isDone()) {
+    System.out.println("Calculating...");
+    Thread.sleep(300);
+}
+
+Integer result = future.get();
+
+Integer result = future.get(500, TimeUnit.MILLISECONDS);
+
+boolean canceled = future.cancel(true);
 ```
  
 
