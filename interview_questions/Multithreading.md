@@ -32,9 +32,9 @@
 + [31. ConcurrentMap](#31-ConcurrentMap)
 + [32. Atomic Variables](#32-Atomic-Variables)
 + [33. Visibility Problem](#33-Visibility-Problem)
-+ [34 ABA Problem](#34-ABA-Problem)
-+ [35 Future vs CompletableFuture](#35-Future-vs-CompletableFuture)
-+ [36 ForkJoinPool](#36-ForkJoinPool)
++ [34. ABA Problem](#34-ABA-Problem)
++ [35. Future vs CompletableFuture](#35-Future-vs-CompletableFuture)
++ [36. ForkJoinPool](#36-ForkJoinPool)
 
 ## 1 Чем отличается процесс от потока
 
@@ -801,5 +801,14 @@ Most methods of the fluent API in the CompletableFuture class have two additiona
 [к оглавлению](#Multithreading)
 
 ## 36 ForkJoinPool
+The ForkJoinPool is the heart of the framework. It is an implementation of the ExecutorService that manages worker threads and provides us with tools to get information about the thread pool state and performance.
+
+ForkJoinPool doesn’t create a separate thread for every single subtask. Instead, each thread in the pool has its own double-ended queue (or deque, pronounced “deck”) that stores tasks.
+
+By default, a worker thread gets tasks from the head of its own deque. When it is empty, the thread takes a task from the tail of the deque of another busy thread or from the global entry queue since this is where the biggest pieces of work are likely to be located.
+
+```java
+public static ForkJoinPool forkJoinPool = new ForkJoinPool(2);
+```
 
 [к оглавлению](#Multithreading)
