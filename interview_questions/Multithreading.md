@@ -704,6 +704,7 @@ The idea behind the double compare and swap method is to keep track of one more 
 ### Future
 Future is a placeholder for a result that will be produced by an asynchronous process and may not yet be available.
 We can either cancel a task or get the result from a completed task and also check if a task has been canceled or completed.
+The method that returns the actual result from the calculation is Future.get(). We can see that this method blocks the execution until the task is complete. However, this won’t be an issue in our example because we’ll check if the task is complete by calling isDone().
 ```java
 class ObjectCallable implements Callable<TestObject> {
     @Override
