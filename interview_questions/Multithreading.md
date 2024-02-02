@@ -841,6 +841,37 @@ public static ForkJoinPool forkJoinPool = new ForkJoinPool(2);
 + the `RecursiveAction` for void tasks
 + and the `RecursiveTask<V>` for tasks that return a value. They both have an abstract method compute() in which the task’s logic is defined.
 
+Пример расчета факториала
+```java
+public class FactorialTask extends RecursiveTask<Long> {
+
+    private final long value;
+
+    public FactorialTask(long value) {
+        this.value = value;
+    }
+
+    @Override
+    protected Long compute() {
+        if (value <= 1) {
+            return 1L;
+        } else {
+            FactorialTask subTask = new FactorialTask(value - 1);
+            subTask.fork();
+            return value * subTask.join();
+        }
+    }
+}
+...
+
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
+        ForkJoinPool forkJoinPool = new ForkJoinPool(4);
+        long value = 5L;
+        Long factorial = forkJoinPool.invoke(new FactorialTask(value));
+        System.out.println(factorial);
+    }
+```
+
 ### Parallel stream
 ```java
         Integer result = IntStream.range(0, 5)
