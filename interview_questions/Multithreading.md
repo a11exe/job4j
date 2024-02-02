@@ -841,5 +841,31 @@ public static ForkJoinPool forkJoinPool = new ForkJoinPool(2);
 + the `RecursiveAction` for void tasks
 + and the `RecursiveTask<V>` for tasks that return a value. They both have an abstract method compute() in which the task’s logic is defined.
 
+### Parallel stream
+```java
+        Integer result = IntStream.range(0, 5)
+                .parallel()
+                .peek(it -> System.out.printf("Thread [%s] peek: %d\n",
+                        Thread.currentThread().getName(), it))
+                .sum();
+        System.out.println("sum: " + result);
+```
+По-умолчанию, размер пула равен Runtime.getRuntime().availableProcessors() — 1, то есть на 1 меньше, чем количество доступных ядер. Когда вы создаете кастомный FJPool, то можно установить желаемый уровень параллелизма через конструктор.
+```java
+long firstNum = 1;
+long lastNum = 1_000_000;
+
+List<Long> aList = LongStream.rangeClosed(firstNum, lastNum).boxed()
+      .collect(Collectors.toList());
+
+ForkJoinPool customThreadPool = new ForkJoinPool(4);
+try {
+    long actualTotal = customThreadPool.submit(
+      () -> aList.parallelStream().reduce(0L, Long::sum)).get();
+    assertEquals((lastNum + firstNum) * lastNum / 2, actualTotal);
+} finally {
+    customThreadPool.shutdown();
+}
+```
 
 [к оглавлению](#Multithreading)
