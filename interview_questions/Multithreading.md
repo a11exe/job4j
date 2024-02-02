@@ -837,5 +837,9 @@ By default, a worker thread gets tasks from the head of its own deque. When it i
 ```java
 public static ForkJoinPool forkJoinPool = new ForkJoinPool(2);
 ```
+`ForkJoinTask` is the base type for tasks executed inside `ForkJoinPool`. In practice, one of its two subclasses should be extended: 
++ the `RecursiveAction` for void tasks
++ and the `RecursiveTask<V>` for tasks that return a value. They both have an abstract method compute() in which the task’s logic is defined.
+
 
 [к оглавлению](#Multithreading)
