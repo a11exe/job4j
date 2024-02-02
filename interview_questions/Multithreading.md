@@ -94,6 +94,7 @@
     void join(long millis) 
     void join(long millis, int nanos) 
 ```
+Иначе основной поток продолжить выполнение параллельно
 
 [к оглавлению](#Multithreading)
 
