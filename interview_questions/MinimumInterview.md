@@ -1535,3 +1535,37 @@ It does this by partitioning system resources, such as threads or connections, i
 
 ## 71 Kubernetes
 Механизм для оркестрации контейнеров
+Kubernetes, in short, is a system **for orchestration of containerized applications across a cluster of nodes, including networking and storage infrastructure**. Some of the most important features are:
+
++ `Resource scheduling`: it ensures, that Pods are distributed optimally over all available nodes
++ `Auto-scaling`: with increasing load, the cluster can dynamically allocate additional nodes, and deploy new Pods on them
++ `Self-healing`: the cluster supervises containers and restarts them, if required, based on defined policies
++ `Service-discovery`: Pods and Services are registered and published via DNS
++ `Rolling updates/rollbacks`: supports rolling updates based on sequential redeployment of Pods and containers
++ `Secret/configuration management`: supports secure handling of sensitive data like passwords or API keys
++ `Storage orchestration`: several 3rd party storage solutions are supported, which can be used as external volumes to persist data
+
+### Basic Objects
++ **Pod** is a basic unit that Kubernetes deals with. It encapsulates one or more closely related containers, storage resources, a unique network IP, and configurations on how the container(s) should run, and thereby represents a single instance of an application.
++ **Service** is an abstraction which groups together logical collections of Pods and defines how to access them. Services are an interface to a group of containers so that consumers do not have to worry about anything beyond a single access location.
++ **Volumes**, containers can access external storage resources (as their file system is ephemeral), and they can read files or store them permanently. Volumes also support the sharing of files between containers. A long list of Volume types is supported.
++ With **Namespaces**, Kubernetes provides the possibility to run multiple virtual clusters on one physical cluster. Namespaces provide scope for names of resources, which have to be unique within a namespace.
+
+### Object metadata
+Mandatory attributes are:
++ Each object must have a **Namespace** (we already discussed that before). If not specified explicitly, an object belongs to the default Namespace.
++ A **Name** is a unique identifier for an object in its Namespace.
++ A **Uid** is a value unique in time and space. It helps to distinguish between objects, which have been deleted and recreated.
+
+### Service Types
+| Service Type  | Use Case  | Accessibility  | Resource Allocation  |
+|---|---|---|---|
+| ClusterIP  |Internal communication between application components   | Within the cluster only	 |  Minimal resources needed |
+| NodePort  | External accessibility for web applications or APIs  |  Accessible from outside the cluster via a high-numbered port on the node |  Additional resources needed |
+| LoadBalancer  | Production environments with high traffic volumes  | Accessible from outside the cluster via a load balancer  | Significant resources needed  |
+			
+		
+			
+			
+
+
