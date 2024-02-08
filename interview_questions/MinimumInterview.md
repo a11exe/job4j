@@ -1564,7 +1564,13 @@ Mandatory attributes are:
 | NodePort  | External accessibility for web applications or APIs  |  Accessible from outside the cluster via a high-numbered port on the node |  Additional resources needed |
 | LoadBalancer  | Production environments with high traffic volumes  | Accessible from outside the cluster via a load balancer  | Significant resources needed  |
 			
-		
+### Ingress vs. Load Balancer
+A **Kubernetes service** is an abstraction that exposes a group of pods as a network service. The service handles all the complexity of identifying running pods and their IP addresses. Every service gets a unique URL that is accessible across the cluster. So instead of using IPs to communicate, pods simply need to use the provided service URLs.
+
+By default, a Kubernetes service is private to the cluster. This means only applications inside the cluster can access them. There are a number of ways around this, and one of the best is an ingress.
+
+In Kubernetes, an **ingress lets us route traffic from outside the cluster to one or more services inside the cluster**. Typically, the ingress works as a single point of entry for all incoming traffic.
+Perhaps the most popular is the nginx ingress controller.
 			
 			
 
