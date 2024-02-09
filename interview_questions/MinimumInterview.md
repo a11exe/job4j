@@ -1543,6 +1543,16 @@ There are two ways of coordination sagas:
 + Choreography - each local transaction publishes domain events that trigger local transactions in other services
 + Orchestration - an orchestrator (object) tells the participants what local transactions to execute
 
+<img src="./Create_Order_Saga_Choreography.png" alt="basic" width="800"/>
+An e-commerce application that uses this approach would create an order using a choreography-based saga that consists of the following steps:
+
++ The `Order Service` receives the `POST /orders` request and creates an `Order` in a `PENDING` state
++ It then emits an `Order Created event`
++ The `Customer Service’s` event handler attempts to reserve credit
++ It then emits an event indicating the outcome
++ The `OrderService’s` event handler either approves or rejects the `Order`
+
+
 
 ## 71 Kubernetes
 Механизм для оркестрации контейнеров
