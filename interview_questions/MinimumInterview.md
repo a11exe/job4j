@@ -1552,7 +1552,16 @@ An e-commerce application that uses this approach would create an order using a 
 + It then emits an event indicating the outcome
 + The `OrderService’s` event handler either approves or rejects the `Order`
 
+<img src="./Create_Order_Saga_Orchestration.png" alt="basic" width="800"/>
 
+An e-commerce application that uses this approach would create an order using an orchestration-based saga that consists of the following steps:
+
++ The `Order Service` receives the `POST /orders` request and creates the `Create Order` saga orchestrator
++ The saga orchestrator creates an `Order` in the `PENDING` state
++ It then sends a `Reserve Credit` command to the `Customer Service`
++ The `Customer Service` attempts to reserve credit
++ It then sends back a reply message indicating the outcome
++ The saga orchestrator either approves or rejects the `Order`
 
 ## 71 Kubernetes
 Механизм для оркестрации контейнеров
