@@ -70,6 +70,7 @@
 + [68. Каков жизненный цикл бина Spring](#68-Каков-жизненный-цикл-бина-Spring)
 + [69. Монолит vs микросервисы](#69-Монолит-vs-микросервисы)
 + [70. Паттерны микросервисов](#70-Паттерны-микросервисов)
++ [71. Kubernetes](#71-Kubernetes)
 
 ## 1 Что такое java характеристики языка
 
@@ -1532,6 +1533,16 @@ The CircuitBreaker is implemented via a finite state machine with three normal s
 ### Bulkhead Pattern
 This pattern is used to prevent the cascading failure of a system by partitioning it into isolated parts or “bulkheads.” The bulkheads act as a barrier between different parts of the system, limiting the damage that can be caused by any one component.
 It does this by partitioning system resources, such as threads or connections, into separate pools that can be allocated to specific components. This prevents a single component from monopolizing resources and causing a system-wide failure.
+
+### Saga pattern
+Problem: How to implement transactions that span services?
+A saga is a sequence of local transactions. Each local transaction updates the database and publishes a message or event to trigger the next local transaction in the saga. If a local transaction fails because it violates a business rule then the saga executes a series of compensating transactions that undo the changes that were made by the preceding local transactions.
+
+There are two ways of coordination sagas:
+
++ Choreography - each local transaction publishes domain events that trigger local transactions in other services
++ Orchestration - an orchestrator (object) tells the participants what local transactions to execute
+
 
 ## 71 Kubernetes
 Механизм для оркестрации контейнеров
