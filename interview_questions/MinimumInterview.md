@@ -1584,6 +1584,8 @@ The Two-Phase Commit (2PC) protocol is a distributed algorithm used to ensure th
 2PC guarantees that all nodes will commit or abort a transaction, but it can be slow and vulnerable to failure.
 The 2PC protocol is useful in situations where all participants of the distributed transaction must commit or roll back the transaction together. It ensures atomicity and consistency of the transaction but can lead to blocking and performance issues in highly distributed systems.
 
+The main disadvantage is that 2PC is a blocking protocol: the other servers need to wait for the transaction manager to issue a decision about whether to commit or abort each transaction. If the transaction manager goes offline while transactions are waiting for its final decision, they will be stuck and hold their database locks until the transaction manager comes online again and issues its decision. This extended holding of locks may be disruptive to other applications that are using the same databases
+
 In contrast, SAGA pattern is useful in situations where the transaction is too large to be managed by a single 2PC protocol. SAGA breaks the transaction down into smaller, local transactions that can be independently managed by each microservice.
 
 ## 71 Kubernetes
