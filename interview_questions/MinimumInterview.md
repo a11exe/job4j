@@ -70,7 +70,8 @@
 + [68. Каков жизненный цикл бина Spring](#68-Каков-жизненный-цикл-бина-Spring)
 + [69. Монолит vs микросервисы](#69-Монолит-vs-микросервисы)
 + [70. Паттерны микросервисов](#70-Паттерны-микросервисов)
-+ [71. Kubernetes](#71-Kubernetes)
++ [71. CAP Theorem](#71-CAP-Theorem)
++ [72. Kubernetes](#72-Kubernetes)
 
 ## 1 Что такое java характеристики языка
 
@@ -1588,7 +1589,19 @@ The main disadvantage is that 2PC is a blocking protocol: the other servers need
 
 In contrast, SAGA pattern is useful in situations where the transaction is too large to be managed by a single 2PC protocol. SAGA breaks the transaction down into smaller, local transactions that can be independently managed by each microservice.
 
-## 71 Kubernetes
+## 71 CAP Theorem
+
+**The CAP Theorem states that a distributed system can only meet 2 of 3 properties.**
+
+CAP is an abbreviation of Consistency, Availability, and Partition tolerance. Let’s discuss these three concepts in simple words:
+
++ **Consistency** means that every read operation will result in getting the latest record. All the information is guaranteed to be up to date.
++ **Availability** is a property that indicates a distributed system will always be available. One or more nodes of such a system might turn off; however, the system will still be accessible through other nodes.
++ **Partition** tolerance represents the ability of the system to be partitioned. Thus it means that every node can work independently from the other ones.
+
+
+
+## 72 Kubernetes
 Механизм для оркестрации контейнеров
 Kubernetes, in short, is a system **for orchestration of containerized applications across a cluster of nodes, including networking and storage infrastructure**. Some of the most important features are:
 
