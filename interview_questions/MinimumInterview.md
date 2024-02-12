@@ -1471,11 +1471,24 @@ WebApplicationContext is an extension of a plain ApplicationContext. it is web a
 - Необходимость вносить изменения в несколько микросервисов при добавлении функционала. Надо следить за версиями при деплое.
 
 ## 70 Паттерны микросервисов
++ [Api Gateway](#Api-Gateway)
++ [Service Discovery](#Service-Discovery)
++ [Database per service](#Database-per-service)
++ [API Composition](#API-Composition)
++ [CQRS](#CQRS)
++ [Event sourcing](#Event-sourcing)
++ [Retry pattern](#Retry-pattern)
++ [Timeout Pattern](#Timeout-Pattern)
++ [Circuit Breaker](#Circuit-Breaker)
++ [Bulkhead Pattern](#Bulkhead-Pattern)
++ [Saga pattern](#Saga-pattern)
++ [SAGA Pattern vs 2 Phase Commit](#SAGA-Pattern-vs-2-Phase-Commit)
+
 ### Api Gateway
 Распределение внешних запросов по микросервисам
+
 ### Service Discovery
 Определение и регистрация новых инстансов
-### Межсервисная коммуникация
 
 ### Database per service
 Keep each microservice’s persistent data private to that service and accessible only via its API. A service’s transactions only involve its database.
@@ -1562,6 +1575,16 @@ An e-commerce application that uses this approach would create an order using an
 + The `Customer Service` attempts to reserve credit
 + It then sends back a reply message indicating the outcome
 + The saga orchestrator either approves or rejects the `Order`
+
+### SAGA Pattern vs 2 Phase Commit
+The Two-Phase Commit (2PC) protocol is a distributed algorithm used to ensure that all nodes in a distributed system agree to commit or abort a transaction.
+
+2PC works by coordinating transactions between a coordinator node and multiple participant nodes. The coordinator sends a request to the participants to prepare for the transaction, and once all participants respond with a positive acknowledgement, the coordinator sends a commit message to each participant to commit the transaction.
+
+2PC guarantees that all nodes will commit or abort a transaction, but it can be slow and vulnerable to failure.
+The 2PC protocol is useful in situations where all participants of the distributed transaction must commit or roll back the transaction together. It ensures atomicity and consistency of the transaction but can lead to blocking and performance issues in highly distributed systems.
+
+In contrast, SAGA pattern is useful in situations where the transaction is too large to be managed by a single 2PC protocol. SAGA breaks the transaction down into smaller, local transactions that can be independently managed by each microservice.
 
 ## 71 Kubernetes
 Механизм для оркестрации контейнеров
