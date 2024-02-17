@@ -1504,6 +1504,19 @@ WebApplicationContext is an extension of a plain ApplicationContext. it is web a
 [к оглавлению](#Вопросы-для-собеседования-минимум)
 
 ## 70 JWT
+Традиционный подход аутентификации (подтверждение личности пользователя) основан на cookies. При авторазации 
+пользователю выдаются session cookies. Сопоставление cookies и пользователя хранится на сервере. 
+При этом если у нас есть несколько серверов. Пользователь авторизовался на одном и получил cookies, 
+а следующий запрос ушел на другой сервер где сопоставления с этими cookies нет, то возникает проблема.
+Для решения этой проблемы придумали jwt token. 
+JWTs (pronounced “jots”) are URL-safe, encoded, cryptographically signed (sometimes encrypted) strings
+The above token is cryptographically signed, and can therefore be verified, providing proof that it hasn’t been tampered with. Also, JWTs are encoded with a variety of additional information.
+JWT состоит из 
++ header `{"alg":"HS256"}`
++ payload (данные пользователя)
++ signature (подпись)
+При ассимитричном шифровании на сервере авторизации хранится закрытый ключ которым подписывается токен, а на серверах приложений публичный ключ которым верифицируется подпись.
+Так же jwt токен периодически обновляется.
 
 [к оглавлению](#Вопросы-для-собеседования-минимум)
 
