@@ -68,10 +68,12 @@
 + [66. Чем отличается DI от IoC](#66-Чем-отличается-DI-от-IoC)
 + [67. Что такое бин Spring](#67-Что-такое-бин-Spring)
 + [68. Каков жизненный цикл бина Spring](#68-Каков-жизненный-цикл-бина-Spring)
-+ [69. Монолит vs микросервисы](#69-Монолит-vs-микросервисы)
-+ [70. Паттерны микросервисов](#70-Паттерны-микросервисов)
-+ [71. CAP Theorem](#71-CAP-Theorem)
-+ [72. Kubernetes](#72-Kubernetes)
++ [69. Spring security](#69-spring-security)
++ [70. JWT](#70-jwt)
++ [71. Монолит vs микросервисы](#71-Монолит-vs-микросервисы)
++ [72. Паттерны микросервисов](#72-Паттерны-микросервисов)
++ [73. CAP Theorem](#73-CAP-Theorem)
++ [74. Kubernetes](#74-Kubernetes)
 
 ## 1 Что такое java характеристики языка
 
@@ -1497,7 +1499,15 @@ WebApplicationContext is an extension of a plain ApplicationContext. it is web a
 
 [к оглавлению](#Вопросы-для-собеседования-минимум)
 
-## 69 Монолит vs микросервисы
+## 69 Spring security
+
+[к оглавлению](#Вопросы-для-собеседования-минимум)
+
+## 70 JWT
+
+[к оглавлению](#Вопросы-для-собеседования-минимум)
+
+## 71 Монолит vs микросервисы
 ### Монолит
 Плюсы:
 + Простота разработки, запуска и деплоимента
@@ -1522,7 +1532,9 @@ WebApplicationContext is an extension of a plain ApplicationContext. it is web a
 - Сложность трассировки и тестирования
 - Необходимость вносить изменения в несколько микросервисов при добавлении функционала. Надо следить за версиями при деплое.
 
-## 70 Паттерны микросервисов
+[к оглавлению](#Вопросы-для-собеседования-минимум)
+
+## 72 Паттерны микросервисов
 + [Api Gateway](#Api-Gateway)
 + [Service Discovery](#Service-Discovery)
 + [Database per service](#Database-per-service)
@@ -1640,7 +1652,9 @@ The main disadvantage is that 2PC is a blocking protocol: the other servers need
 
 In contrast, SAGA pattern is useful in situations where the transaction is too large to be managed by a single 2PC protocol. SAGA breaks the transaction down into smaller, local transactions that can be independently managed by each microservice.
 
-## 71 CAP Theorem
+[к оглавлению](#Вопросы-для-собеседования-минимум)
+
+## 73 CAP Theorem
 
 **The CAP Theorem states that a distributed system can only meet 2 of 3 properties.**
 
@@ -1650,9 +1664,9 @@ CAP is an abbreviation of Consistency, Availability, and Partition tolerance. Le
 + **Availability** is a property that indicates a distributed system will always be available. One or more nodes of such a system might turn off; however, the system will still be accessible through other nodes.
 + **Partition** tolerance represents the ability of the system to be partitioned. Thus it means that every node can work independently from the other ones.
 
+[к оглавлению](#Вопросы-для-собеседования-минимум)
 
-
-## 72 Kubernetes
+## 74 Kubernetes
 Механизм для оркестрации контейнеров
 Kubernetes, in short, is a system **for orchestration of containerized applications across a cluster of nodes, including networking and storage infrastructure**. Some of the most important features are:
 
@@ -1690,7 +1704,5 @@ By default, a Kubernetes service is private to the cluster. This means only appl
 
 In Kubernetes, an **ingress lets us route traffic from outside the cluster to one or more services inside the cluster**. Typically, the ingress works as a single point of entry for all incoming traffic.
 Perhaps the most popular is the nginx ingress controller.
-			
-			
 
-
+[к оглавлению](#Вопросы-для-собеседования-минимум)
