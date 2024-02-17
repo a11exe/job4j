@@ -894,7 +894,35 @@ public void transferMoney(Account fromAccount, Account toAccount, Amount amount)
 
 [3 ways to configure the Spring Container](https://stackoverflow.com/questions/35807056/how-many-ways-are-there-to-configure-the-spring-framework-what-are-the-differen)
 + XML - based configuration
+  ```xml
+  <?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" ...>
+
+    <bean id="accountService" class="com.wiley.beginningspring.ch2.AccountServiceImpl">
+        <property name="accountDao" ref="accountDao"/>
+    </bean>
+    
+    <bean id="accountDao" class="com.wiley.beginningspring.ch2.AccountDaoInMemoryImpl">
+    </bean>
+
+</beans>
+  ```
+and using then
+```java
+ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("/com/wiley/beginningspring/ch2/ch2-beans.xml");
+```
+
 + Java Based Configuration (In this Configuration method, there will be a class for the configuration)
+```java
+@Configuration
+public class Ch2BeanConfiguration {
+    @Bean
+    public AccountDao accountDao() {
+        AccountDaoInMemoryImpl bean = new AccountDaoInMemoryImpl();
+        return bean;
+    }
+}
+```
 + Annotation Based Configuration
 
 [к оглавлению](#Вопросы-для-собеседования-минимум)
