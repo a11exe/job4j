@@ -1562,6 +1562,7 @@ JWT состоит из:
 + [Bulkhead Pattern](#Bulkhead-Pattern)
 + [Saga pattern](#Saga-pattern)
 + [SAGA Pattern vs 2 Phase Commit](#SAGA-Pattern-vs-2-Phase-Commit)
++ [Transactional outbox](#Transactional-outbox)
 
 ### Api Gateway
 Распределение внешних запросов по микросервисам
@@ -1666,6 +1667,20 @@ The 2PC protocol is useful in situations where all participants of the distribut
 The main disadvantage is that 2PC is a blocking protocol: the other servers need to wait for the transaction manager to issue a decision about whether to commit or abort each transaction. If the transaction manager goes offline while transactions are waiting for its final decision, they will be stuck and hold their database locks until the transaction manager comes online again and issues its decision. This extended holding of locks may be disruptive to other applications that are using the same databases
 
 In contrast, SAGA pattern is useful in situations where the transaction is too large to be managed by a single 2PC protocol. SAGA breaks the transaction down into smaller, local transactions that can be independently managed by each microservice.
+
+### Transactional outbox
+How to atomically update the database and send messages to a message broker?
+
+The solution is for the service that sends the message to first store the message in the database as part of the transaction that updates the business entities. A separate process then sends the messages to the message broker.
+
+The participants in this pattern are:
+
++ **Sender** - the service that sends the message
++ **Database** - the database that stores the business entities and message outbox
++ **Message outbox** - if it’s a relational database, this is a table that stores the messages to be sent. Otherwise, if it’s a + NoSQL database, the outbox is a property of each database record (e.g. document or item)
++ **Message relay** - sends the messages stored in the outbox to the message broker
+
+The Message relay might publish a message more than once. It might, for example, crash after publishing a message but before recording the fact that it has done so. When it restarts, it will then publish the message again. As a result, a **message consumer must be idempotent**
 
 [к оглавлению](#Вопросы-для-собеседования-минимум)
 
