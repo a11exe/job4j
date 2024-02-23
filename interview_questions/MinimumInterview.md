@@ -837,6 +837,14 @@ public void transferMoney(Account fromAccount, Account toAccount, Amount amount)
 + ForkJoinPool - пул для выполнения задач типа ForkJoinTask;
 + ... и другие.
 
+`parallelStream()` использует CommonThredPool (могут быть проблемы с загрузкой ЦП до 100%) и ForkJoinPool
+Могут быть особенности при выполнении параллельно:
+```java
+List<Integer> listOfNumbers = Arrays.asList(1, 2, 3, 4);
+int sumParallel = listOfNumbers.parallelStream().reduce(5, Integer::sum); // not equal 15
+int sum = listOfNumbers.stream().reduce(5, Integer::sum); // equal 15
+```
+
 [к оглавлению](#Вопросы-для-собеседования-минимум)
 
 ## 41 В чем отличия между equals и == Контракты по equals и hashcode
